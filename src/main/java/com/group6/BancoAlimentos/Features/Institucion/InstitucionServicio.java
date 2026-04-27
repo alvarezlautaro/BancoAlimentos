@@ -1,12 +1,13 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
 import com.group6.BancoAlimentos.Common.exception.InstitucionNoEncontradaException;
+import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
+import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.IActualizarMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.IMapper;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class InstitucionServicio {
     private final IInstitucionRepositorio institucionRepositorio;
     private final IActualizarMapper<Institucion, InstitucionDTO> institucionDTO;
+    private final IActualizarMapper<Institucion, ActualizarInstitucionDTO> actualizarInstitucionMapper;
     private final IMapper<Institucion, NuevaInstitucionDTO> nuevaInstitucionDTO;
 
     public List<InstitucionDTO> encontrarTodos(){
@@ -30,6 +32,12 @@ public class InstitucionServicio {
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el id: " + id));
     }
 
+    public InstitucionDTO encontrarPorNombre(String nombre){
+        return institucionRepositorio.encontrarPorNombre(nombre)
+                .map(entidad -> institucionDTO.aDTO(entidad))
+                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el nombre: " + nombre));
+    }
+
     public InstitucionDTO guardar(NuevaInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto)); //Mappeo la nueva institucion a entidad y la guardo en el repositorio
 
@@ -42,6 +50,15 @@ public class InstitucionServicio {
 
         return institucionDTO.aDTO(
                 institucionRepositorio.save(institucionDTO.actualizarEntidad(dto, institucion)) //Guardo en el repositorio lo que actualice.
+        );
+    }
+
+    public InstitucionDTO actualizacionParcial(Long id, ActualizarInstitucionDTO dto){
+        Institucion institucion = institucionRepositorio.encontrarPorId(id)
+                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
+
+        return institucionDTO.aDTO(
+                institucionRepositorio.save(actualizarInstitucionMapper.actualizarEntidad(dto, institucion))
         );
     }
 
