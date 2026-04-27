@@ -14,12 +14,12 @@ public class InstitucionNuevaMapper implements IMapper<Institucion, NuevaInstitu
     private final ModelMapper modelMapper;
 
     @Override
-    public Institucion toEntity(NuevaInstitucionDTO dto) {
+    public Institucion aEntidad(NuevaInstitucionDTO dto) {
         return modelMapper.map(dto, Institucion.class);
     }
 
     @Override
-    public NuevaInstitucionDTO toDTO(Institucion entidad) {
+    public NuevaInstitucionDTO aDTO(Institucion entidad) {
         return modelMapper.map(entidad, NuevaInstitucionDTO.class);
     }
 }

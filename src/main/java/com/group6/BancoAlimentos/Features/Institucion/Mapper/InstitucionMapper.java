@@ -9,16 +9,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class InstitucionMapper implements IMapper<Institucion, InstitucionDTO> {
+public class InstitucionMapper implements IActualizarMapper<Institucion, InstitucionDTO> {
     private final ModelMapper modelMapper;
 
     @Override
-    public Institucion toEntity(InstitucionDTO dto) {
+    public Institucion aEntidad(InstitucionDTO dto) {
         return modelMapper.map(dto, Institucion.class);
     }
 
     @Override
-    public InstitucionDTO toDTO(Institucion entidad) {
+    public InstitucionDTO aDTO(Institucion entidad) {
         return modelMapper.map(entidad, InstitucionDTO.class);
+    }
+
+    @Override
+    public Institucion actualizarEntidad(InstitucionDTO dto, Institucion institucionExistente){
+        if(dto == null || institucionExistente == null){
+            return institucionExistente;
+        }
+
+        modelMapper.map(dto, institucionExistente);
+        return institucionExistente;
     }
 }
