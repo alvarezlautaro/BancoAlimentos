@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Config;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,11 @@ public class MapperConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper;
+        ModelMapper mapper = new ModelMapper();
+
+        mapper.getConfiguration().setSkipNullEnabled(true);
+        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+
+        return mapper;
     }
 }
