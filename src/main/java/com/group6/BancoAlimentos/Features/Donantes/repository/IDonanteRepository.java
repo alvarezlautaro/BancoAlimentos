@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IDonanteRepository extends JpaRepository<Donante, Long> {
 
-    @Override
     boolean existsByCuit(Long cuit);
 }

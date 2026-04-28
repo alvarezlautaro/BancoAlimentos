@@ -27,13 +27,13 @@ public class InstitucionServicio {
     }
 
     public InstitucionDTO encontrarPorID(Long id){
-        return institucionRepositorio.encontrarPorId(id)
+        return institucionRepositorio.findById(id)
                 .map(entidad -> institucionDTO.aDTO(entidad))
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el id: " + id));
     }
 
     public InstitucionDTO encontrarPorNombre(String nombre){
-        return institucionRepositorio.encontrarPorNombre(nombre)
+        return institucionRepositorio.findByNombre(nombre)
                 .map(entidad -> institucionDTO.aDTO(entidad))
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el nombre: " + nombre));
     }
@@ -45,7 +45,7 @@ public class InstitucionServicio {
     }
 
     public InstitucionDTO actualizar(Long id, InstitucionDTO dto){
-        Institucion institucion = institucionRepositorio.encontrarPorId(id)
+        Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
@@ -54,7 +54,7 @@ public class InstitucionServicio {
     }
 
     public InstitucionDTO actualizacionParcial(Long id, ActualizarInstitucionDTO dto){
-        Institucion institucion = institucionRepositorio.encontrarPorId(id)
+        Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
@@ -63,7 +63,7 @@ public class InstitucionServicio {
     }
 
     public void eliminar(Long id){
-        Institucion institucion = institucionRepositorio.encontrarPorId(id)
+        Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new InstitucionNoEncontradaException("La institucion a eliminar con el id: " + id + "no fue encontrada"));
 
         institucionRepositorio.delete(institucion);

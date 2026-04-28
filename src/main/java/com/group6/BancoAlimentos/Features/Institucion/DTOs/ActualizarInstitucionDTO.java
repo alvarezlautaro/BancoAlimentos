@@ -10,16 +10,13 @@ import org.hibernate.validator.constraints.Length;
 @Schema(description = "DTO para la actualizacion parcial de instituciones.")
 public record ActualizarInstitucionDTO(
         @Schema(description = "Nombre de la institucion", example = "Escuela Nuestra Señora de Fátima")
-        @NotBlank(message = "El nombre es requerido")
         @Length(min = 3, message = "Debe tener al menos 3 caracteres")
         String nombre,
 
         @Schema(description = "Tipo de la nueva institucion", example = "COMEDOR")
-        @NotNull(message = "El tipo es requerido")
         tipoInstitucion tipo,
 
         @Schema(description = "Direccion de la institucion", example = "Calle Falsa 123")
-        @NotBlank
         String direccion,
 
         @Schema(description = "Telefono de contacto", example = "1234567890")
