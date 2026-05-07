@@ -45,7 +45,7 @@ public class InstitucionServicio {
     }
 
     public List<InstitucionDTO> encontrarPorEstadoPago(estadoPago estado){
-        return institucionRepositorio.findByEstadoPago(estado).stream()
+        return institucionRepositorio.findByEstado(estado).stream()
                 .map(entity -> institucionDTO.aDTO(entity))
                 .toList();
     }

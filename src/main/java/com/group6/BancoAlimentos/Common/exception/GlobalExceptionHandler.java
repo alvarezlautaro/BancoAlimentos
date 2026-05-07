@@ -1,10 +1,12 @@
 package com.group6.BancoAlimentos.Common.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,5 +32,19 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetail> manejarErrorDeConversion(MethodArgumentTypeMismatchException ex){
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "El valor no coincide con el tipo esperado");
+
+        //Verifica que el dato que se esperaba era un ENUM
+        if(ex.getRequiredType() != null && ex.getRequiredType().isEnum()){
+            //Agrega el valor recibido en la consulta
+            problema.setProperty("valor recibido: ", ex.getValue());
+            //Muestra los valores permitidos que tiene el ENUM
+            problema.setProperty("valores permitidos: ", ex.getRequiredType().getEnumConstants());
+        }
+
+        return ResponseEntity.badRequest().body(problema);
     }
 }

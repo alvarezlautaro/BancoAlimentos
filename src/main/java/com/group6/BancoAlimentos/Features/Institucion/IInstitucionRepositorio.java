@@ -8,7 +8,5 @@ import java.util.Optional;
 public interface IInstitucionRepositorio extends JpaRepository<Institucion, Long> {
     Optional<Institucion> findByNombre(String nombre);
     List<Institucion> findByTipo(tipoInstitucion tipo);
-    List<Institucion> findByEstadoPago(estadoPago estado);
-
-    tipoInstitucion tipo(tipoInstitucion tipo);
+    List<Institucion> findByEstado(estadoPago estado);
 }
