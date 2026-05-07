@@ -38,6 +38,18 @@ public class InstitucionServicio {
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el nombre: " + nombre));
     }
 
+    public List<InstitucionDTO> encontrarPorTipo(tipoInstitucion tipo){
+        return institucionRepositorio.findByTipo(tipo).stream()
+                .map(entity -> institucionDTO.aDTO(entity))
+                .toList();
+    }
+
+    public List<InstitucionDTO> encontrarPorEstadoPago(estadoPago estado){
+        return institucionRepositorio.findByEstadoPago(estado).stream()
+                .map(entity -> institucionDTO.aDTO(entity))
+                .toList();
+    }
+
     public InstitucionDTO guardar(NuevaInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto)); //Mappeo la nueva institucion a entidad y la guardo en el repositorio
 
@@ -49,7 +61,7 @@ public class InstitucionServicio {
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
-                institucionRepositorio.save(institucionDTO.actualizarEntidad(dto, institucion)) //Guardo en el repositorio lo que actualice.
+                institucionRepositorio.save(institucionDTO.actualizarEntidad(dto, institucion))
         );
     }
 

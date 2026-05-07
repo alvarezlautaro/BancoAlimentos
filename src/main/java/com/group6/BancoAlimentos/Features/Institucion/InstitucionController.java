@@ -56,6 +56,24 @@ public class InstitucionController {
     }
 
     @Operation(
+            summary = "Obtener una lista de instituciones por tipo dado"
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de instituciones obtenida correctamente")
+    @GetMapping("/tipo/{tipo}")
+    public ResponseEntity<List<InstitucionDTO>> encontrarPorTipo(@PathVariable tipoInstitucion tipo){
+        return ResponseEntity.ok(institucionServicio.encontrarPorTipo(tipo));
+    }
+
+    @Operation(
+            summary = "Obtener una lista de instituciones por estado de pago dado"
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de instituciones obtenida correctamente")
+    @GetMapping("/estado-pago/{estado}")
+    public ResponseEntity<List<InstitucionDTO>> encontrarPorEstadoPago(@PathVariable estadoPago estado){
+        return ResponseEntity.ok(institucionServicio.encontrarPorEstadoPago(estado));
+    }
+
+    @Operation(
             summary = "Crear una nueva institución"
     )
     @ApiResponses({

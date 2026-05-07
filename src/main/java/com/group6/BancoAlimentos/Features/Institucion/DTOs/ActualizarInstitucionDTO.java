@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Institucion.DTOs;
 
+import com.group6.BancoAlimentos.Features.Institucion.estadoPago;
 import com.group6.BancoAlimentos.Features.Institucion.tipoInstitucion;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -32,4 +33,7 @@ public class ActualizarInstitucionDTO {
         @Email(message = "El formato del email no es valido",
                 regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
         String email;
+
+        @Schema(description = "Estado del pago de la suscripción", example = "AL DIA")
+        estadoPago estado;
 }

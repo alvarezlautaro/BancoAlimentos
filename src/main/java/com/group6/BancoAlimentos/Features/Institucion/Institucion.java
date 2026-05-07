@@ -26,4 +26,7 @@ public class Institucion {
     private String telefono;
 
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private estadoPago estado;
 }
