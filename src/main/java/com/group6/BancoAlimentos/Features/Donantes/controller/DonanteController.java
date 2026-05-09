@@ -29,14 +29,14 @@ public class DonanteController {
         return donanteService.save(donanteRequestDTO);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public DonanteResponseDTO findByID(@PathVariable Long id){
 
         return donanteService.findByID(id).
                 orElseThrow(() -> new RuntimeException("No existe el donante"));
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public DonanteResponseDTO update(@PathVariable Long id,@RequestBody DonanteRequestDTO donante){
 
         return donanteService.update(id,donante);
