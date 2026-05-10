@@ -1,7 +1,10 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
+import com.group6.BancoAlimentos.Features.Remito.Remito;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "institucion")
@@ -14,6 +17,7 @@ public class Institucion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_institucion")
     private Long id;
 
     private String nombre;
@@ -29,4 +33,7 @@ public class Institucion {
 
     @Enumerated(EnumType.STRING)
     private estadoPago estado;
+
+    @OneToMany(mappedBy = "institucion")
+    private List<Remito> remitos;
 }
