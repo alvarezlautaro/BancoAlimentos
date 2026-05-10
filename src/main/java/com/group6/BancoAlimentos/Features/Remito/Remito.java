@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "remito")
@@ -20,6 +21,9 @@ public class Remito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_remito")
     private Long idRemito;
+
+    @Column(unique = true, nullable = false, updatable = false)
+    private UUID externalId = UUID.randomUUID();
 
     private LocalDate fecha;
 

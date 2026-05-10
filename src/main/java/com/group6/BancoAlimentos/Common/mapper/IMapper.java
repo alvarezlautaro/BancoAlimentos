@@ -1,4 +1,4 @@
-package com.group6.BancoAlimentos.Features.Institucion.Mapper;
+package com.group6.BancoAlimentos.Common.mapper;
 
 public interface IMapper<T, R>{
     T aEntidad(R r);

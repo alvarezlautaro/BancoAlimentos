@@ -4,9 +4,8 @@ import com.group6.BancoAlimentos.Common.exception.InstitucionNoEncontradaExcepti
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
-import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
-import com.group6.BancoAlimentos.Features.Institucion.Mapper.IActualizarMapper;
-import com.group6.BancoAlimentos.Features.Institucion.Mapper.IMapper;
+import com.group6.BancoAlimentos.Common.mapper.IActualizarMapper;
+import com.group6.BancoAlimentos.Common.mapper.IMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
