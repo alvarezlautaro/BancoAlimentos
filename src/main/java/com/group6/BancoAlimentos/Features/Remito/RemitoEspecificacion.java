@@ -22,4 +22,10 @@ public class RemitoEspecificacion {
                 ? cb.conjunction()
                 : cb.greaterThanOrEqualTo(root.get("fecha"), desde);
     }
+
+    public static Specification<Remito> fechaHasta(LocalDate hasta){
+        return (root, query, cb) -> hasta == null
+                ? cb.conjunction()
+                : cb.lessThanOrEqualTo(root.get("fecha"), hasta);
+    }
 }
