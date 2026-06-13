@@ -34,6 +34,6 @@ public class Institucion {
     @Enumerated(EnumType.STRING)
     private estadoPago estado;
 
-    @OneToMany(mappedBy = "institucion")
+    @OneToMany(mappedBy = "institucion", orphanRemoval = true)
     private List<Remito> remitos;
 }
