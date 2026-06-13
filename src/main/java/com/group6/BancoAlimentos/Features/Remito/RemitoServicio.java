@@ -4,9 +4,10 @@ import com.group6.BancoAlimentos.Common.exception.InstitucionNoEncontradaExcepti
 import com.group6.BancoAlimentos.Common.exception.RemitoNoEncontradoException;
 import com.group6.BancoAlimentos.Features.Institucion.IInstitucionRepositorio;
 import com.group6.BancoAlimentos.Features.Institucion.Institucion;
-import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
+import com.group6.BancoAlimentos.Features.Remito.DTOs.ActualizarRemitoDTO;
 import com.group6.BancoAlimentos.Features.Remito.DTOs.NuevoRemitoDTO;
 import com.group6.BancoAlimentos.Features.Remito.DTOs.RemitoDTO;
+import com.group6.BancoAlimentos.Features.Remito.Mapper.ActualizarRemitoMapper;
 import com.group6.BancoAlimentos.Features.Remito.Mapper.RemitoMapper;
 import com.group6.BancoAlimentos.Features.Remito.Mapper.RemitoNuevoMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class RemitoServicio {
     private final IInstitucionRepositorio institucionRepositorio;
 
     private final RemitoMapper remitoMapper;
-    private final RemitoNuevoMapper actualizarRemitoMapper;
+    private final RemitoNuevoMapper remitoNuevoMapper;
+    private final ActualizarRemitoMapper actualizarRemitoMapper;
 
     public List<RemitoDTO> encontrarTodos(Integer mes,
                                           Integer anio,
@@ -49,7 +51,7 @@ public class RemitoServicio {
     }
 
     public RemitoDTO guardar(NuevoRemitoDTO nuevoRemitoDTO){
-        Remito remitoNuevo = actualizarRemitoMapper.aEntidad(nuevoRemitoDTO);
+        Remito remitoNuevo = remitoNuevoMapper.aEntidad(nuevoRemitoDTO);
 
         Institucion institucion = institucionRepositorio.findById(nuevoRemitoDTO.getIdInstitucion())
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el id: " + nuevoRemitoDTO.getIdInstitucion()));
@@ -57,5 +59,26 @@ public class RemitoServicio {
         remitoNuevo.setInstitucion(institucion);
 
         return remitoMapper.aDTO(remitoRepositorio.save(remitoNuevo));
+    }
+
+    public RemitoDTO actualizar(UUID externalId, ActualizarRemitoDTO remitoActualizar){
+        Remito remito = remitoRepositorio.findByExternalId(externalId)
+                .orElseThrow(() -> new RemitoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
+
+        return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
+    }
+
+    public RemitoDTO actualizacionParcial(UUID externalId, ActualizarRemitoDTO remitoActualizar){
+        Remito remito = remitoRepositorio.findByExternalId(externalId)
+                .orElseThrow(() -> new RemitoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
+
+        return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
+    }
+
+    public void eliminar(UUID externalId){
+        Remito remito = remitoRepositorio.findByExternalId(externalId)
+                .orElseThrow(() -> new RemitoNoEncontradoException("El remito con el id externo: " + externalId + " no existe"));
+
+        remitoRepositorio.delete(remito);
     }
 }

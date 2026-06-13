@@ -18,5 +18,4 @@ public class NuevoRemitoDTO {
 
     @NotNull(message = "Debe especificar la ID de la institución de destino")
     Long idInstitucion;
-
 }

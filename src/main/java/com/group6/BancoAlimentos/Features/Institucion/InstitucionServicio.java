@@ -6,6 +6,9 @@ import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
 import com.group6.BancoAlimentos.Common.mapper.IActualizarMapper;
 import com.group6.BancoAlimentos.Common.mapper.IMapper;
+import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
+import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionMapper;
+import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionNuevaMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class InstitucionServicio {
     private final IInstitucionRepositorio institucionRepositorio;
-    private final IActualizarMapper<Institucion, InstitucionDTO> institucionDTO;
-    private final IActualizarMapper<Institucion, ActualizarInstitucionDTO> actualizarInstitucionMapper;
-    private final IMapper<Institucion, NuevaInstitucionDTO> nuevaInstitucionDTO;
+    private final InstitucionMapper institucionDTO;
+    private final ActualizarInstitucionMapper actualizarInstitucionMapper;
+    private final InstitucionNuevaMapper nuevaInstitucionDTO;
 
     public List<InstitucionDTO> encontrarTodos(){
         return institucionRepositorio.findAll().stream()
@@ -55,12 +58,12 @@ public class InstitucionServicio {
         return institucionDTO.aDTO(institucion);
     }
 
-    public InstitucionDTO actualizar(Long id, InstitucionDTO dto){
+    public InstitucionDTO actualizar(Long id, ActualizarInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
-                institucionRepositorio.save(institucionDTO.actualizarEntidad(dto, institucion))
+                institucionRepositorio.save(actualizarInstitucionMapper.actualizarEntidad(dto, institucion))
         );
     }
 
