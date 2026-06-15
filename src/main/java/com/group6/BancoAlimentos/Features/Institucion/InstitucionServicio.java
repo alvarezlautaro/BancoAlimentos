@@ -1,11 +1,9 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
-import com.group6.BancoAlimentos.Common.exception.InstitucionNoEncontradaException;
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
-import com.group6.BancoAlimentos.Common.mapper.IActualizarMapper;
-import com.group6.BancoAlimentos.Common.mapper.IMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionNuevaMapper;
@@ -31,13 +29,13 @@ public class InstitucionServicio {
     public InstitucionDTO encontrarPorID(Long id){
         return institucionRepositorio.findById(id)
                 .map(entidad -> institucionDTO.aDTO(entidad))
-                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el id: " + id));
     }
 
     public InstitucionDTO encontrarPorNombre(String nombre){
         return institucionRepositorio.findByNombre(nombre)
                 .map(entidad -> institucionDTO.aDTO(entidad))
-                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada con el nombre: " + nombre));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el nombre: " + nombre));
     }
 
     public List<InstitucionDTO> encontrarPorTipo(tipoInstitucion tipo){
@@ -60,7 +58,7 @@ public class InstitucionServicio {
 
     public InstitucionDTO actualizar(Long id, ActualizarInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.findById(id)
-                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
                 institucionRepositorio.save(actualizarInstitucionMapper.actualizarEntidad(dto, institucion))
@@ -69,7 +67,7 @@ public class InstitucionServicio {
 
     public InstitucionDTO actualizacionParcial(Long id, ActualizarInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.findById(id)
-                .orElseThrow(() -> new InstitucionNoEncontradaException("Institucion no encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
 
         return institucionDTO.aDTO(
                 institucionRepositorio.save(actualizarInstitucionMapper.actualizarEntidad(dto, institucion))
@@ -78,7 +76,7 @@ public class InstitucionServicio {
 
     public void eliminar(Long id){
         Institucion institucion = institucionRepositorio.findById(id)
-                .orElseThrow(() -> new InstitucionNoEncontradaException("La institucion a eliminar con el id: " + id + "no fue encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id: " + id + "no fue encontrada"));
 
         institucionRepositorio.delete(institucion);
     }
