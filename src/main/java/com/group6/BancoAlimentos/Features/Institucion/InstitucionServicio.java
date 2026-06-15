@@ -8,12 +8,15 @@ import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstituci
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionNuevaMapper;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@Transactional
+@RequiredArgsConstructor
 public class InstitucionServicio {
     private final IInstitucionRepositorio institucionRepositorio;
     private final InstitucionMapper institucionDTO;
@@ -50,12 +53,14 @@ public class InstitucionServicio {
                 .toList();
     }
 
+    @Transactional
     public InstitucionDTO guardar(NuevaInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto)); //Mappeo la nueva institucion a entidad y la guardo en el repositorio
 
         return institucionDTO.aDTO(institucion);
     }
 
+    @Transactional
     public InstitucionDTO actualizar(Long id, ActualizarInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
@@ -65,6 +70,7 @@ public class InstitucionServicio {
         );
     }
 
+    @Transactional
     public InstitucionDTO actualizacionParcial(Long id, ActualizarInstitucionDTO dto){
         Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
@@ -74,6 +80,7 @@ public class InstitucionServicio {
         );
     }
 
+    @Transactional
     public void eliminar(Long id){
         Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id: " + id + "no fue encontrada"));

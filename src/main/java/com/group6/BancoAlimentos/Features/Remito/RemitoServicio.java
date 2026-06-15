@@ -14,12 +14,14 @@ import com.group6.BancoAlimentos.Features.Remito.Mapper.RemitoNuevoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RemitoServicio {
     private final IRemitoRepositorio remitoRepositorio;
@@ -51,6 +53,7 @@ public class RemitoServicio {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el remito con el id externo: "+ uuid)));
     }
 
+    @Transactional
     public RemitoDTO crear(NuevoRemitoDTO nuevoRemitoDTO){
         Remito remitoNuevo = remitoNuevoMapper.aEntidad(nuevoRemitoDTO);
 
@@ -68,6 +71,7 @@ public class RemitoServicio {
         return remitoMapper.aDTO(remitoRepositorio.save(remitoNuevo));
     }
 
+    @Transactional
     public RemitoDTO actualizar(UUID externalId, ActualizarRemitoDTO remitoActualizar){
         Remito remito = remitoRepositorio.findByExternalId(externalId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
@@ -75,6 +79,7 @@ public class RemitoServicio {
         return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
     }
 
+    @Transactional
     public RemitoDTO actualizacionParcial(UUID externalId, ActualizarRemitoDTO remitoActualizar){
         Remito remito = remitoRepositorio.findByExternalId(externalId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
@@ -82,6 +87,7 @@ public class RemitoServicio {
         return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
     }
 
+    @Transactional
     public void eliminar(UUID externalId){
         Remito remito = remitoRepositorio.findByExternalId(externalId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe"));
