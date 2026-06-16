@@ -1,7 +1,7 @@
 package com.group6.BancoAlimentos.Features.Institucion.Mapper;
 
 
-import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
+import com.group6.BancoAlimentos.Common.mapper.IMapper;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.Institucion;
 import lombok.RequiredArgsConstructor;

@@ -13,10 +13,20 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(InstitucionNoEncontradaException.class)
-    public ResponseEntity<String> manejarInstitucionNoEncontrada(InstitucionNoEncontradaException ex){
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity<String> manejarRecursoNoEncontrado(RecursoNoEncontradoException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<ErrorReglaNegocioDTO> manejarReglaNegocio(ReglaNegocioException ex){
+        ErrorReglaNegocioDTO error = new ErrorReglaNegocioDTO(
+                ex.getMessage(), ex.getCategoria(), ex.getTimestamp()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> manejarValidaciones(MethodArgumentNotValidException ex){
         Map<String, String> errores = new HashMap<>();

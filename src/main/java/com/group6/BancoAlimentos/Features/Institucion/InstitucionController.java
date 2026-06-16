@@ -95,7 +95,7 @@ public class InstitucionController {
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable Long id, @Valid @RequestBody InstitucionDTO institucionDTO){
+    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ActualizarInstitucionDTO institucionDTO){
         return ResponseEntity.ok(institucionServicio.actualizar(id, institucionDTO));
     }
 
