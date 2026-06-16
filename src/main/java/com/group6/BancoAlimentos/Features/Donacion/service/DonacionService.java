@@ -9,8 +9,8 @@ import com.group6.BancoAlimentos.Features.Donacion.repository.IDonacionRepositor
 import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
 import com.group6.BancoAlimentos.Features.Donantes.repository.IDonanteRepository;
 import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
-import com.group6.BancoAlimentos.model.Producto;
-import com.group6.BancoAlimentos.repository.ProductoRepository;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
