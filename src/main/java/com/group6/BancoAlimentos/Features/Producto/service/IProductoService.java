@@ -1,8 +1,7 @@
-package com.group6.BancoAlimentos.service;
+package com.group6.BancoAlimentos.Features.Producto.service;
 
-import com.group6.BancoAlimentos.dto.ProductoRequestDTO;
-import com.group6.BancoAlimentos.dto.ProductoResponseDTO;
-import org.springframework.stereotype.Service;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

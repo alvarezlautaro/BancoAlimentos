@@ -12,12 +12,13 @@ import com.group6.BancoAlimentos.Features.Remito.Mapper.ActualizarRemitoMapper;
 import com.group6.BancoAlimentos.Features.Remito.Mapper.RemitoMapper;
 import com.group6.BancoAlimentos.Features.Remito.Mapper.RemitoNuevoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,10 +32,11 @@ public class RemitoServicio {
     private final RemitoNuevoMapper remitoNuevoMapper;
     private final ActualizarRemitoMapper actualizarRemitoMapper;
 
-    public List<RemitoDTO> encontrarTodos(Integer mes,
+    public Page<RemitoDTO> encontrarTodos(Integer mes,
                                           Integer anio,
                                           LocalDate desde,
-                                          LocalDate hasta){
+                                          LocalDate hasta,
+                                          Pageable pageable){
 
         Specification<Remito> spec = Specification.allOf(
                 RemitoEspecificacion.mesEquals(mes),
@@ -43,9 +45,8 @@ public class RemitoServicio {
                 RemitoEspecificacion.fechaHasta(hasta)
         );
 
-        return remitoRepositorio.findAll(spec).stream()
-                .map(remito -> remitoMapper.aDTO(remito))
-                .toList();
+        return remitoRepositorio.findAll(spec, pageable)
+                .map(remitoMapper::aDTO);
     }
 
     public RemitoDTO encontrarPorExternalID(UUID uuid){

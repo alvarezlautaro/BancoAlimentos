@@ -7,12 +7,11 @@ import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionNuevaMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -23,10 +22,9 @@ public class InstitucionServicio {
     private final ActualizarInstitucionMapper actualizarInstitucionMapper;
     private final InstitucionNuevaMapper nuevaInstitucionDTO;
 
-    public List<InstitucionDTO> encontrarTodos(){
-        return institucionRepositorio.findAll().stream()
-                .map(entidad -> institucionDTO.aDTO(entidad))
-                .toList();
+    public Page<InstitucionDTO> encontrarTodos(Pageable pageable){
+        return institucionRepositorio.findAll(pageable)
+                .map(institucionDTO::aDTO);
     }
 
     public InstitucionDTO encontrarPorID(Long id){
@@ -41,22 +39,19 @@ public class InstitucionServicio {
                 .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el nombre: " + nombre));
     }
 
-    public List<InstitucionDTO> encontrarPorTipo(tipoInstitucion tipo){
-        return institucionRepositorio.findByTipo(tipo).stream()
-                .map(entity -> institucionDTO.aDTO(entity))
-                .toList();
+    public Page<InstitucionDTO> encontrarPorTipo(tipoInstitucion tipo, Pageable pageable){
+        return institucionRepositorio.findByTipo(tipo, pageable)
+                .map(institucionDTO::aDTO);
     }
 
-    public List<InstitucionDTO> encontrarPorEstadoPago(estadoPago estado){
-        return institucionRepositorio.findByEstado(estado).stream()
-                .map(entity -> institucionDTO.aDTO(entity))
-                .toList();
+    public Page<InstitucionDTO> encontrarPorEstadoPago(estadoPago estado, Pageable pageable){
+        return institucionRepositorio.findByEstado(estado, pageable)
+                .map(institucionDTO::aDTO);
     }
 
     @Transactional
     public InstitucionDTO guardar(NuevaInstitucionDTO dto){
-        Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto)); //Mappeo la nueva institucion a entidad y la guardo en el repositorio
-
+        Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto));
         return institucionDTO.aDTO(institucion);
     }
 
@@ -83,7 +78,7 @@ public class InstitucionServicio {
     @Transactional
     public void eliminar(Long id){
         Institucion institucion = institucionRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id: " + id + "no fue encontrada"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id: " + id + " no fue encontrada"));
 
         institucionRepositorio.delete(institucion);
     }

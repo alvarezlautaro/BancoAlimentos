@@ -1,17 +1,15 @@
-package com.group6.BancoAlimentos.controller;
+package com.group6.BancoAlimentos.Features.Producto.controller;
 
-import com.group6.BancoAlimentos.dto.ProductoRequestDTO;
-import com.group6.BancoAlimentos.dto.ProductoResponseDTO;
-import com.group6.BancoAlimentos.service.IProductoService;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
+import com.group6.BancoAlimentos.Features.Producto.service.IProductoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.List;
 
     @RestController

@@ -20,7 +20,7 @@ public class Remito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_remito")
-    private Long idRemito;
+    private Long id;
 
     @Column(unique = true, nullable = false, updatable = false)
     private UUID externalId = UUID.randomUUID();

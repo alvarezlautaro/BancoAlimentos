@@ -1,7 +1,7 @@
 package com.group6.BancoAlimentos.Features.ItemDonacion.model;
 
 import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
-import com.group6.BancoAlimentos.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,7 @@ public class ItemDonacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_itemdonacion")
     private Long id;
 
     @Column(name = "cantidad",nullable = false,length = 55)

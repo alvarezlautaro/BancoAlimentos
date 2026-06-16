@@ -1,7 +1,7 @@
-package com.group6.BancoAlimentos.dto;
+package com.group6.BancoAlimentos.Features.Producto.dto;
 
-import com.group6.BancoAlimentos.emun.Categoria;
-import com.group6.BancoAlimentos.emun.UnidadMedida;
+import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
+import com.group6.BancoAlimentos.Features.Producto.emun.UnidadMedida;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

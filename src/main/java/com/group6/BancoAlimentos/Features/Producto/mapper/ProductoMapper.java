@@ -1,9 +1,9 @@
-package com.group6.BancoAlimentos.mapper;
+package com.group6.BancoAlimentos.Features.Producto.mapper;
 
 //.<>
-import com.group6.BancoAlimentos.dto.ProductoRequestDTO;
-import com.group6.BancoAlimentos.dto.ProductoResponseDTO;
-import com.group6.BancoAlimentos.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 
 public class ProductoMapper {
 
