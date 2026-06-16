@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +25,12 @@ import java.util.UUID;
 public class DetalleRemitoController {
     private final DetalleRemitoServicio detalleRemitoServicio;
 
-    @Operation(summary = "Obtener todos los detalles de remito")
-    @ApiResponse(responseCode = "200", description = "Lista de detalles obtenida exitosamente")
+    @Operation(summary = "Obtener todos los detalles de remito paginados", description = "Parámetros: page, size, sort")
+    @ApiResponse(responseCode = "200", description = "Página de detalles obtenida exitosamente")
     @GetMapping
-    public ResponseEntity<List<DetalleRemitoResponse>> encontrarTodos(){
-        return ResponseEntity.ok(detalleRemitoServicio.encontrarTodos());
+    public ResponseEntity<Page<DetalleRemitoResponse>> encontrarTodos(
+            @PageableDefault(size = 10) Pageable pageable){
+        return ResponseEntity.ok(detalleRemitoServicio.encontrarTodos(pageable));
     }
 
     @Operation(summary = "Obtener detalles por id de remito")

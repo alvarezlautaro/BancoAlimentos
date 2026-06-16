@@ -11,6 +11,8 @@ import com.group6.BancoAlimentos.Features.ItemDonacion.repository.ItemDonacionRe
 import com.group6.BancoAlimentos.Features.Remito.IRemitoRepositorio;
 import com.group6.BancoAlimentos.Features.Remito.Remito;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +30,9 @@ public class DetalleRemitoServicio {
     private final DetalleRemitoRequestMapper requestMapper;
     private final DetalleRemitoResponseMapper responseMapper;
 
-    public List<DetalleRemitoResponse> encontrarTodos(){
-        return detalleRemitoRepositorio.findAll()
-                .stream()
-                .map(responseMapper::aDTO)
-                .toList();
+    public Page<DetalleRemitoResponse> encontrarTodos(Pageable pageable){
+        return detalleRemitoRepositorio.findAll(pageable)
+                .map(responseMapper::aDTO);
     }
 
     public List<DetalleRemitoResponse> encontrarPorIdRemito(Long idRemito){

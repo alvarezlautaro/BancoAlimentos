@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,17 +38,19 @@ public class RemitoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(remitoServicio.crear(nuevoRemito));
     }
 
-    @Operation(summary = "Obtener todos los remitos", description = "Permite filtrar por mes, año o rango de fechas")
+    @Operation(summary = "Obtener todos los remitos paginados", description = "Permite filtrar por mes, año o rango de fechas. Parámetros: page, size, sort")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Lista de remitos obtenida exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Parámetros de fecha inválidos")
+            @ApiResponse(responseCode = "200", description = "Página de remitos obtenida exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Parámetros de fecha o paginación inválidos")
     })
     @GetMapping
-    public ResponseEntity<List<RemitoDTO>> encontrarTodos(@RequestParam(required = false)Integer mes,
-                                                          @RequestParam(required = false)Integer anio,
-                                                          @RequestParam(required = false)LocalDate desde,
-                                                          @RequestParam(required = false)LocalDate hasta){
-        return ResponseEntity.ok(remitoServicio.encontrarTodos(mes, anio, desde, hasta));
+    public ResponseEntity<Page<RemitoDTO>> encontrarTodos(
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer anio,
+            @RequestParam(required = false) LocalDate desde,
+            @RequestParam(required = false) LocalDate hasta,
+            @PageableDefault(size = 10, sort = "fecha") Pageable pageable){
+        return ResponseEntity.ok(remitoServicio.encontrarTodos(mes, anio, desde, hasta, pageable));
     }
 
     @Operation(summary = "Obtener un remito por su id externo")

@@ -9,11 +9,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -23,12 +24,13 @@ public class InstitucionController {
     private final InstitucionServicio institucionServicio;
 
     @Operation(
-            summary = "Obtener todas las instituciones"
+            summary = "Obtener todas las instituciones paginadas", description = "Parámetros: page, size, sort"
     )
-    @ApiResponse(responseCode = "200", description = "Lista de instituciones obtenida correctamente")
+    @ApiResponse(responseCode = "200", description = "Página de instituciones obtenida correctamente")
     @GetMapping
-    public ResponseEntity<List<InstitucionDTO>> encontrarTodos(){
-        return ResponseEntity.ok(institucionServicio.encontrarTodos());
+    public ResponseEntity<Page<InstitucionDTO>> encontrarTodos(
+            @PageableDefault(size = 10, sort = "nombre") Pageable pageable){
+        return ResponseEntity.ok(institucionServicio.encontrarTodos(pageable));
     }
 
     @Operation(
@@ -56,21 +58,25 @@ public class InstitucionController {
     }
 
     @Operation(
-            summary = "Obtener una lista de instituciones por tipo dado"
+            summary = "Obtener instituciones por tipo paginadas", description = "Parámetros: page, size, sort"
     )
-    @ApiResponse(responseCode = "200", description = "Lista de instituciones obtenida correctamente")
+    @ApiResponse(responseCode = "200", description = "Página de instituciones obtenida correctamente")
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<List<InstitucionDTO>> encontrarPorTipo(@PathVariable tipoInstitucion tipo){
-        return ResponseEntity.ok(institucionServicio.encontrarPorTipo(tipo));
+    public ResponseEntity<Page<InstitucionDTO>> encontrarPorTipo(
+            @PathVariable tipoInstitucion tipo,
+            @PageableDefault(size = 10, sort = "nombre") Pageable pageable){
+        return ResponseEntity.ok(institucionServicio.encontrarPorTipo(tipo, pageable));
     }
 
     @Operation(
-            summary = "Obtener una lista de instituciones por estado de pago dado"
+            summary = "Obtener instituciones por estado de pago paginadas", description = "Parámetros: page, size, sort"
     )
-    @ApiResponse(responseCode = "200", description = "Lista de instituciones obtenida correctamente")
+    @ApiResponse(responseCode = "200", description = "Página de instituciones obtenida correctamente")
     @GetMapping("/estado-pago/{estado}")
-    public ResponseEntity<List<InstitucionDTO>> encontrarPorEstadoPago(@PathVariable estadoPago estado){
-        return ResponseEntity.ok(institucionServicio.encontrarPorEstadoPago(estado));
+    public ResponseEntity<Page<InstitucionDTO>> encontrarPorEstadoPago(
+            @PathVariable estadoPago estado,
+            @PageableDefault(size = 10, sort = "nombre") Pageable pageable){
+        return ResponseEntity.ok(institucionServicio.encontrarPorEstadoPago(estado, pageable));
     }
 
     @Operation(
