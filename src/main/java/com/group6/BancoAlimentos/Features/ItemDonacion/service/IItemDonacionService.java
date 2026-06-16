@@ -9,10 +9,12 @@ import java.util.List;
 public interface IItemDonacionService {
 
     List<ItemDonacionResponseDTO> findAll();
-    List<ItemDonacionResponseDTO> findByProductoId(Long productoId);
-    List<ItemDonacionResponseDTO> findByDonacionId(Long donacionId);
+    List<ItemDonacionResponseDTO> findByProductoID(Long productoId);
+    List<ItemDonacionResponseDTO> findByDonacionID(Long donacionId);
     ItemDonacionResponseDTO findById(Long id);
     ItemDonacionResponseDTO update(Long id, ItemDonacionRequestDTO dto);
+    List<ItemDonacionResponseDTO> findByCategoria(String categoria);
+    void delete(Long id);
 
 
 }

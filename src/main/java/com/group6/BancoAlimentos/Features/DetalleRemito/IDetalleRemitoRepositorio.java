@@ -20,4 +20,7 @@ public interface IDetalleRemitoRepositorio extends JpaRepository<DetalleRemito, 
     List<DetalleRemito> findByItemDonacionId(Long idItemDonacion);
 
     boolean existsByRemitoIdAndItemDonacionId(Long idRemito, Long idItemDonacion);
+
+    boolean existsByItemDonacion_Id(Long itemDonacionId);
+
 }
