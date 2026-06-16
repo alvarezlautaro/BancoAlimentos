@@ -1,5 +1,7 @@
 package com.group6.BancoAlimentos.Features.Donacion.model;
 
+import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
+import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,8 +37,11 @@ public class Donacion {
     @Column(name = "observaciones")
     private String observaciones;
 
-  //  @OneToMany(mappedBy = "donacion")
-    // private List<itemDonacion> itemDonaciones;
+    @OneToMany(mappedBy = "donacion",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<ItemDonacion> itemDonaciones;
 
+    @ManyToOne
+    @JoinColumn(name = "id_donante", nullable = false)
+    private Donante donante;
 
 }

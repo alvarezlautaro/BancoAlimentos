@@ -1,10 +1,13 @@
 package com.group6.BancoAlimentos.Features.Donantes.model;
 
+import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -20,5 +23,7 @@ public class Donante {
     private String email;
     private String direccion;
 
+    @OneToMany(mappedBy = "donante")
+    private List<Donacion> donaciones;
 
 }

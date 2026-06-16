@@ -6,12 +6,18 @@ import com.group6.BancoAlimentos.Features.Donacion.mapper.DonacionMapper;
 import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
 import com.group6.BancoAlimentos.Features.Donacion.model.EstadoDonacion;
 import com.group6.BancoAlimentos.Features.Donacion.repository.IDonacionRepository;
+import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
+import com.group6.BancoAlimentos.Features.Donantes.repository.IDonanteRepository;
+import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
+import com.group6.BancoAlimentos.model.Producto;
+import com.group6.BancoAlimentos.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +25,8 @@ import java.util.Optional;
 public class DonacionService implements IDonacionService {
 
     private final IDonacionRepository donacionRepository;
+    private final IDonanteRepository donanteRepository;
+    private final ProductoRepository productoRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -38,12 +46,34 @@ public class DonacionService implements IDonacionService {
 
     @Override
     public DonacionResponseDTO save(DonacionRequestDTO dto) {
-        Donacion donacion = DonacionMapper.toEntity(dto);
 
-        Donacion donacionGuardada = donacionRepository.save(donacion);
+        Donante donante=donanteRepository.findById(dto.getIdDonante()).
+                orElseThrow(() -> new RuntimeException("Donante no encontrado"));
 
-        return DonacionMapper.toResponse(donacionGuardada);
+        Donacion donacion=new Donacion();
+        donacion.setEstado(dto.getEstado());
+        donacion.setObservaciones(dto.getObservaciones());
+        donacion.setFecha(dto.getFecha());
+        donacion.setNroRemitoProveedor(dto.getNroRemitoProveedor());
+        donacion.setDonante(donante);
+
+        List<ItemDonacion> items = dto.getItems().stream().map(itemDTO -> {
+            Producto producto = productoRepository.findById(itemDTO.getProductoId()).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            ItemDonacion item = new ItemDonacion();
+            item.setFechaVencimiento(itemDTO.getFechaVencimiento());
+            item.setValorUnitario(itemDTO.getValorUnitario());
+            item.setCantidad(itemDTO.getCantidad());
+            item.setProducto(producto);
+            item.setDonacion(donacion);
+            return item;
+        }).collect(Collectors.toList());
+
+        donacion.setItemDonaciones(items);
+        return DonacionMapper.toResponse(donacionRepository.save(donacion));
     }
+
+
 
     @Override
     public DonacionResponseDTO update(Long id, DonacionRequestDTO dto) {
