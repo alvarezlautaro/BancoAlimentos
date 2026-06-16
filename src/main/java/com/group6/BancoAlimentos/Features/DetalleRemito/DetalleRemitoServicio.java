@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +63,12 @@ public class DetalleRemitoServicio {
             throw new ReglaNegocioException("El item ya existe en este remito", "DETALLE_REMITO");
         }
 
-        if(itemDonacion.getFechaVencimiento().isBefore(remito.getFecha())){
+        LocalDate fechaVencimiento = itemDonacion.getFechaVencimiento()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        if(fechaVencimiento.isBefore(remito.getFecha())){
             throw new ReglaNegocioException("No se puede agregar un item vencido al remito", "FECHA");
         }
 

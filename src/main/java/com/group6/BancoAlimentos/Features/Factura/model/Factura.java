@@ -23,7 +23,7 @@ public class Factura {
 
 
     @OneToOne
-    @JoinColumn(table = "id_donacion",nullable = false,unique = true)
+    @JoinColumn(name = "id_donacion",nullable = false,unique = true)
     private Donacion donacion;
 
     @Column(name = "fecha",nullable = false)

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -20,6 +20,7 @@ public class ItemDonacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_itemdonacion")
     private Long id;
 
     @Column(name = "cantidad",nullable = false,length = 55)
@@ -27,7 +28,7 @@ public class ItemDonacion {
     @Column(name = "valor_unitario",nullable = false)
     private double valorUnitario;
     @Column(name = "fecha_vencimiento",nullable = false)
-    private LocalDate fechaVencimiento;
+    private Date fechaVencimiento;
 
     @ManyToOne
     @JoinColumn(name = "producto_id",nullable = false)
