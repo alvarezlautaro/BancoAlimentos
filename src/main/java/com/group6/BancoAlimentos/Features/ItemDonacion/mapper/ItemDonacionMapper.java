@@ -4,7 +4,7 @@ import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
 import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionRequestDTO;
 import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionResponseDTO;
 import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
-import com.group6.BancoAlimentos.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 
 public class ItemDonacionMapper {
 

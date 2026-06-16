@@ -1,10 +1,10 @@
-package com.group6.BancoAlimentos.service;
+package com.group6.BancoAlimentos.Features.Producto.service;
 
-import com.group6.BancoAlimentos.dto.ProductoRequestDTO;
-import com.group6.BancoAlimentos.dto.ProductoResponseDTO;
-import com.group6.BancoAlimentos.mapper.ProductoMapper;
-import com.group6.BancoAlimentos.model.Producto;
-import com.group6.BancoAlimentos.repository.ProductoRepository;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
+import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
+import com.group6.BancoAlimentos.Features.Producto.mapper.ProductoMapper;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

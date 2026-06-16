@@ -1,8 +1,8 @@
-package com.group6.BancoAlimentos.model;
+package com.group6.BancoAlimentos.Features.Producto.model;
 
 
-import com.group6.BancoAlimentos.emun.Categoria;
-import com.group6.BancoAlimentos.emun.UnidadMedida;
+import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
+import com.group6.BancoAlimentos.Features.Producto.emun.UnidadMedida;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

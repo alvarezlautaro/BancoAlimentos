@@ -1,4 +1,4 @@
-package com.group6.BancoAlimentos.emun;
+package com.group6.BancoAlimentos.Features.Producto.emun;
 
 public enum UnidadMedida {
     UNIDAD,
