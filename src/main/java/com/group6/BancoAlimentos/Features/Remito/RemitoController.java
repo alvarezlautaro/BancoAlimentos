@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class RemitoController {
     private final RemitoServicio remitoServicio;
 
+    @PreAuthorize("hasAuthority('REMITO_CREAR')")
     @Operation(summary = "Crear un nuevo remito")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Remito creado exitosamente"),
@@ -38,6 +40,7 @@ public class RemitoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(remitoServicio.crear(nuevoRemito));
     }
 
+    @PreAuthorize("hasAuthority('REMITO_VER')")
     @Operation(summary = "Obtener todos los remitos paginados", description = "Permite filtrar por mes, año o rango de fechas. Parámetros: page, size, sort")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Página de remitos obtenida exitosamente"),
@@ -53,6 +56,7 @@ public class RemitoController {
         return ResponseEntity.ok(remitoServicio.encontrarTodos(mes, anio, desde, hasta, pageable));
     }
 
+    @PreAuthorize("hasAuthority('REMITO_VER')")
     @Operation(summary = "Obtener un remito por su id externo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Remito encontrado exitosamente"),
@@ -64,6 +68,7 @@ public class RemitoController {
         return ResponseEntity.ok(remitoServicio.encontrarPorExternalID(id));
     }
 
+    @PreAuthorize("hasAuthority('REMITO_ACTUALIZAR')")
     @Operation(summary = "Actualizar un remito completo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Remito actualizado exitosamente"),
@@ -76,6 +81,7 @@ public class RemitoController {
         return ResponseEntity.ok(remitoServicio.actualizar(id, actualizarRemito));
     }
 
+    @PreAuthorize("hasAuthority('REMITO_ACTUALIZAR')")
     @Operation(summary = "Actualizar parcialmente un remito")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Remito actualizado exitosamente"),
@@ -88,6 +94,7 @@ public class RemitoController {
         return ResponseEntity.ok(remitoServicio.actualizacionParcial(id, actualizarRemito));
     }
 
+    @PreAuthorize("hasAuthority('REMITO_ELIMINAR')")
     @Operation(summary = "Eliminar un remito por su id externo")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Remito eliminado exitosamente"),

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class FacturaController {
 
     private final IFacturaService facturaService;
 
+    @PreAuthorize("hasAuthority('FACTURA_VER')")
     @GetMapping
     public ResponseEntity<List<FacturaResponseDTO>> findAll() {
         return ResponseEntity.ok(facturaService.findAll());
     }
 
+    @PreAuthorize("hasAuthority('FACTURA_VER')")
     @GetMapping("/{id}")
     public ResponseEntity<FacturaResponseDTO> findById(@PathVariable Long id) {
         return facturaService.findById(id)
@@ -30,6 +33,7 @@ public class FacturaController {
                 .orElseThrow(() -> new RuntimeException("La factura no existe"));
     }
 
+    @PreAuthorize("hasAuthority('FACTURA_CREAR')")
     @PostMapping
     public ResponseEntity<FacturaResponseDTO> save(@Valid @RequestBody FacturaRequestDTO dto) {
         FacturaResponseDTO facturaGuardada = facturaService.save(dto);
@@ -37,6 +41,7 @@ public class FacturaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(facturaGuardada);
     }
 
+    @PreAuthorize("hasAuthority('FACTURA_ACTUALIZAR')")
     @PutMapping("/{id}")
     public ResponseEntity<FacturaResponseDTO> update(
             @PathVariable Long id,
@@ -45,6 +50,7 @@ public class FacturaController {
         return ResponseEntity.ok(facturaService.update(id, dto));
     }
 
+    @PreAuthorize("hasAuthority('FACTURA_ELIMINAR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         facturaService.delete(id);
@@ -52,6 +58,7 @@ public class FacturaController {
         return ResponseEntity.ok("Factura eliminada correctamente");
     }
 
+    @PreAuthorize("hasAuthority('FACTURA_CREAR')")
     @PostMapping("/generar/{idDonacion}")
     public ResponseEntity<FacturaResponseDTO> generarFactura(@PathVariable Long idDonacion) {
         FacturaResponseDTO facturaGenerada = facturaService.generarFactura(idDonacion);

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class InstitucionController {
     private final InstitucionServicio institucionServicio;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Obtener todas las instituciones paginadas", description = "Parámetros: page, size, sort"
     )
@@ -33,6 +35,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.encontrarTodos(pageable));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Obtener una institución por un id dado"
     )
@@ -45,6 +48,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.encontrarPorID(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Obtener una institución por un nombre dado"
     )
@@ -57,6 +61,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.encontrarPorNombre(nombre));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Obtener instituciones por tipo paginadas", description = "Parámetros: page, size, sort"
     )
@@ -68,6 +73,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.encontrarPorTipo(tipo, pageable));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Obtener instituciones por estado de pago paginadas", description = "Parámetros: page, size, sort"
     )
@@ -79,6 +85,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.encontrarPorEstadoPago(estado, pageable));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Crear una nueva institución"
     )
@@ -92,6 +99,7 @@ public class InstitucionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaInstitucionDTO);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Actualización completa de una institución"
     )
@@ -105,6 +113,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.actualizar(id, institucionDTO));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_USER_INSTITUCIONAL', 'ROLE_USER_TESORERIA')")
     @Operation(
             summary = "Actualización parcial de una institución"
     )
@@ -118,6 +127,7 @@ public class InstitucionController {
         return ResponseEntity.ok(institucionServicio.actualizacionParcial(id, dtoParcial));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
     @Operation(
             summary = "Eliminar una institución por id"
     )
