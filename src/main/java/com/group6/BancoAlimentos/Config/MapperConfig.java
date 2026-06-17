@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Config;
 
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,7 @@ public class MapperConfig {
 
         mapper.getConfiguration().setSkipNullEnabled(true);
         mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         return mapper;
     }

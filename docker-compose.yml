@@ -11,6 +11,29 @@ services:
       - "3306:3306"
     volumes:
       - banco_alimentos_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  app:
+    build: .
+    container_name: banco_alimentos_app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # La URL usa "mysql" como host — ese es el nombre del servicio de arriba,
+      # que es como Docker resuelve la red interna. "localhost" no funciona acá.
+      DB_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+    ports:
+      - "8080:8080"
 
 volumes:
   banco_alimentos_data:
