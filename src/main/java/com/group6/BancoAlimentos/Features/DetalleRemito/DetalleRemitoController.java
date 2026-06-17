@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class DetalleRemitoController {
     private final DetalleRemitoServicio detalleRemitoServicio;
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_VER')")
     @Operation(summary = "Obtener todos los detalles de remito paginados", description = "Parámetros: page, size, sort")
     @ApiResponse(responseCode = "200", description = "Página de detalles obtenida exitosamente")
     @GetMapping
@@ -33,6 +35,7 @@ public class DetalleRemitoController {
         return ResponseEntity.ok(detalleRemitoServicio.encontrarTodos(pageable));
     }
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_VER')")
     @Operation(summary = "Obtener detalles por id de remito")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Detalles encontrados exitosamente"),
@@ -43,6 +46,7 @@ public class DetalleRemitoController {
         return ResponseEntity.ok(detalleRemitoServicio.encontrarPorIdRemito(idRemito));
     }
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_VER')")
     @Operation(summary = "Obtener detalles por id de item donación")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Detalles encontrados exitosamente"),
@@ -53,6 +57,7 @@ public class DetalleRemitoController {
         return ResponseEntity.ok(detalleRemitoServicio.encontrarPorItemDonacion(idItemDonacion));
     }
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_CREAR')")
     @Operation(summary = "Crear un nuevo detalle de remito")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Detalle creado exitosamente"),
@@ -65,6 +70,7 @@ public class DetalleRemitoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(detalleRemitoServicio.crear(dto));
     }
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_ACTUALIZAR')")
     @Operation(summary = "Actualizar un detalle de remito por su id externo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Detalle actualizado exitosamente"),
@@ -77,6 +83,7 @@ public class DetalleRemitoController {
         return ResponseEntity.ok(detalleRemitoServicio.actualizar(externalId, dto));
     }
 
+    @PreAuthorize("hasAuthority('DETALLE_REMITO_ELIMINAR')")
     @Operation(summary = "Eliminar un detalle de remito por su id externo")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Detalle eliminado exitosamente"),

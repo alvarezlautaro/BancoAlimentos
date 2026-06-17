@@ -4,6 +4,7 @@ import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
 import com.group6.BancoAlimentos.Features.Donantes.service.DonanteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import java.util.List;
 public class DonanteController {
 
     private final DonanteService donanteService;
-
     @GetMapping
     public List<DonanteResponseDTO> findAll(){
 
