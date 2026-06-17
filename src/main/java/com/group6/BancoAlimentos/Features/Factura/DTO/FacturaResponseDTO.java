@@ -18,4 +18,5 @@ public class FacturaResponseDTO {
     private Long idDonacion;
     private LocalDate fecha;
     private TipoFactura tipo;
+    private String nombreDonante;
 }

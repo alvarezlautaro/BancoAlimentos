@@ -16,11 +16,17 @@ import java.util.List;
 @Table(name="donantes")
 public class Donante {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_donante")
     private Long id;
-    private String razon_social;
+    @Column(name = "razon_social",nullable = false)
+    private String razonSocial;
+    @Column(name = "cuit_donante",nullable = false)
     private Long cuit;
+    @Column(name = "telefono_donante",nullable = false)
     private String telefono;
+    @Column(name = "email_donante",nullable = false)
     private String email;
+    @Column(name = "direccion_donante",nullable = false)
     private String direccion;
 
     @OneToMany(mappedBy = "donante")

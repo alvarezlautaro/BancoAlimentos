@@ -14,6 +14,7 @@ public class FacturaMapper {
         dto.setIdDonacion(factura.getDonacion().getId());
         dto.setFecha(factura.getFecha());
         dto.setTipo(factura.getTipo());
+        dto.setNombreDonante(factura.getDonacion().getDonante().getRazonSocial());
 
         return dto;
     }

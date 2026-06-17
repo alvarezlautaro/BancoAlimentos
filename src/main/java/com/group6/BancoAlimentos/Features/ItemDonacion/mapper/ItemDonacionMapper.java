@@ -29,7 +29,7 @@ public class ItemDonacionMapper {
         dto.setValorUnitario(item.getValorUnitario());
         dto.setCantidad(item.getCantidad());
         dto.setProductoNombre(item.getProducto().getNombre());
-        dto.setDonante(item.getDonacion().getDonante().getRazon_social());
+        dto.setDonante(item.getDonacion().getDonante().getRazonSocial());
         return dto;
 
     }

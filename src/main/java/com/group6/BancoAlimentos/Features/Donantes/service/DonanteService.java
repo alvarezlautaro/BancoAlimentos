@@ -18,12 +18,13 @@ public class DonanteService implements IDonanteService{
 
     private final IDonanteRepository donanteRepository;
 
-
+    @Override
     public List<DonanteResponseDTO> findAll(){
         return donanteRepository.findAll().stream().
                 map(DonanteMapper::toResponse).toList();
     }
 
+    @Override
 
     public DonanteResponseDTO save(DonanteRequestDTO donanteRequestDTO) throws CuitDuplicadoExpections {
         if(donanteRepository.existsByCuit(donanteRequestDTO.getCuit())){
@@ -34,11 +35,13 @@ public class DonanteService implements IDonanteService{
         return DonanteMapper.toResponse(donante);
     }
 
+    @Override
 
-    public Optional<DonanteResponseDTO> findByID(Long id) {
+    public Optional<DonanteResponseDTO> findById(Long id) {
 
         return donanteRepository.findById(id).map(DonanteMapper::toResponse);
     }
+    @Override
 
     public DonanteResponseDTO update(Long id, DonanteRequestDTO donanteDTO){
 
@@ -48,12 +51,20 @@ public class DonanteService implements IDonanteService{
         donante.setTelefono(donante.getTelefono());
         donante.setCuit(donanteDTO.getCuit());
         donante.setDireccion(donanteDTO.getDireccion());
-        donante.setRazon_social(donanteDTO.getRazon_social());
+        donante.setRazonSocial(donanteDTO.getRazon_social());
 
         Donante donanteGuardado=donanteRepository.save(donante);
 
         return DonanteMapper.toResponse(donanteGuardado);
 
+    }
+
+    @Override
+    public void delete(Long id) {
+        Donante donante=donanteRepository.findById(id).
+                orElseThrow(()->new RuntimeException("Donante no existado"));
+
+        donanteRepository.delete(donante);
     }
 
 
