@@ -16,7 +16,12 @@ public class RemitoMapper implements IMapper<Remito, RemitoDTO> {
 
     @Override
     public RemitoDTO aDTO(Remito remito) {
-        return modelMapper.map(remito, RemitoDTO.class);
+        RemitoDTO dto = modelMapper.map(remito, RemitoDTO.class);
+        if (remito.getInstitucion() != null) {
+            dto.setIdInstitucion(remito.getInstitucion().getId());
+        }
+
+        return dto;
     }
 
     @Override
