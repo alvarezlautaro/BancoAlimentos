@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.Donacion.dto;
 
 import com.group6.BancoAlimentos.Features.Donacion.model.EstadoDonacion;
 import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionRequestDTO;
+import com.group6.BancoAlimentos.Features.ItemDonacion.dto.NuevoItemDonacionDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +34,7 @@ public class DonacionRequestDTO {
 
     @NotNull
     @Size(min = 1, message = "La donación debe tener al menos un ítem")
-    private List<@Valid ItemDonacionRequestDTO> items;
+    private List<@Valid NuevoItemDonacionDTO> items;
 
     private Long idDonante;
 

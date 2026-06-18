@@ -51,7 +51,7 @@ public class DonanteService implements IDonanteService{
         donante.setTelefono(donante.getTelefono());
         donante.setCuit(donanteDTO.getCuit());
         donante.setDireccion(donanteDTO.getDireccion());
-        donante.setRazonSocial(donanteDTO.getRazon_social());
+        donante.setRazonSocial(donanteDTO.getRazonSocial());
 
         Donante donanteGuardado=donanteRepository.save(donante);
 

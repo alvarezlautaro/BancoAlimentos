@@ -8,6 +8,7 @@ import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionResponseD
 import com.group6.BancoAlimentos.Features.ItemDonacion.mapper.ItemDonacionMapper;
 import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
 import com.group6.BancoAlimentos.Features.ItemDonacion.repository.ItemDonacionRepository;
+import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
 import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -80,7 +81,9 @@ public class ItemDonacionService implements IItemDonacionService {
 
     @Override
     public List<ItemDonacionResponseDTO> findByCategoria(String categoria) {
-        return itemDonacionRepository.findByProducto_Categoria(categoria)
+        Categoria categoriaEnum = Categoria.valueOf(categoria.toUpperCase());
+
+        return itemDonacionRepository.findByProducto_Categoria(categoriaEnum)
                 .stream()
                 .map(ItemDonacionMapper::aResponse)
                 .toList();

@@ -14,8 +14,8 @@ public class ItemDonacionResponseDTO {
 
         private Long id;
         private Date fechaVencimiento;
-        private double valorUnitario;
-        private int cantidad;
+        private Double valorUnitario;
+        private Integer cantidad;
         private String productoNombre;
         private String donante;
 }

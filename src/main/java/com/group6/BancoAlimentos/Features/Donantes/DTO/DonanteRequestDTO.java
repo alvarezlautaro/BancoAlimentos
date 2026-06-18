@@ -16,10 +16,10 @@ public class DonanteRequestDTO {
 
 
     @NotNull(message = "La razon social no puede estar vacia")
-    private String razon_social;
+    private String razonSocial;
     @Size(min = 11, max = 11, message = "Ingrese un CUIT valido")
-    private Long cuit;
-    @Size(min = 11, max = 11,message = "Ingrese un telefono valido")
+    private String cuit;
+    @Size(min = 10, max = 11,message = "Ingrese un telefono valido")
     private String telefono;
     @Email
     private String email;

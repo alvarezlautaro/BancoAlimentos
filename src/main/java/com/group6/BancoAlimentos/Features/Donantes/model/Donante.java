@@ -21,7 +21,7 @@ public class Donante {
     @Column(name = "razon_social",nullable = false)
     private String razonSocial;
     @Column(name = "cuit_donante",nullable = false)
-    private Long cuit;
+    private String cuit;
     @Column(name = "telefono_donante",nullable = false)
     private String telefono;
     @Column(name = "email_donante",nullable = false)

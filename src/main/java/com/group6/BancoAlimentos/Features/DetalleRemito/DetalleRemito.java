@@ -35,4 +35,10 @@ public class DetalleRemito {
     @Column(nullable = false)
     private Integer cantidad;
 
+    @PrePersist
+    protected void onCreate() {
+        if (this.externalId == null) {
+            this.externalId = UUID.randomUUID();
+        }
+    }
 }
