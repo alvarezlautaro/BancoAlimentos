@@ -14,7 +14,17 @@ public class DetalleRemitoResponseMapper implements IMapper<DetalleRemito, Detal
 
     @Override
     public DetalleRemitoResponse aDTO(DetalleRemito detalleRemito) {
-        return modelMapper.map(detalleRemito, DetalleRemitoResponse.class);
+        DetalleRemitoResponse response = modelMapper.map(detalleRemito, DetalleRemitoResponse.class);
+
+        if(detalleRemito.getRemito() != null){
+            response.setIdRemito(detalleRemito.getRemito().getId());
+        }
+
+        if(detalleRemito.getItemDonacion() != null){
+            response.setIdItemDonacion(detalleRemito.getItemDonacion().getId());
+        }
+
+        return response;
     }
 
     @Override
