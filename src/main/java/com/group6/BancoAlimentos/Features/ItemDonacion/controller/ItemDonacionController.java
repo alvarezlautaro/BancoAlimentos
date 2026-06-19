@@ -52,11 +52,7 @@ public class ItemDonacionController {
         return ResponseEntity.status(HttpStatus.OK).body(itemDonacionService.findByCategoria(categoria));
     }
 
-    @PreAuthorize("hasAuthority('ITEM_DONACION_CREAR')")
-    @PostMapping
-    public ResponseEntity<ItemDonacionResponseDTO> create(@RequestBody @Valid ItemDonacionRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemDonacionService.save(dto));
-    }
+
 
     @PreAuthorize("hasAuthority('ITEM_DONACION_ACTUALIZAR')")
     @PutMapping("/{id}")
