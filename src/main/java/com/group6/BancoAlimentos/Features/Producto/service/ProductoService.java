@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.Producto.service;
 
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
+import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
 import com.group6.BancoAlimentos.Features.Producto.mapper.ProductoMapper;
 import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
@@ -63,4 +64,15 @@ public class ProductoService implements IProductoService {
 
         productoRepository.deleteById(id);
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> findByCategoria(Categoria categoria) {
+        return productoRepository.findByCategoria(categoria)
+                .stream()
+                .map(ProductoMapper::toResponse)
+                .toList();
+    }
+
 }

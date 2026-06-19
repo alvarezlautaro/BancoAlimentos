@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.Producto.controller;
 
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
+import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
 import com.group6.BancoAlimentos.Features.Producto.service.IProductoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,13 @@ public class ProductoController {
     @GetMapping
     public ResponseEntity<List<ProductoResponseDTO>> findAllProductos() {
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(productoService.findAll());
+    }
+
+
+    @PreAuthorize("hasAuthority('PRODUCTO_VER')")
+    @GetMapping("/filtrar/categoria")
+    public ResponseEntity<List<ProductoResponseDTO>> findByCategoria(@RequestParam Categoria categoria) {
+        return ResponseEntity.ok(productoService.findByCategoria(categoria));
     }
 
     @PreAuthorize("hasAuthority('PRODUCTO_VER')")
