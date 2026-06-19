@@ -27,6 +27,5 @@ public class ItemDonacionRequestDTO {
     @NotNull(message = "El producto es obligatorio")
     private Long productoId;
 
-    @NotNull(message = "La donacion es obligatoria")
-    private Long donacionId;
+
 }

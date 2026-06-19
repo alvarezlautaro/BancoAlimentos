@@ -54,26 +54,17 @@ public class ItemDonacionService implements IItemDonacionService {
         return ItemDonacionMapper.aResponse(item);
     }
 
-    @Override
-    public ItemDonacionResponseDTO save(ItemDonacionRequestDTO dto) {
-        Producto producto = productoRepository.findById(dto.getProductoId())
-                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + dto.getProductoId()));
-        Donacion donacion = donacionRepository.findById(dto.getDonacionId())
-                .orElseThrow(() -> new EntityNotFoundException("Donacion no encontrada con id: " + dto.getDonacionId()));
-        ItemDonacion item = ItemDonacionMapper.aEntidad(dto, producto, donacion);
-        itemDonacionRepository.save(item);
-        return ItemDonacionMapper.aResponse(item);
-    }
+
 
     @Override
     public ItemDonacionResponseDTO update(Long id, ItemDonacionRequestDTO dto) {
-        itemDonacionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("ItemDonacion no encontrado con id: " + id));
+        ItemDonacion itemExistente = itemDonacionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ItemDonacion no encontrado con id: " + id));
 
-        Producto producto = productoRepository.findById(dto.getProductoId()).orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + dto.getProductoId()));
+        Producto producto = productoRepository.findById(dto.getProductoId())
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + dto.getProductoId()));
 
-        Donacion donacion = donacionRepository.findById(dto.getDonacionId()).orElseThrow(() -> new EntityNotFoundException("Donacion no encontrada con id: " + dto.getDonacionId()));
-
-        ItemDonacion item = ItemDonacionMapper.aEntidad(dto, producto, donacion);
+        ItemDonacion item = ItemDonacionMapper.aEntidad(dto, producto, itemExistente.getDonacion());
         item.setId(id);
         itemDonacionRepository.save(item);
         return ItemDonacionMapper.aResponse(item);
