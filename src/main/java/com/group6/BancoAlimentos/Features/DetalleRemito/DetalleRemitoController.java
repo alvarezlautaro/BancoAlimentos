@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.DetalleRemito;
 
 import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.DetalleRemitoRequest;
 import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.DetalleRemitoResponse;
+import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.NuevoDetalleRemito;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -66,8 +67,8 @@ public class DetalleRemitoController {
             @ApiResponse(responseCode = "422", description = "Violación de regla de negocio")
     })
     @PostMapping
-    public ResponseEntity<DetalleRemitoResponse> crear(@Valid @RequestBody DetalleRemitoRequest dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(detalleRemitoServicio.crear(dto));
+    public ResponseEntity<List<DetalleRemitoResponse>> crear(@Valid @RequestBody List<NuevoDetalleRemito> listaDetalleRemitos){
+        return ResponseEntity.status(HttpStatus.CREATED).body(detalleRemitoServicio.crear(listaDetalleRemitos));
     }
 
     @PreAuthorize("hasAuthority('DETALLE_REMITO_ACTUALIZAR')")

@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class DonanteResponseDTO {
 
-    private String razon_social;
-    private Long cuit;
+    private String razonSocial;
+    private String cuit;
     private String telefono;
     private String email;
     private String direccion;

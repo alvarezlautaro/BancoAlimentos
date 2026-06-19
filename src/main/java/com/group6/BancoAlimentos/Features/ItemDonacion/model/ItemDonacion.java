@@ -24,9 +24,9 @@ public class ItemDonacion {
     private Long id;
 
     @Column(name = "cantidad",nullable = false,length = 55)
-    private int cantidad;
+    private Integer cantidad;
     @Column(name = "valor_unitario",nullable = false)
-    private double valorUnitario;
+    private Double valorUnitario;
     @Column(name = "fecha_vencimiento",nullable = false)
     private Date fechaVencimiento;
 

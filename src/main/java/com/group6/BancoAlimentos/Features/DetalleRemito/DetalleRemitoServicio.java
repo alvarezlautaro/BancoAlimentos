@@ -4,8 +4,10 @@ import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.DetalleRemitoRequest;
 import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.DetalleRemitoResponse;
+import com.group6.BancoAlimentos.Features.DetalleRemito.DTOs.NuevoDetalleRemito;
 import com.group6.BancoAlimentos.Features.DetalleRemito.Mapper.DetalleRemitoRequestMapper;
 import com.group6.BancoAlimentos.Features.DetalleRemito.Mapper.DetalleRemitoResponseMapper;
+import com.group6.BancoAlimentos.Features.DetalleRemito.Mapper.NuevoDetalleRemitoMapper;
 import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
 import com.group6.BancoAlimentos.Features.ItemDonacion.repository.ItemDonacionRepository;
 import com.group6.BancoAlimentos.Features.Remito.IRemitoRepositorio;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +34,7 @@ public class DetalleRemitoServicio {
 
     private final DetalleRemitoRequestMapper requestMapper;
     private final DetalleRemitoResponseMapper responseMapper;
+    private final NuevoDetalleRemitoMapper nuevoMapper;
 
     public Page<DetalleRemitoResponse> encontrarTodos(Pageable pageable){
         return detalleRemitoRepositorio.findAll(pageable)
@@ -52,38 +56,56 @@ public class DetalleRemitoServicio {
     }
 
     @Transactional
-    public DetalleRemitoResponse crear(DetalleRemitoRequest dto){
-        Remito remito = remitoRepositorio.findById(dto.getIdRemito())
-                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id: " + dto.getIdRemito()  + " no fue encontrado"));
-
-        ItemDonacion itemDonacion = itemDonacionRepositorio.findById(dto.getIdItemDonacion())
-                .orElseThrow(() -> new RecursoNoEncontradoException("El item donacion con el id: " + dto.getIdItemDonacion() + " no fue encontrado"));
-
-        if(detalleRemitoRepositorio.existsByRemitoIdAndItemDonacionId(dto.getIdRemito(), dto.getIdItemDonacion())){
-            throw new ReglaNegocioException("El item ya existe en este remito", "DETALLE_REMITO");
+    public List<DetalleRemitoResponse> crear(List<NuevoDetalleRemito> listaDetalleRemitos){
+        if(listaDetalleRemitos.isEmpty()){
+            throw new IllegalArgumentException("La lista de detalles remito no puede estar vacia");
         }
 
-        LocalDate fechaVencimiento = itemDonacion.getFechaVencimiento()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        Long idRemito = listaDetalleRemitos.getFirst().getIdRemito();
+        Remito remito = remitoRepositorio.findById(idRemito)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con id: " + idRemito + " no existe"));
 
-        if(fechaVencimiento.isBefore(remito.getFecha())){
-            throw new ReglaNegocioException("No se puede agregar un item vencido al remito", "FECHA");
+        List<DetalleRemitoResponse> listaRespuestas = new ArrayList<>();
+
+        for(NuevoDetalleRemito dto : listaDetalleRemitos){
+
+            if (!dto.getIdRemito().equals(idRemito)) {
+                throw new ReglaNegocioException("Todos los detalles deben pertenecer al mismo remito", "REMITO");
+            }
+
+            ItemDonacion itemDonacion = itemDonacionRepositorio.findById(dto.getIdItemDonacion())
+                    .orElseThrow(() -> new RecursoNoEncontradoException("El item donacion con el id: " + dto.getIdItemDonacion() + " no fue encontrado"));
+
+            if(detalleRemitoRepositorio.existsByRemitoIdAndItemDonacionId(dto.getIdRemito(), dto.getIdItemDonacion())){
+                throw new ReglaNegocioException("El item ya existe en este remito", "DETALLE_REMITO");
+            }
+
+            LocalDate fechaVencimiento = itemDonacion.getFechaVencimiento()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+
+            if(fechaVencimiento.isBefore(remito.getFecha())){
+                throw new ReglaNegocioException("No se puede agregar un item vencido al remito", "FECHA");
+            }
+
+            if(dto.getCantidad() > itemDonacion.getCantidad()){
+                throw new ReglaNegocioException("La cantidad solicitada supera el stock disponible", "STOCK");
+            }
+
+            itemDonacion.setCantidad(itemDonacion.getCantidad() - dto.getCantidad());
+            itemDonacionRepositorio.save(itemDonacion);
+
+            DetalleRemito detalle = nuevoMapper.aEntidad(dto);
+            detalle.setRemito(remito);
+            detalle.setItemDonacion(itemDonacion);
+
+            DetalleRemito detalleGuardado = detalleRemitoRepositorio.save(detalle);
+
+            listaRespuestas.add(responseMapper.aDTO(detalleGuardado));
         }
 
-        if(dto.getCantidad() > itemDonacion.getCantidad()){
-            throw new ReglaNegocioException("La cantidad solicitada supera el stock disponible", "STOCK");
-        }
-
-        itemDonacion.setCantidad(itemDonacion.getCantidad() - dto.getCantidad());
-        itemDonacionRepositorio.save(itemDonacion);
-
-        DetalleRemito detalle = requestMapper.aEntidad(dto);
-        detalle.setRemito(remito);
-        detalle.setItemDonacion(itemDonacion);
-
-        return responseMapper.aDTO(detalleRemitoRepositorio.save(detalle));
+        return listaRespuestas;
     }
 
     @Transactional

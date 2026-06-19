@@ -25,11 +25,11 @@ public class ActualizarRemitoMapper implements IActualizarMapper<Remito, Actuali
 
     @Override
     public Remito aEntidad(ActualizarRemitoDTO actualizarRemitoDTO) {
-        return null;
+        return modelMapper.map(actualizarRemitoDTO, Remito.class);
     }
 
     @Override
     public ActualizarRemitoDTO aDTO(Remito remito) {
-        return null;
+        return modelMapper.map(remito, ActualizarRemitoDTO.class);
     }
 }

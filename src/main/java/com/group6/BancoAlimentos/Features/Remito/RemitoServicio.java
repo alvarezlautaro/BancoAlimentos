@@ -77,7 +77,13 @@ public class RemitoServicio {
         Remito remito = remitoRepositorio.findByExternalId(externalId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
 
-        return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
+        Institucion nuevaInstitucion = institucionRepositorio.findById(remitoActualizar.getIdInstitucion())
+                .orElseThrow(() -> new RecursoNoEncontradoException("La institución con id: " + remitoActualizar.getIdInstitucion() + " no existe."));
+
+        remito = actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito);
+        remito.setInstitucion(nuevaInstitucion);
+
+        return remitoMapper.aDTO(remitoRepositorio.save(remito));
     }
 
     @Transactional
