@@ -1,5 +1,7 @@
 package com.group6.BancoAlimentos.Features.Factura.service;
 
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
+import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
 import com.group6.BancoAlimentos.Features.Donacion.repository.IDonacionRepository;
 import com.group6.BancoAlimentos.Features.Factura.DTO.FacturaRequestDTO;
@@ -43,7 +45,7 @@ public class FacturaService implements IFacturaService {
     @Override
     public FacturaResponseDTO save(FacturaRequestDTO dto) {
         Donacion donacion = donacionRepository.findById(dto.getIdDonacion())
-                .orElseThrow(() -> new RuntimeException("La donación no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La donación no existe"));
 
         Factura factura = FacturaMapper.toEntity(dto, donacion);
 
@@ -55,10 +57,10 @@ public class FacturaService implements IFacturaService {
     @Override
     public FacturaResponseDTO update(Long id, FacturaRequestDTO dto) {
         Factura factura = facturaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("La factura no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La factura no existe"));
 
         Donacion donacion = donacionRepository.findById(dto.getIdDonacion())
-                .orElseThrow(() -> new RuntimeException("La donación no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La donación no existe"));
 
         factura.setDonacion(donacion);
         factura.setFecha(dto.getFecha());
@@ -72,7 +74,7 @@ public class FacturaService implements IFacturaService {
     @Override
     public void delete(Long id) {
         if (!facturaRepository.existsById(id)) {
-            throw new RuntimeException("La factura no existe");
+            throw new RecursoNoEncontradoException("La factura no existe");
         }
 
         facturaRepository.deleteById(id);
@@ -81,12 +83,12 @@ public class FacturaService implements IFacturaService {
     @Override
     public FacturaResponseDTO generarFactura(Long idDonacion) {
         Donacion donacion = donacionRepository.findById(idDonacion)
-                .orElseThrow(() -> new RuntimeException("La donación no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La donación no existe"));
 
         Optional<Factura> facturaExistente = facturaRepository.findByDonacionId(idDonacion);
 
         if (facturaExistente.isPresent()) {
-            throw new RuntimeException("La donación ya tiene una factura asociada");
+            throw new ReglaNegocioException("La donación ya tiene una factura asociada", "DONACION");
         }
 
         Factura factura = new Factura();

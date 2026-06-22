@@ -25,14 +25,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class DetalleRemitoServicio {
     private final IDetalleRemitoRepositorio detalleRemitoRepositorio;
     private final IRemitoRepositorio remitoRepositorio;
     private final ItemDonacionRepository itemDonacionRepositorio;
 
-    private final DetalleRemitoRequestMapper requestMapper;
     private final DetalleRemitoResponseMapper responseMapper;
     private final NuevoDetalleRemitoMapper nuevoMapper;
 

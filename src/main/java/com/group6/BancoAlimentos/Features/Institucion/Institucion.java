@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "institucion")
@@ -19,6 +20,9 @@ public class Institucion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_institucion")
     private Long id;
+
+    @Column(unique = true, nullable = false, updatable = false)
+    private UUID externalId;
 
     private String nombre;
 
@@ -36,4 +40,11 @@ public class Institucion {
 
     @OneToMany(mappedBy = "institucion", orphanRemoval = true)
     private List<Remito> remitos;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.externalId == null) {
+            this.externalId = UUID.randomUUID();
+        }
+    }
 }

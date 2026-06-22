@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class RemitoServicio {
     private final IRemitoRepositorio remitoRepositorio;
