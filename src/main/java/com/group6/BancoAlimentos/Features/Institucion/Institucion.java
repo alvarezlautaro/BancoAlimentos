@@ -13,7 +13,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Institucion {
 
     @Id
@@ -24,18 +23,24 @@ public class Institucion {
     @Column(unique = true, nullable = false, updatable = false)
     private UUID externalId;
 
+    @Column(nullable = false)
     private String nombre;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private tipoInstitucion tipo;
 
+    @Column(nullable = false)
     private String direccion;
 
+    @Column(nullable = false)
     private String telefono;
 
+    @Column(nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private estadoPago estado;
 
     @OneToMany(mappedBy = "institucion", orphanRemoval = true)

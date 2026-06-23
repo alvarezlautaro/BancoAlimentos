@@ -96,9 +96,8 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos")
     })
     @PostMapping
-    public ResponseEntity<NuevaInstitucionDTO> crear(@Valid @RequestBody NuevaInstitucionDTO nuevaInstitucionDTO){
-        institucionServicio.guardar(nuevaInstitucionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaInstitucionDTO);
+    public ResponseEntity<InstitucionDTO> crear(@Valid @RequestBody NuevaInstitucionDTO nuevaInstitucionDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(institucionServicio.guardar(nuevaInstitucionDTO));
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")

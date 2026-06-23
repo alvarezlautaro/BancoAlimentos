@@ -53,8 +53,9 @@ public class InstitucionServicio {
 
     @Transactional
     public InstitucionDTO guardar(NuevaInstitucionDTO dto){
-        Institucion institucion = institucionRepositorio.save(nuevaInstitucionDTO.aEntidad(dto));
-        return institucionMapper.aDTO(institucion);
+        Institucion institucion = nuevaInstitucionDTO.aEntidad(dto);
+        Institucion institucionGuardada = institucionRepositorio.save(institucion);
+        return institucionMapper.aDTO(institucionGuardada);
     }
 
     @Transactional
