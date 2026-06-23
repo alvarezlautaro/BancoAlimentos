@@ -1,6 +1,6 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
-import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionDTO;
+import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionParcialDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -44,8 +46,8 @@ public class InstitucionController {
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable Long id){
-        return ResponseEntity.ok(institucionServicio.encontrarPorID(id));
+    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable UUID externalId){
+        return ResponseEntity.ok(institucionServicio.encontrarPorID(externalId));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
@@ -94,9 +96,8 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos")
     })
     @PostMapping
-    public ResponseEntity<NuevaInstitucionDTO> crear(@Valid @RequestBody NuevaInstitucionDTO nuevaInstitucionDTO){
-        institucionServicio.guardar(nuevaInstitucionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaInstitucionDTO);
+    public ResponseEntity<InstitucionDTO> crear(@Valid @RequestBody NuevaInstitucionDTO nuevaInstitucionDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(institucionServicio.guardar(nuevaInstitucionDTO));
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
@@ -108,9 +109,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ActualizarInstitucionDTO institucionDTO){
-        return ResponseEntity.ok(institucionServicio.actualizar(id, institucionDTO));
+    @PutMapping("/{externalId}")
+    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable UUID externalId, @Valid @RequestBody InstitucionDTO institucionDTO){
+        return ResponseEntity.ok(institucionServicio.actualizar(externalId, institucionDTO));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER_INSTITUCIONAL', 'ROLE_USER_TESORERIA')")
@@ -122,9 +123,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<InstitucionDTO> actualizacionParcial(@PathVariable Long id, @Valid @RequestBody ActualizarInstitucionDTO dtoParcial){
-        return ResponseEntity.ok(institucionServicio.actualizacionParcial(id, dtoParcial));
+    @PatchMapping("/{externalId}")
+    public ResponseEntity<InstitucionDTO> actualizacionParcial(@PathVariable UUID externalId, @Valid @RequestBody ActualizarInstitucionParcialDTO dtoParcial){
+        return ResponseEntity.ok(institucionServicio.actualizacionParcial(externalId, dtoParcial));
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
@@ -135,9 +136,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "204", description = "Institución eliminada correctamente"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id){
-        institucionServicio.eliminar(id);
+    @DeleteMapping("/{externalId}")
+    public ResponseEntity<Void> eliminar(@PathVariable UUID externalId){
+        institucionServicio.eliminar(externalId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

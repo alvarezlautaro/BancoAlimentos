@@ -1,5 +1,7 @@
 package com.group6.BancoAlimentos.Features.ItemDonacion.service;
 
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
+import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.DetalleRemito.IDetalleRemitoRepositorio;
 import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
 import com.group6.BancoAlimentos.Features.Donacion.repository.IDonacionRepository;
@@ -14,10 +16,12 @@ import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 
 public class ItemDonacionService implements IItemDonacionService {
@@ -50,7 +54,7 @@ public class ItemDonacionService implements IItemDonacionService {
     @Override
     public ItemDonacionResponseDTO findById(Long id) {
         ItemDonacion item = itemDonacionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ItemDonacion no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("ItemDonacion no encontrado con id: " + id));
         return ItemDonacionMapper.aResponse(item);
     }
 
@@ -59,10 +63,10 @@ public class ItemDonacionService implements IItemDonacionService {
     @Override
     public ItemDonacionResponseDTO update(Long id, ItemDonacionRequestDTO dto) {
         ItemDonacion itemExistente = itemDonacionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ItemDonacion no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("ItemDonacion no encontrado con id: " + id));
 
         Producto producto = productoRepository.findById(dto.getProductoId())
-                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con id: " + dto.getProductoId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado con id: " + dto.getProductoId()));
 
         ItemDonacion item = ItemDonacionMapper.aEntidad(dto, producto, itemExistente.getDonacion());
         item.setId(id);
@@ -83,10 +87,10 @@ public class ItemDonacionService implements IItemDonacionService {
     @Override
     public void delete(Long id) {
         itemDonacionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ItemDonacion no encontrado con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("ItemDonacion no encontrado con id: " + id));
 
         if (detalleRemitoRepositorio.existsByItemDonacion_Id(id)) {
-            throw new IllegalStateException("No se puede eliminar el ItemDonacion porque YA esta asociado a un Remito");
+            throw new ReglaNegocioException("No se puede eliminar el ItemDonacion porque YA esta asociado a un Remito", "REMITO");
         }
 
         itemDonacionRepository.deleteById(id);

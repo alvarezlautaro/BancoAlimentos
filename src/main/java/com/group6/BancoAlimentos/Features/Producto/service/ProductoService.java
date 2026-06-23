@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Producto.service;
 
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoRequestDTO;
 import com.group6.BancoAlimentos.Features.Producto.dto.ProductoResponseDTO;
 import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
@@ -45,7 +46,7 @@ public class ProductoService implements IProductoService {
 
     @Override
     public ProductoResponseDTO update(Long id, ProductoRequestDTO dto) {
-        Producto producto = productoRepository.findById(id).orElseThrow(()-> new RuntimeException("El producto no existe"));
+        Producto producto = productoRepository.findById(id).orElseThrow(()-> new RecursoNoEncontradoException("El producto no existe"));
 
         producto.setNombre(dto.getNombre());
         producto.setCategoria(dto.getCategoria());
@@ -59,7 +60,7 @@ public class ProductoService implements IProductoService {
     @Override
     public void delete(Long id) {
         if (!productoRepository.existsById(id)) {
-            throw new RuntimeException("El producto no existe");
+            throw new RecursoNoEncontradoException("El producto no existe");
         }
 
         productoRepository.deleteById(id);

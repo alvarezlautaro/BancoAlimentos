@@ -23,11 +23,18 @@ public class Remito {
     private Long id;
 
     @Column(unique = true, nullable = false, updatable = false)
-    private UUID externalId = UUID.randomUUID();
+    private UUID externalId;
 
     private LocalDate fecha;
 
     @ManyToOne
     @JoinColumn(name = "id_institucion")
     private Institucion institucion;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.externalId == null) {
+            this.externalId = UUID.randomUUID();
+        }
+    }
 }

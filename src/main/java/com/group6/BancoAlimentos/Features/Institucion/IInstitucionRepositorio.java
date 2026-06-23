@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IInstitucionRepositorio extends JpaRepository<Institucion, Long> {
     Optional<Institucion> findByNombre(String nombre);
@@ -14,4 +15,5 @@ public interface IInstitucionRepositorio extends JpaRepository<Institucion, Long
     Page<Institucion> findAll(Pageable pageable);
     Page<Institucion> findByTipo(tipoInstitucion tipo, Pageable pageable);
     Page<Institucion> findByEstado(estadoPago estado, Pageable pageable);
+    Optional<Institucion> findByExternalId(UUID externalId);
 }

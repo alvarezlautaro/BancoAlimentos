@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Donacion.service;
 
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Features.Donacion.dto.DonacionRequestDTO;
 import com.group6.BancoAlimentos.Features.Donacion.dto.DonacionResponseDTO;
 import com.group6.BancoAlimentos.Features.Donacion.mapper.DonacionMapper;
@@ -53,7 +54,7 @@ public class DonacionService implements IDonacionService {
     public DonacionResponseDTO save(DonacionRequestDTO dto) {
 
         Donante donante=donanteRepository.findById(dto.getIdDonante()).
-                orElseThrow(() -> new RuntimeException("Donante no encontrado"));
+                orElseThrow(() -> new RecursoNoEncontradoException("Donante no encontrado"));
 
         Donacion donacion=new Donacion();
         donacion.setEstado(dto.getEstado());
@@ -90,7 +91,7 @@ public class DonacionService implements IDonacionService {
     @Override
     public DonacionResponseDTO update(Long id, DonacionRequestDTO dto) {
         Donacion donacion = donacionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("La donación no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La donación no existe"));
 
         donacion.setFecha(dto.getFecha());
         donacion.setEstado(dto.getEstado());
@@ -105,7 +106,7 @@ public class DonacionService implements IDonacionService {
     @Override
     public void delete(Long id) {
         if (!donacionRepository.existsById(id)) {
-            throw new RuntimeException("La donación no existe");
+            throw new RecursoNoEncontradoException("La donación no existe");
         }
 
         donacionRepository.deleteById(id);
@@ -114,7 +115,7 @@ public class DonacionService implements IDonacionService {
     @Override
     public DonacionResponseDTO confirmarDonacion(Long id) {
         Donacion donacion = donacionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("La donación no existe"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("La donación no existe"));
 
         donacion.setEstado(EstadoDonacion.CONFIRMADA);
 

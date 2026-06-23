@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Common.exception;
 
+import com.group6.BancoAlimentos.Features.Donantes.expections.CuitDuplicadoExpections;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +57,9 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(problema);
+    }
+    @ExceptionHandler(CuitDuplicadoExpections.class)
+    public ResponseEntity<String> manejarCuitDuplicado(CuitDuplicadoExpections ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
