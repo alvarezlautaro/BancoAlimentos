@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IDonanteRepository extends JpaRepository<Donante, Long> {
-    Optional<Donante> findByExternalId(UUID externalId);
+
     boolean existsByCuit(String cuit);
 }

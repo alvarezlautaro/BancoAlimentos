@@ -76,8 +76,8 @@ public class DonanteService implements IDonanteService{
         donanteRepository.delete(donante);
     }
 
-    public List<Donante> getHistorial(UUID externalId) {
-        Donante donante = donanteRepository.findByExternalId(externalId)
+    public List<Donante> getHistorial(Long id) {
+        Donante donante = donanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donante no encontrado"));
 
         AuditReader reader = AuditReaderFactory.get(entityManager);

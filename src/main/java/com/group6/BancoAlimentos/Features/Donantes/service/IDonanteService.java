@@ -16,5 +16,5 @@ public interface IDonanteService {
     Optional<DonanteResponseDTO> findById(Long id);
     DonanteResponseDTO update(Long id,DonanteRequestDTO dto);
     void delete(Long id);
-    public List<Donante> getHistorial(UUID externalId);
+    public List<Donante> getHistorial(Long id);
 }
