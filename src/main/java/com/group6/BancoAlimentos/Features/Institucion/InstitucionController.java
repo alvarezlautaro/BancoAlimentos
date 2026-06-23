@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -140,5 +141,9 @@ public class InstitucionController {
     public ResponseEntity<Void> eliminar(@PathVariable UUID externalId){
         institucionServicio.eliminar(externalId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @GetMapping("/{externalId}/historial")
+    public ResponseEntity<List<Institucion>> getHistorial(@PathVariable UUID externalId) {
+        return ResponseEntity.ok(institucionServicio.getHistorial(externalId));
     }
 }

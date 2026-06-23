@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter @Setter
 @Table(name="donantes")
+@Audited
 public class Donante {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -29,6 +32,8 @@ public class Donante {
     @Column(nullable = false)
     private String direccion;
 
+
+    @NotAudited
     @OneToMany(mappedBy = "donante")
     private List<Donacion> donaciones;
 

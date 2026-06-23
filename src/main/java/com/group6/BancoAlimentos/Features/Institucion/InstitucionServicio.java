@@ -8,13 +8,19 @@ import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.ActualizarInstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionMapper;
 import com.group6.BancoAlimentos.Features.Institucion.Mapper.InstitucionNuevaMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +29,8 @@ public class InstitucionServicio {
     private final InstitucionMapper institucionMapper;
     private final ActualizarInstitucionMapper actualizarInstitucionMapper;
     private final InstitucionNuevaMapper nuevaInstitucionDTO;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Page<InstitucionDTO> encontrarTodos(Pageable pageable){
         return institucionRepositorio.findAll(pageable)
@@ -98,5 +106,17 @@ public class InstitucionServicio {
                 .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id externo: " + externalId + " no fue encontrada"));
 
         institucionRepositorio.delete(institucion);
+    }
+
+    public List<Institucion> getHistorial(UUID externalId) {
+        Institucion inst = institucionRepositorio.findByExternalId(externalId)
+                .orElseThrow(() -> new RuntimeException("Institución no encontrada"));
+
+        AuditReader reader = AuditReaderFactory.get(entityManager);
+        List<Number> revisiones = reader.getRevisions(Institucion.class, inst.getId());
+
+        return revisiones.stream()
+                .map(rev -> reader.find(Institucion.class, inst.getId(), rev))
+                .collect(Collectors.toList());
     }
 }

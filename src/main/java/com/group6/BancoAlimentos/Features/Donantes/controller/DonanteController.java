@@ -2,9 +2,11 @@ package com.group6.BancoAlimentos.Features.Donantes.controller;
 
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
+import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
 import com.group6.BancoAlimentos.Features.Donantes.service.IDonanteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,4 +58,9 @@ public class DonanteController {
         return ResponseEntity.ok("Donante eliminado");
     }
 
+    @Autowired
+    @GetMapping("/{externalId}/historial")
+    public ResponseEntity<List<Donante>> getHistorial(@PathVariable UUID externalId) {
+        return ResponseEntity.ok(donanteService.getHistorial(externalId));
+    }
 }

@@ -3,6 +3,8 @@ package com.group6.BancoAlimentos.Features.Institucion;
 import com.group6.BancoAlimentos.Features.Remito.Remito;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Audited
 public class Institucion {
 
     @Id
@@ -43,6 +46,7 @@ public class Institucion {
     @Column(nullable = false)
     private estadoPago estado;
 
+    @NotAudited
     @OneToMany(mappedBy = "institucion", orphanRemoval = true)
     private List<Remito> remitos;
 

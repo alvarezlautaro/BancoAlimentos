@@ -6,12 +6,18 @@ import com.group6.BancoAlimentos.Features.Donantes.expections.CuitDuplicadoExpec
 import com.group6.BancoAlimentos.Features.Donantes.mapper.DonanteMapper;
 import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
 import com.group6.BancoAlimentos.Features.Donantes.repository.IDonanteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,7 +25,8 @@ import java.util.Optional;
 public class DonanteService implements IDonanteService{
 
     private final IDonanteRepository donanteRepository;
-
+    @PersistenceContext
+    private EntityManager entityManager;
     @Override
     public List<DonanteResponseDTO> findAll(){
         return donanteRepository.findAll().stream().
@@ -69,5 +76,15 @@ public class DonanteService implements IDonanteService{
         donanteRepository.delete(donante);
     }
 
+    public List<Donante> getHistorial(UUID externalId) {
+        Donante donante = donanteRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new RuntimeException("Donante no encontrado"));
 
+        AuditReader reader = AuditReaderFactory.get(entityManager);
+        List<Number> revisiones = reader.getRevisions(Donante.class, donante.getId());
+
+        return revisiones.stream()
+                .map(rev -> reader.find(Donante.class, donante.getId(), rev))
+                .collect(Collectors.toList());
+    }
 }
