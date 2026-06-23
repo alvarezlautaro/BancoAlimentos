@@ -1,0 +1,42 @@
+package com.group6.BancoAlimentos.Features.ItemDonacion.model;
+
+import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
+import com.group6.BancoAlimentos.Features.Producto.model.Producto;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "ItemDonacion")
+public class ItemDonacion {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_itemdonacion")
+    private Long id;
+
+    @Column(name = "cantidad",nullable = false,length = 55)
+    private Integer cantidad;
+    @Column(name = "valor_unitario",nullable = false)
+    private Double valorUnitario;
+    @Column(name = "fecha_vencimiento",nullable = false)
+    private Date fechaVencimiento;
+
+    @ManyToOne
+    @JoinColumn(name = "producto_id",nullable = false)
+    private Producto producto;
+
+
+    @ManyToOne
+    @JoinColumn(name = "id_donacion",nullable=false)
+    private Donacion donacion;
+
+}
