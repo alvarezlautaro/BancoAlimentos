@@ -46,8 +46,8 @@ public class InstitucionController {
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable Long id){
-        return ResponseEntity.ok(institucionServicio.encontrarPorID(id));
+    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable UUID externalId){
+        return ResponseEntity.ok(institucionServicio.encontrarPorID(externalId));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")

@@ -29,10 +29,10 @@ public class InstitucionServicio {
                 .map(institucionMapper::aDTO);
     }
 
-    public InstitucionDTO encontrarPorID(Long id){
-        return institucionRepositorio.findById(id)
+    public InstitucionDTO encontrarPorID(UUID externalId){
+        return institucionRepositorio.findByExternalId(externalId)
                 .map(entidad -> institucionMapper.aDTO(entidad))
-                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el id externo: " + externalId));
     }
 
     public InstitucionDTO encontrarPorNombre(String nombre){
