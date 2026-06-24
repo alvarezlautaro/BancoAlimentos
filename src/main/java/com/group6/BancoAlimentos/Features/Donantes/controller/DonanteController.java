@@ -58,7 +58,7 @@ public class DonanteController {
         return ResponseEntity.ok("Donante eliminado");
     }
 
-    @PreAuthorize("hasAuthority('AUDITORIA_INSTITUCION_VER')")
+    @PreAuthorize("hasAuthority('AUDITORIA_DONACION_VER')")
     @GetMapping("/{id}/historial")
     public ResponseEntity<List<Donante>> getHistorial(@PathVariable Long id) {
         return ResponseEntity.ok(donanteService.getHistorial(id));
