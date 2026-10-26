@@ -25,6 +25,7 @@ services:
       mysql:
         condition: service_healthy
     environment:
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:4200}
       DB_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
