@@ -19,7 +19,7 @@ services:
       start_period: 30s
 
   app:
-    build: .
+    build: ./backend
     container_name: banco_alimentos_app
     depends_on:
       mysql:

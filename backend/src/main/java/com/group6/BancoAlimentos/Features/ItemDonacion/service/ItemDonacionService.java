@@ -3,8 +3,6 @@ package com.group6.BancoAlimentos.Features.ItemDonacion.service;
 import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.DetalleRemito.IDetalleRemitoRepositorio;
-import com.group6.BancoAlimentos.Features.Donacion.model.Donacion;
-import com.group6.BancoAlimentos.Features.Donacion.repository.IDonacionRepository;
 import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionRequestDTO;
 import com.group6.BancoAlimentos.Features.ItemDonacion.dto.ItemDonacionResponseDTO;
 import com.group6.BancoAlimentos.Features.ItemDonacion.mapper.ItemDonacionMapper;
@@ -13,7 +11,6 @@ import com.group6.BancoAlimentos.Features.ItemDonacion.repository.ItemDonacionRe
 import com.group6.BancoAlimentos.Features.Producto.emun.Categoria;
 import com.group6.BancoAlimentos.Features.Producto.model.Producto;
 import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +25,6 @@ public class ItemDonacionService implements IItemDonacionService {
 
     private final ItemDonacionRepository itemDonacionRepository;
     private final ProductoRepository productoRepository;
-    private final IDonacionRepository donacionRepository;
     private final IDetalleRemitoRepositorio detalleRemitoRepositorio;
 
 
