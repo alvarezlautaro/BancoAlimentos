@@ -46,7 +46,7 @@ public class InstitucionController {
             @ApiResponse(responseCode = "200", description = "Institución obtenida correctamente"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @GetMapping("/{id}")
+    @GetMapping("/{externalId}")
     public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable UUID externalId){
         return ResponseEntity.ok(institucionServicio.encontrarPorID(externalId));
     }
