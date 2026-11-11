@@ -1,1 +1,42 @@
-<p>producto-edit works!</p>
+<section>
+    <h2>Editar producto</h2>
+
+    <form [formGroup]="formulario">
+        <div>
+            <label for="">Nombre</label>
+            <input type="text" formControlName="nombre">
+        </div>
+
+        <div>
+            <label for="">Categoria</label>
+            <select id="categoria" formControlName = 'categoria'> //Crea la lista desplegable
+            <option value="" disabled selected>Seleccione una categoria...</option> //Primera opcion que aparece en la lista desplegable y seleccionada
+
+            @for (item of categorias; track $index) {
+                <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>
+            }
+            
+            </select>
+        </div>
+
+        <div>
+            <label for="">Unidad de Medida</label>
+
+            <select id="unidadMedida" formControlName = "unidadMedida">
+            <option value="" disabled selected>Seleccione una unidad de medida</option>
+
+            @for (item of unidades; track $index) {
+                <option [value]="item"> {{ item.replaceAll('_', ' ') }}</option>
+            }
+            </select>
+        </div>
+
+        <div>
+            
+            <button (click)="save()" [disabled]="formulario.invalid">Guardar cambios</button>
+            <button (click)="cancel()">Cancelar</button>
+
+
+        </div>
+    </form>
+</section>

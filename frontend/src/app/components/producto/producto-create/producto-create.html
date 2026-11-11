@@ -2,6 +2,10 @@
     <div>
         <label for="">Nombre:</label>
         <input type="text" formControlName = 'nombre'>
+
+        @if (formulario.controls.nombre.hasError('required') && formulario.controls.nombre.touched) {
+            <span>Campo requerido</span>
+        }
     </div>
 
     <div>
@@ -14,6 +18,10 @@
             }
             
         </select>
+
+        @if (formulario.controls.categoria.hasError('required') && formulario.controls.categoria.touched) {
+            <span>Campo requerido</span>
+        }
     </div>
 
     <div>
@@ -27,6 +35,10 @@
             }
 
         </select>
+
+        @if (formulario.controls.unidadMedida.hasError('required') && formulario.controls.unidadMedida.touched) {
+            <span>Campo requerido</span>
+        }
     </div>
 
     <div>
