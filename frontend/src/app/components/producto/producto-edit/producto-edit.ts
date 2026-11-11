@@ -19,9 +19,9 @@ export class ProductoEdit implements OnInit {
   categorias = Object.values(Categoria);
   unidades = Object.values(UnidadMedida);
 
-  formulario = this.fb.nonNullable.group(
+  formulario = this.fb.group(
     {
-      nombre: [''],
+      nombre: ['', Validators.maxLength(55)],
       categoria: ['' as Categoria],
       unidadMedida: ['' as UnidadMedida]
     }
@@ -41,9 +41,9 @@ export class ProductoEdit implements OnInit {
     if(!productoActual || !productoActual.id) return ;
 
     const productoEditado: Producto = {
-      nombre: this.formulario.controls.nombre.value,
-      categoria: this.formulario.controls.categoria.value as Categoria,
-      unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida
+      nombre: this.formulario.controls.nombre.value?.trim() || productoActual.nombre,
+      categoria: this.formulario.controls.categoria.value as Categoria || productoActual.categoria,
+      unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida || productoActual.unidadMedida
     };
 
     this.productoService.update(productoActual.id, productoEditado);

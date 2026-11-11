@@ -3,8 +3,15 @@
         <label for="">Nombre:</label>
         <input type="text" formControlName = 'nombre'>
 
-        @if (formulario.controls.nombre.hasError('required') && formulario.controls.nombre.touched) {
-            <span>Campo requerido</span>
+        @if (formulario.controls.nombre.invalid && formulario.controls.nombre.touched) {
+            
+            @if (formulario.controls.nombre.hasError('required')) {
+                <span>Campo requerido</span>
+            }
+
+            @if(formulario.controls.nombre.hasError('maxlength')){
+                <small style="color: red">El nombre del producto no puede superar los 55 caracteres</small>
+            }
         }
     </div>
 
@@ -20,8 +27,9 @@
         </select>
 
         @if (formulario.controls.categoria.hasError('required') && formulario.controls.categoria.touched) {
-            <span>Campo requerido</span>
+                <small style="color: red">Campo requerido</small> 
         }
+        
     </div>
 
     <div>

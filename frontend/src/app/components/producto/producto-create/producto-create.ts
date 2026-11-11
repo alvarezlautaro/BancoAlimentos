@@ -21,7 +21,7 @@ export class ProductoCreate {
 
   formulario = this.fb.nonNullable.group(
     {
-      nombre: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.maxLength(55)]],
       categoria: ['' as Categoria, Validators.required],
       unidadMedida: ['' as UnidadMedida, Validators.required]
     }
