@@ -1,0 +1,42 @@
+import { Component, inject } from '@angular/core';
+import { ProductoService } from '../../../service/producto-service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UnidadMedida } from '../../../enums/UnidadMedida';
+import { Categoria } from '../../../enums/Categoria';
+import { Producto } from '../../../interfaces/Producto';
+
+@Component({
+  imports: [ReactiveFormsModule],
+  selector: 'app-producto-create',
+  styleUrl: './producto-create.css',
+  templateUrl: './producto-create.html',
+})
+export class ProductoCreate {
+  productoService = inject(ProductoService);
+
+  fb: FormBuilder = inject(FormBuilder);
+
+  categorias = Object.values(Categoria);
+  unidades = Object.values(UnidadMedida);
+
+  formulario = this.fb.nonNullable.group(
+    {
+      nombre: ['', Validators.required],
+      categoria: ['' as Categoria, Validators.required],
+      unidadMedida: ['' as UnidadMedida, Validators.required]
+    }
+  )
+
+  add(){
+    if(this.formulario.invalid) return;
+
+    const p: Producto = {
+      nombre: this.formulario.controls.nombre.value,
+      categoria: this.formulario.controls.categoria.value as Categoria,
+      unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida
+    };
+
+    this.productoService.add(p);
+    this.formulario.reset();
+  }
+}
