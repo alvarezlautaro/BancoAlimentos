@@ -1,0 +1,37 @@
+<section>
+    <h1>Listado de tareas</h1>
+
+    <div>
+        <label for="">Buscar por id: </label>
+        <input type="number" [(ngModel)]="searchId">
+        <button (click)="buscar()">Buscar</button>
+    </div>
+
+    @if (productoService.productoById(); as p) {
+        <div>
+            <p> Id: {{ p.id}} - Nombre: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
+        </div>
+    }
+
+    <ul>
+        @for (item of productoService.productos(); track $index) {
+            <li>
+                Id: {{ item.id }} - Nombre: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
+
+                <button (click)="editar(item)">Editar</button>
+                <button (click)="eliminar(item.id!)">Eliminar</button>
+            </li>
+        }
+    </ul>
+
+    @if (productoService.productoById(); as p) {
+        <app-producto-edit></app-producto-edit>
+    }
+
+    @if (productoService.error(); as mensajeError) {
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+            {{ mensajeError }}
+        </div>
+    }
+
+</section>

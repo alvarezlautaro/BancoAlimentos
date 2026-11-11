@@ -19,7 +19,7 @@
     <div>
         <label for="">Unidad de Medida</label>
 
-        <select id="unidadMedida">
+        <select id="unidadMedida" formControlName = "unidadMedida">
             <option value="" disabled selected>Seleccione una unidad de medida</option>
 
             @for (item of unidades; track $index) {
@@ -27,5 +27,9 @@
             }
 
         </select>
+    </div>
+
+    <div>
+        <button (click)="add()" [disabled]="this.formulario.invalid">Crear Producto</button>
     </div>
 </form>
