@@ -1,3 +1,5 @@
+<h2>Crear Producto</h2>
+
 <form [formGroup]="formulario">
     <div>
         <label for="">Nombre:</label>
@@ -6,7 +8,7 @@
         @if (formulario.controls.nombre.invalid && formulario.controls.nombre.touched) {
             
             @if (formulario.controls.nombre.hasError('required')) {
-                <span>Campo requerido</span>
+                <small style="color: red;">Campo requerido</small>
             }
 
             @if (formulario.controls.nombre.hasError('minlength')) {
@@ -49,7 +51,7 @@
         </select>
 
         @if (formulario.controls.unidadMedida.hasError('required') && formulario.controls.unidadMedida.touched) {
-            <span>Campo requerido</span>
+            <small style="color: red">Campo requerido</small> 
         }
     </div>
 

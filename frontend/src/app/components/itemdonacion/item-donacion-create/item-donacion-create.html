@@ -1,3 +1,5 @@
+<h2>Crear item donacion</h2>
+
 <form [formGroup]="formulario">
 
     <!-- DONANTE -->
@@ -26,6 +28,10 @@
         @if (donanteSeleccionado()) {
             <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razonSocial }}</small>
         }
+
+        @if (formulario.controls.donanteId.touched && formulario.controls.donanteId.invalid) {
+            <small style="color: red; display: block;">Debes seleccionar un donante de la lista.</small>
+        }
     </div>
 
     <!-- PRODUCTO -->
@@ -38,6 +44,10 @@
             <option [ngValue]="prod.id">{{ prod.nombre }} ({{ prod.unidadMedida }})</option>
         }
         </select>
+
+        @if (formulario.controls.productoId.touched && formulario.controls.productoId.invalid) {
+            <small style="color: red; display: block;">El producto es obligatorio.</small>
+        }
   </div>
 
   <!-- CANTIDAD -->
@@ -45,6 +55,15 @@
   <div>
     <label for= "cantidad">Cantidad</label>
     <input type="number" id="cantidad" formControlName="cantidad">
+
+    @if (formulario.controls.cantidad.touched && formulario.controls.cantidad.invalid) {
+      @if (formulario.controls.cantidad.hasError('required')) {
+        <small style="color: red; display: block;">La cantidad es obligatoria.</small>
+      }
+      @if (formulario.controls.cantidad.hasError('min')) {
+        <small style="color: red; display: block;">La cantidad debe ser al menos 1.</small>
+      }
+    }
   </div>
 
   <!-- VALOR UNITARIO -->
@@ -52,6 +71,15 @@
   <div>
     <label for="valor">Valor unitario</label>
     <input type="number" step="0.01" id="valor" formControlName="valorUnitario">
+
+    @if (formulario.controls.valorUnitario.touched && formulario.controls.valorUnitario.invalid) {
+      @if (formulario.controls.valorUnitario.hasError('required')) {
+        <small style="color: red; display: block;">El valor unitario es obligatorio.</small>
+      }
+      @if (formulario.controls.valorUnitario.hasError('min')) {
+        <small style="color: red; display: block;">El valor unitario debe ser mayor a 0.</small>
+      }
+    }
   </div>
 
   <!-- FECHA VENCIMIENTO -->
@@ -59,6 +87,10 @@
   <div>
     <label for="fecha">Fecha de vencimiento</label>
     <input type="date" id="fecha" formControlName="fechaVencimiento">
+
+    @if (formulario.controls.fechaVencimiento.touched && formulario.controls.fechaVencimiento.invalid) {
+      <small style="color: red; display: block;">La fecha de vencimiento es obligatoria.</small>
+    }
   </div>
 
   <button type="submit" [disabled]="formulario.invalid">Agregar Ítem</button>
