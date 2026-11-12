@@ -1,1 +1,68 @@
-<p>item-donacion-edit works!</p>
+<section>
+    <h2>Editar item</h2>
+
+    <form [formGroup]="formulario">
+        <div>
+            <label for="donante">Donante</label>
+            <input 
+                id="donante" 
+                type="text" 
+                [value]="textoBusquedaDonante()"
+                (input)="onInputDonante($event)"
+                placeholder="Escribe el nombre del donante..."
+                autocomplete="off"
+            />
+
+            @if (donantesFiltrados().length > 0 && !donanteSeleccionado()) {
+                <ul>
+                @for (d of donantesFiltrados(); track d.id) {
+                    <li (click)="seleccionarDonante(d)">
+                    {{ d.razonSocial }}
+                    </li>
+                }
+                </ul>
+            }
+
+            @if (donanteSeleccionado()) {
+                <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razonSocial }}</small>
+            }
+        </div>
+
+    <!-- PRODUCTO -->
+
+        <div>
+            <label for="producto">Producto</label>
+            <select id="producto" formControlName="productoId">
+            <option [ngValue]="0" disabled>Seleccione un producto...</option>
+            @for (prod of productoService.productos(); track prod.id) {
+                <option [ngValue]="prod.id">{{ prod.nombre }} ({{ prod.unidadMedida }})</option>
+            }
+            </select>
+        </div>
+
+  <!-- CANTIDAD -->
+
+        <div>
+            <label for= "cantidad">Cantidad</label>
+            <input type="number" id="cantidad" formControlName="cantidad" min="1">
+        </div>
+
+  <!-- VALOR UNITARIO -->
+
+        <div>
+            <label for="valor">Valor unitario</label>
+            <input type="number" step="0.01" id="valor" formControlName="valorUnitario">
+        </div>
+
+  <!-- FECHA VENCIMIENTO -->
+
+        <div>
+            <label for="fecha">Fecha de vencimiento</label>
+            <input type="date" id="fecha" formControlName="fechaVencimiento">
+        </div>
+
+        <button type="submit" [disabled]="formulario.invalid">Guardar cambios</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+    </form>
+    
+</section>

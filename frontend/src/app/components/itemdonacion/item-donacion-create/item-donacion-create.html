@@ -44,21 +44,21 @@
 
   <div>
     <label for= "cantidad">Cantidad</label>
-    <input type="text" id="cantidad" formControlName="cantidad">
+    <input type="number" id="cantidad" formControlName="cantidad">
   </div>
 
   <!-- VALOR UNITARIO -->
 
   <div>
     <label for="valor">Valor unitario</label>
-    <input type="text" id="valor" formControlName="valorUnitario">
+    <input type="number" step="0.01" id="valor" formControlName="valorUnitario">
   </div>
 
   <!-- FECHA VENCIMIENTO -->
 
   <div>
     <label for="fecha">Fecha de vencimiento</label>
-    <input type="text" id="fecha" formControlName="fechaVencimiento">
+    <input type="date" id="fecha" formControlName="fechaVencimiento">
   </div>
 
   <button type="submit" [disabled]="formulario.invalid">Agregar Ítem</button>
