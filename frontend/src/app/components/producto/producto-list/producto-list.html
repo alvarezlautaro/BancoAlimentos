@@ -9,7 +9,7 @@
 
     @if (productoService.productoById(); as p) {
         <div>
-            <p>Nombre: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
+            <p>Producto: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
         </div>
     }
 
@@ -26,7 +26,7 @@
     <ul>
         @for (item of productoService.productos(); track $index) {
             <li>
-                Nombre: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
+                Producto: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
 
                 <button (click)="editar(item)">Editar</button>
                 <button (click)="eliminar(item.id!)">Eliminar</button>

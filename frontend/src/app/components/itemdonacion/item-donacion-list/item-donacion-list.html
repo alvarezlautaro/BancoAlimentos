@@ -1,1 +1,36 @@
-<p>item-donacion-list works!</p>
+<section>
+    <h1>Listado de Item Donacion</h1>
+
+    <div>
+        <label for="buscarId">Buscar por id: </label>
+        <input type="text" id="buscarId" [(ngModel)]="searchId">
+        <button (click)="buscar()">Buscar</button>
+    </div>
+
+    @if (itemService.itemById(); as i) {
+        <div>
+            <p>Producto: {{i.productoNombre}} - Donante: {{i.donante}} - Valor unitario: {{i.valorUnitario}} - Cantidad: {{i.cantidad}} - Fecha de vencimiento: {{i.fechaVencimiento}}</p>
+        </div>
+    }
+
+    <ul>
+        @for (i of itemService.items(); track $index) {
+            <li>
+                Producto: {{i.productoNombre}} - Donante: {{i.donante}} - Valor unitario: {{i.valorUnitario}} - Cantidad: {{i.cantidad}} - Fecha de vencimiento: {{i.fechaVencimiento}}
+
+                <button (click)="editar(i)">Editar</button>
+                <button (click)="eliminar(i.id!)">Eliminar</button>
+            </li>
+        }
+    </ul>
+
+    @if (itemService.itemById(); as i) {
+        <app-item-donacion-edit></app-item-donacion-edit>
+    }
+
+    @if (itemService.error(); as mensajeError) {
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+            {{ mensajeError }}
+        </div>
+    }
+</section>
