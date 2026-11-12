@@ -1,1 +1,66 @@
-<p>item-donacion-create works!</p>
+<form [formGroup]="formulario">
+
+    <!-- DONANTE -->
+
+    <div>
+        <label for="donante">Donante</label>
+        <input 
+            id="donante" 
+            type="text" 
+            [value]="textoBusquedaDonante()"
+            (input)="textoBusquedaDonante.set($any($event.target).value); donanteSeleccionado.set(null)"
+            placeholder="Escribe el nombre del donante..."
+            autocomplete="off"
+        />
+
+        @if (donantesFiltrados().length > 0 && !donanteSeleccionado()) {
+            <ul>
+            @for (d of donantesFiltrados(); track d.id) {
+                <li (click)="seleccionarDonante(d)">
+                {{ d.razonSocial }}
+                </li>
+            }
+            </ul>
+        }
+
+        @if (donanteSeleccionado()) {
+            <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razonSocial }}</small>
+        }
+    </div>
+
+    <!-- PRODUCTO -->
+
+    <div>
+        <label for="producto">Producto</label>
+        <select id="producto" formControlName="productoId">
+        <option [ngValue]="0" disabled>Seleccione un producto...</option>
+        @for (prod of productoService.productos(); track prod.id) {
+            <option [ngValue]="prod.id">{{ prod.nombre }} ({{ prod.unidadMedida }})</option>
+        }
+        </select>
+  </div>
+
+  <!-- CANTIDAD -->
+
+  <div>
+    <label for= "cantidad">Cantidad</label>
+    <input type="text" id="cantidad" formControlName="cantidad">
+  </div>
+
+  <!-- VALOR UNITARIO -->
+
+  <div>
+    <label for="valor">Valor unitario</label>
+    <input type="text" id="valor" formControlName="valorUnitario">
+  </div>
+
+  <!-- FECHA VENCIMIENTO -->
+
+  <div>
+    <label for="fecha">Fecha de vencimiento</label>
+    <input type="text" id="fecha" formControlName="fechaVencimiento">
+  </div>
+
+  <button type="submit" [disabled]="formulario.invalid">Agregar Ítem</button>
+
+</form>

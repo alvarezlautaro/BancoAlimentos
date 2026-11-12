@@ -3,6 +3,7 @@ export interface ItemDonacionRequest {
   valorUnitario: number;
   cantidad: number;
   productoId: number;
+  donanteId: number
 }
 
 export interface ItemDonacionResponse {
