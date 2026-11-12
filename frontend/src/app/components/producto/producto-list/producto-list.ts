@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductoService } from '../../../service/producto-service';
 import { Categoria } from '../../../enums/Categoria';
-import { Producto } from '../../../interfaces/Producto';
+import { ProductoResponse, ProductoRequest } from '../../../interfaces/Producto';
 import { FormsModule } from '@angular/forms';
 import { ProductoEdit } from '../producto-edit/producto-edit';
 
@@ -36,7 +36,7 @@ export class ProductoList implements OnInit{
     this.productoService.getByCategoria(this.categoria);
   }
 
-  editar(p: Producto){
+  editar(p: ProductoResponse){
     this.productoService.productoById.set(p)
   }
 

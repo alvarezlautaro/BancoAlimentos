@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { Producto } from '../interfaces/Producto';
+import { ProductoRequest, ProductoResponse } from '../interfaces/Producto';
 import { Categoria } from '../enums/Categoria';
 
 @Service()
@@ -8,14 +8,13 @@ export class ProductoService {
     http: HttpClient = inject(HttpClient);
     url: string = 'http://localhost:8080/api/productos'
 
-    productos = signal<Producto[]>([]);
-    productoById = signal<Producto | null>(null);
-    productosByCategoria = signal<Producto[]>([]);
+    productos = signal<ProductoResponse[]>([]);
+    productoById = signal<ProductoResponse | null>(null);
 
     error= signal<string>('');
 
     listProductos(){
-        this.http.get<Producto[]>(this.url).subscribe(
+        this.http.get<ProductoResponse[]>(this.url).subscribe(
             {
                 next: (data) => {
                     this.productos.set(data)
@@ -28,7 +27,7 @@ export class ProductoService {
     }
 
     getById(id: number){
-        this.http.get<Producto>(this.url + '/' + id).subscribe(
+        this.http.get<ProductoResponse>(this.url + '/' + id).subscribe(
             {
                 next: (data) => {
                     this.productoById.set(data)
@@ -43,10 +42,11 @@ export class ProductoService {
     getByCategoria(categoria: Categoria){
         const params = new HttpParams().set('categoria', categoria);
 
-        this.http.get<Producto[]>(this.url + 'filtrar/categoria', { params }).subscribe(
+        this.http.get<ProductoResponse[]>(this.url + '/filtrar/categoria', { params }).subscribe(
             {
                 next: (data) => {
-                    this.productosByCategoria.set(data)
+                    this.productos.set(data);
+                    this.error.set(''); //Para limpiar errores anteriores
                 },
                 error: (error) => {
                     this.error.set("No se pudo encontrar productos con la categoria: " + categoria)
@@ -55,7 +55,7 @@ export class ProductoService {
         )
     }
 
-    add(producto: Producto){
+    add(producto: ProductoRequest){
         this.http.post(this.url, producto).subscribe(
             () => {
                 this.listProductos()
@@ -66,7 +66,7 @@ export class ProductoService {
         )
     }
 
-    update(id: number, pUpdate: Partial<Producto>){
+    update(id: number, pUpdate: Partial<ProductoRequest>){
         this.http.patch(this.url + '/' + id, pUpdate).subscribe(
             {
                 next: () => this.listProductos(),

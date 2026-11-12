@@ -2,21 +2,31 @@
     <h1>Listado de tareas</h1>
 
     <div>
-        <label for="">Buscar por id: </label>
-        <input type="number" [(ngModel)]="searchId">
+        <label for="buscarId">Buscar por id: </label>
+        <input id="buscarId" type="number" [(ngModel)]="searchId">
         <button (click)="buscar()">Buscar</button>
     </div>
 
     @if (productoService.productoById(); as p) {
         <div>
-            <p> Id: {{ p.id}} - Nombre: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
+            <p>Nombre: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
         </div>
     }
+
+    <div>
+        <label for="filtroCategoria">Filtrar por categoría: </label>
+        <select id="filtroCategoria" [(ngModel)]="categoria" (change)="buscarCategoria()">
+            <option value="">Todas las categorías</option>
+            @for (cat of categorias; track cat) {
+                <option [value]="cat">{{ cat.replaceAll('_', ' ') }}</option>
+            }
+        </select>
+    </div>
 
     <ul>
         @for (item of productoService.productos(); track $index) {
             <li>
-                Id: {{ item.id }} - Nombre: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
+                Nombre: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
 
                 <button (click)="editar(item)">Editar</button>
                 <button (click)="eliminar(item.id!)">Eliminar</button>

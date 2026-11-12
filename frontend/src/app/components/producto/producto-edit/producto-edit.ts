@@ -3,7 +3,7 @@ import { ProductoService } from '../../../service/producto-service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Categoria } from '../../../enums/Categoria';
 import { UnidadMedida } from '../../../enums/UnidadMedida';
-import { Producto } from '../../../interfaces/Producto';
+import { ProductoRequest } from '../../../interfaces/Producto';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -21,7 +21,7 @@ export class ProductoEdit implements OnInit {
 
   formulario = this.fb.group(
     {
-      nombre: ['', Validators.maxLength(55)],
+      nombre: ['', [Validators.maxLength(55), Validators.minLength(3)]],
       categoria: ['' as Categoria],
       unidadMedida: ['' as UnidadMedida]
     }
@@ -40,7 +40,7 @@ export class ProductoEdit implements OnInit {
     const productoActual = this.productoService.productoById();
     if(!productoActual || !productoActual.id) return ;
 
-    const productoEditado: Producto = {
+    const productoEditado: ProductoRequest = {
       nombre: this.formulario.controls.nombre.value?.trim() || productoActual.nombre,
       categoria: this.formulario.controls.categoria.value as Categoria || productoActual.categoria,
       unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida || productoActual.unidadMedida

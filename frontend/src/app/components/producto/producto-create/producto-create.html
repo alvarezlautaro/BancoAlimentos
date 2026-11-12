@@ -9,6 +9,10 @@
                 <span>Campo requerido</span>
             }
 
+            @if (formulario.controls.nombre.hasError('minlength')) {
+                <small style="color: red;">El nombre debe tener al menos 3 caracteres.</small>
+            }
+
             @if(formulario.controls.nombre.hasError('maxlength')){
                 <small style="color: red">El nombre del producto no puede superar los 55 caracteres</small>
             }
@@ -17,8 +21,8 @@
 
     <div>
         <label for="">Categoria</label>
-        <select id="categoria" formControlName = 'categoria'> //Crea la lista desplegable
-            <option value="" disabled selected>Seleccione una categoria...</option> //Primera opcion que aparece en la lista desplegable y seleccionada
+        <select id="categoria" formControlName = 'categoria'> <!--Crea la lista desplegable-->
+            <option value="" disabled selected>Seleccione una categoria...</option> <!--Primera opcion que aparece en la lista desplegable y seleccionada -->
 
             @for (item of categorias; track $index) {
                 <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>

@@ -3,7 +3,7 @@ import { ProductoService } from '../../../service/producto-service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UnidadMedida } from '../../../enums/UnidadMedida';
 import { Categoria } from '../../../enums/Categoria';
-import { Producto } from '../../../interfaces/Producto';
+import { ProductoRequest } from '../../../interfaces/Producto';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -30,7 +30,7 @@ export class ProductoCreate {
   add(){
     if(this.formulario.invalid) return;
 
-    const p: Producto = {
+    const p: ProductoRequest = {
       nombre: this.formulario.controls.nombre.value,
       categoria: this.formulario.controls.categoria.value as Categoria,
       unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida
