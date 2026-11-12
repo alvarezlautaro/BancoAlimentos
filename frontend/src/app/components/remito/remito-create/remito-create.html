@@ -1,0 +1,39 @@
+<section>
+  <h2>Crear remito</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="add()">
+    <div>
+      <label for="fecha">Fecha:</label>
+      <input id="fecha" type="date" formControlName="fecha">
+      @if (formulario.controls.fecha.touched && formulario.controls.fecha.hasError('required')) {
+        <small>La fecha es obligatoria.</small>
+      }
+    </div>
+
+    <div>
+      <label for="institucionId">ID de institución:</label>
+      <input id="institucionId" type="number" min="1" formControlName="institucionId">
+      @if (formulario.controls.institucionId.touched && formulario.controls.institucionId.hasError('required')) {
+        <small>El ID de institución es obligatorio.</small>
+      }
+    </div>
+
+    <fieldset>
+      <legend>Cargar productos</legend>
+      @for (item of itemDonacionService.items(); track item.id) {
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isItemSelected(item.id)"
+            (change)="toggleItem(item.id, $event)">
+          {{ item.productoNombre }} - {{ item.donante }} -
+          Cantidad: {{ item.cantidad }} - Vencimiento: {{ item.fechaVencimiento }}
+        </label>
+      } @empty {
+        <p>No hay ítems de donación disponibles en el estado actual.</p>
+      }
+    </fieldset>
+
+    <button type="submit" [disabled]="formulario.invalid">Crear remito</button>
+  </form>
+</section>

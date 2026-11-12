@@ -1,0 +1,40 @@
+<section>
+  <h2>Editar remito</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="save()">
+    <div>
+      <label for="fechaEdicion">Fecha:</label>
+      <input id="fechaEdicion" type="date" formControlName="fecha">
+      @if (formulario.controls.fecha.touched && formulario.controls.fecha.hasError('required')) {
+        <small>La fecha es obligatoria.</small>
+      }
+    </div>
+
+    <div>
+      <label for="institucionIdEdicion">ID de institución:</label>
+      <input id="institucionIdEdicion" type="number" min="1" formControlName="institucionId">
+      @if (formulario.controls.institucionId.touched && formulario.controls.institucionId.hasError('required')) {
+        <small>El ID de institución es obligatorio.</small>
+      }
+    </div>
+
+    <fieldset>
+      <legend>Ítems de donación</legend>
+      @for (item of itemsDisponibles; track item.id) {
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isItemSelected(item.id)"
+            (change)="toggleItem(item.id, $event)">
+          {{ item.productoNombre }} - {{ item.donante }} -
+          Cantidad: {{ item.cantidad }} - Vencimiento: {{ item.fechaVencimiento }}
+        </label>
+      } @empty {
+        <p>No hay ítems de donación disponibles en el estado actual.</p>
+      }
+    </fieldset>
+
+    <button type="submit" [disabled]="formulario.invalid">Guardar cambios</button>
+    <button type="button" (click)="cancel()">Cancelar</button>
+  </form>
+</section>

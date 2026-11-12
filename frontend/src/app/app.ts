@@ -4,9 +4,10 @@ import { ItemDonacionCreate } from './components/itemdonacion/item-donacion-crea
 import { ItemDonacionList } from './components/itemdonacion/item-donacion-list/item-donacion-list';
 import { ProductoCreate } from './components/producto/producto-create/producto-create';
 import { ProductoList } from './components/producto/producto-list/producto-list';
+import { RemitoList } from './components/remito/remito-list/remito-list';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RemitoList],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
