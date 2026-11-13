@@ -1,0 +1,25 @@
+<div class="container-details">
+
+    @if(institucion){
+        
+        <article>
+            <p><strong>ID:</strong> {{ institucion.id }}</p>
+            <p><strong>Nombre:</strong> {{ institucion.nombre }}</p>
+            <p><strong>Tipo:</strong> {{ institucion.tipo }}</p>
+            <p><strong>Dirección:</strong> {{ institucion.direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ institucion.telefono }}</p>
+            <p><strong>Email:</strong> {{ institucion.email }}</p>
+            <p><strong>Estado:</strong> {{ institucion.estado }}</p>
+        </article>
+
+        <div class="actions">
+            <a [routerLink]="['/instituciones/form', institucion.id]" class="btn-edit">Editar</a>
+            <button (click)="deleteInstitucion()" class="btn-delete">Eliminar</button>
+            <a routerLink="/instituciones" class="btn-back">Volver al listado</a>
+        </div>
+
+    }@else{
+        <p>No hay institución cargada con el ID ingresado</p>
+    }
+
+</div>

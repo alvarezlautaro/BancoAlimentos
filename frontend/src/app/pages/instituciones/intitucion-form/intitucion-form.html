@@ -1,0 +1,60 @@
+<div class="container-form">
+    <h1>
+        {{id ? 'Editar institución' : 'Crear institución'}}
+    </h1>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+
+    <label>Nombre</label>
+    <input formControlName="nombre" />
+    @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+        @if (formulario.get('nombre')?.hasError('required')) { <p class="error">El nombre es obligatorio</p> }
+        @if (formulario.get('nombre')?.hasError('minlength')) { <p class="error">El nombre debe tener al menos 3 caracteres</p> }
+    }
+
+    <label>Tipo</label>
+    <select formControlName="tipo">
+        <option value="">Seleccione un tipo</option>
+        <option value="COMEDOR">Comedor</option>
+        <option value="MERENDERO">Merendero</option>
+        <option value="ESCUELA">Escuela</option>
+        <option value="OTRO">Otro</option>
+    </select>
+    @if (formulario.get('tipo')?.invalid && formulario.get('tipo')?.touched) {
+        @if (formulario.get('tipo')?.hasError('required')) { <p class="error">El tipo de institución es obligatorio</p> }
+    }
+
+    <label>Dirección</label>
+    <input formControlName="direccion" />
+    @if (formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched) {
+        @if (formulario.get('direccion')?.hasError('required')) { <p class="error">La dirección es obligatoria</p> }
+    }
+
+    <label>Teléfono</label>
+    <input formControlName="telefono" />
+    @if (formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched) {
+        @if (formulario.get('telefono')?.hasError('pattern')) { <p class="error">El teléfono solo debe contener números</p> }
+    }
+
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    @if (formulario.get('email')?.invalid && formulario.get('email')?.touched) {
+        @if (formulario.get('email')?.hasError('email')) { <p class="error">El formato del email no es válido</p> }
+    }
+
+    <label>Estado</label>
+    <select formControlName="estado">
+        <option value="">Seleccione un estado</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="APROBADO">Aprobado</option>
+        <option value="RECHAZADO">Rechazado</option>
+    </select>
+    @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
+        @if (formulario.get('estado')?.hasError('required')) { <p class="error">El estado es obligatorio</p> }
+    }
+
+    <button type="submit">Guardar</button>
+    <a [routerLink]="id ? ['/instituciones', id] : ['/instituciones']">Cancelar</a>
+
+    </form>
+</div>

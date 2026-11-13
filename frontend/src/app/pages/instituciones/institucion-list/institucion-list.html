@@ -1,0 +1,38 @@
+<div class="container-lista">
+        
+    <div class="encabezado">
+        <h1>Gestión de instituciones</h1>
+
+        <a routerLink="/instituciones/form" class="btn-create"> Nueva institución </a>
+    </div>
+
+    <div class="barra-busqueda">
+        <input type="text" [(ngModel)]="filtroInstitucion" placeholder="Buscar por ID, nombre, dirección, email o teléfono...">
+    </div>
+
+    <div class="list">
+        @for(data of institucionesFiltradas; track data.id){
+            <article class="item">
+
+                <div class="data">
+                    <h2> {{data.nombre}} </h2>
+                    <h3> {{data.tipo}} </h3>
+                    <p><strong>Tel:</strong> {{data.telefono}}</p>
+                    <p><strong>Email:</strong> {{data.email}}</p>
+                    <p><strong>Dirección:</strong> {{data.direccion}}</p>
+                </div>
+
+                <div class="btns">
+                    <a [routerLink]="['/instituciones', data.id]" class="btn-details">Ver detalle</a>
+                    <a [routerLink]="['/instituciones/form', data.id]" class="btn-edit">Editar</a>
+                    <button (click)="eliminarInstitucion(data.id!)" class="btn-delete">Eliminar</button>
+                </div>
+
+            </article>
+        }@empty{
+            <p>No hay instituciones cargadas</p>
+        }
+
+    </div>
+
+</div>
