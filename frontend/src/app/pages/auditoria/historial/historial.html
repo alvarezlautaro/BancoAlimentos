@@ -1,0 +1,32 @@
+<h2>{{ titulo }}</h2>
+
+@if (error()) {
+    <p style="color: red">{{ error() }}</p>
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Cambio</th>
+            @for (c of columnas(); track c) {
+                <th>{{ c }}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (r of revisiones(); track r.revision) {
+            <tr>
+                <td>{{ r.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ etiquetas[r.tipo] }}</td>
+                @if (r.tipo === 'DEL') {
+                    <td [attr.colspan]="columnas().length">Registro eliminado</td>
+                } @else {
+                    @for (c of columnas(); track c) {
+                        <td>{{ r.datos[c] }}</td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

@@ -10,7 +10,7 @@
             id="donante" 
             type="text" 
             [value]="textoBusquedaDonante()"
-            (input)="textoBusquedaDonante.set($any($event.target).value); donanteSeleccionado.set(null)"
+            (input)="onInputDonante($event)"
             placeholder="Escribe el nombre del donante..."
             autocomplete="off"
         />
@@ -19,14 +19,14 @@
             <ul>
             @for (d of donantesFiltrados(); track d.id) {
                 <li (click)="seleccionarDonante(d)">
-                {{ d.razonSocial }}
+                {{ d.razon_social }}
                 </li>
             }
             </ul>
         }
 
         @if (donanteSeleccionado()) {
-            <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razonSocial }}</small>
+            <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razon_social }}</small>
         }
 
         @if (formulario.controls.donanteId.touched && formulario.controls.donanteId.invalid) {

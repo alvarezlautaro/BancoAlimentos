@@ -17,14 +17,14 @@
                 <ul>
                 @for (d of donantesFiltrados(); track d.id) {
                     <li (click)="seleccionarDonante(d)">
-                    {{ d.razonSocial }}
+                    {{ d.razon_social }}
                     </li>
                 }
                 </ul>
             }
 
             @if (donanteSeleccionado()) {
-                <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razonSocial }}</small>
+                <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razon_social }}</small>
             }
         </div>
 

@@ -1,8 +1,8 @@
 package com.group6.BancoAlimentos.Features.Donantes.controller;
 
+import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
-import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
 import com.group6.BancoAlimentos.Features.Donantes.service.IDonanteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class DonanteController {
 
     @PreAuthorize("hasAuthority('AUDITORIA_DONACION_VER')")
     @GetMapping("/{id}/historial")
-    public ResponseEntity<List<Donante>> getHistorial(@PathVariable Long id) {
+    public ResponseEntity<List<RevisionDTO<DonanteResponseDTO>>> getHistorial(@PathVariable Long id) {
         return ResponseEntity.ok(donanteService.getHistorial(id));
     }
 }

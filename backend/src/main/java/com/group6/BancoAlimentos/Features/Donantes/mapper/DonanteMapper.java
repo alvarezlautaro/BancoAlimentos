@@ -8,6 +8,7 @@ public class DonanteMapper {
     public static DonanteResponseDTO toResponse(Donante donante){
 
         DonanteResponseDTO donanteResponseDTO= new DonanteResponseDTO();
+        donanteResponseDTO.setId(donante.getId());
         donanteResponseDTO.setRazonSocial(donante.getRazonSocial());
         donanteResponseDTO.setCuit(donante.getCuit());
         donanteResponseDTO.setDireccion(donante.getDireccion());

@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
+import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionParcialDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.InstitucionDTO;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.NuevaInstitucionDTO;
@@ -141,8 +142,10 @@ public class InstitucionController {
         institucionServicio.eliminar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PreAuthorize("hasAuthority('AUDITORIA_INSTITUCION_VER')")
     @GetMapping("/{id}/historial")
-    public ResponseEntity<List<Institucion>> getHistorial(@PathVariable Long id) {
+    public ResponseEntity<List<RevisionDTO<InstitucionDTO>>> getHistorial(@PathVariable Long id) {
         return ResponseEntity.ok(institucionServicio.getHistorial(id));
     }
 }

@@ -1,5 +1,7 @@
 package com.group6.BancoAlimentos.Features.Donantes.service;
 
+import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
+import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
 import com.group6.BancoAlimentos.Features.Donantes.expections.CuitDuplicadoExpections;
@@ -11,12 +13,17 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.query.AuditEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.envers.RevisionType;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -75,15 +82,30 @@ public class DonanteService implements IDonanteService{
         donanteRepository.delete(donante);
     }
 
-    public List<Donante> getHistorial(Long id) {
-        Donante donante = donanteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donante no encontrado"));
-
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-        List<Number> revisiones = reader.getRevisions(Donante.class, donante.getId());
-
-        return revisiones.stream()
-                .map(rev -> reader.find(Donante.class, donante.getId(), rev))
-                .collect(Collectors.toList());
+    public List<RevisionDTO<DonanteResponseDTO>> getHistorial(Long id) {
+    if (!donanteRepository.existsById(id)) {
+        throw new RecursoNoEncontradoException("Donante no encontrado con el id: " + id);
     }
+
+    AuditReader reader = AuditReaderFactory.get(entityManager);
+
+    List<Object[]> filas = reader.createQuery()
+            .forRevisionsOfEntity(Donante.class, false, true)
+            .add(AuditEntity.id().eq(id))
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .getResultList();
+
+    return filas.stream().map(fila -> {
+        Donante donante = (Donante) fila[0];
+        DefaultRevisionEntity rev = (DefaultRevisionEntity) fila[1];
+        RevisionType tipo = (RevisionType) fila[2];
+
+        return new RevisionDTO<>(
+                Long.valueOf(rev.getId()),
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(rev.getTimestamp()), ZoneId.systemDefault()),
+                tipo.name(),
+                DonanteMapper.toResponse(donante)
+        );
+    }).toList();
+}
 }

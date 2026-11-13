@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Institucion;
 
+import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
 import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
 import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.Institucion.DTOs.ActualizarInstitucionParcialDTO;
@@ -13,13 +14,18 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.query.AuditEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.envers.RevisionType;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,15 +113,31 @@ public class InstitucionServicio {
         institucionRepositorio.delete(institucion);
     }
 
-    public List<Institucion> getHistorial(Long id) {
-        Institucion inst = institucionRepositorio.findById(id)
-                .orElseThrow(() -> new RuntimeException("Institución no encontrada"));
-
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-        List<Number> revisiones = reader.getRevisions(Institucion.class, inst.getId());
-
-        return revisiones.stream()
-                .map(rev -> reader.find(Institucion.class, inst.getId(), rev))
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+public List<RevisionDTO<InstitucionDTO>> getHistorial(Long id) {
+    if (!institucionRepositorio.existsById(id)) {
+        throw new RecursoNoEncontradoException("Institucion no encontrada con el id: " + id);
     }
+
+    AuditReader reader = AuditReaderFactory.get(entityManager);
+
+    List<Object[]> filas = reader.createQuery()
+            .forRevisionsOfEntity(Institucion.class, false, true)
+            .add(AuditEntity.id().eq(id))
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .getResultList();
+
+    return filas.stream().map(fila -> {
+        Institucion institucion = (Institucion) fila[0];
+        DefaultRevisionEntity rev = (DefaultRevisionEntity) fila[1];
+        RevisionType tipo = (RevisionType) fila[2];
+
+        return new RevisionDTO<>(
+                Long.valueOf(rev.getId()),
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(rev.getTimestamp()), ZoneId.systemDefault()),
+                tipo.name(),
+                institucionMapper.aDTO(institucion)
+        );
+    }).toList();
+}
 }

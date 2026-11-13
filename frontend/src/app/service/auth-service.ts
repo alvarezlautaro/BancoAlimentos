@@ -46,6 +46,10 @@ export class AuthService {
         return roles.some(r => this.hasRole(r));
     }
 
+    hasAuthority(authority: string): boolean {
+        return this.roles().includes(authority);
+    }
+
     private decode(token: string | null): { sub: string; exp: number; roles: string[] } | null {
         if(!token) return null;
 

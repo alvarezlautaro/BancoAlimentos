@@ -3,8 +3,8 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ItemdonacionService } from '../../../service/itemdonacion-service';
 import { ItemDonacionRequest } from '../../../interfaces/ItemDonacion';
 import { ProductoService } from '../../../service/producto-service';
-import { DonanteService } from '../../../service/donante-service';
-import { DonanteResponse } from '../../../interfaces/Donante';
+import { EmpresaService } from '../../../services/empresas/empresa';
+import { Empresa } from '../../../models/empresa';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -16,17 +16,18 @@ export class ItemDonacionEdit implements OnInit{
   itemService = inject(ItemdonacionService);
 
   productoService = inject(ProductoService);
-  donanteService = inject(DonanteService);
+  donanteService = inject(EmpresaService);
+  empresas = signal<Empresa[]>([]);
 
   textoBusquedaDonante = signal<string>('');
-  donanteSeleccionado = signal<DonanteResponse | null>(null);
+  donanteSeleccionado = signal<Empresa | null>(null);
 
   donantesFiltrados = computed(() => {
     const filtro = this.textoBusquedaDonante().toLowerCase().trim();
     if (!filtro) return [];
 
-    return this.donanteService.donantes().filter(d => 
-      d.razonSocial.toLowerCase().includes(filtro) || 
+    return this.empresas().filter(d => 
+      d.razon_social.toLowerCase().includes(filtro) || 
       d.cuit.includes(filtro)
     );
   });
@@ -44,7 +45,7 @@ export class ItemDonacionEdit implements OnInit{
   );
 
   ngOnInit(): void {
-    this.donanteService.listDonantes();
+    this.donanteService.obtenerEmpresas().subscribe(data => this.empresas.set(data));
     this.productoService.listProductos();
 
     const i = this.itemService.itemById();
@@ -61,10 +62,10 @@ export class ItemDonacionEdit implements OnInit{
     }
   }
 
-  seleccionarDonante(donante: DonanteResponse) {
+  seleccionarDonante(donante: Empresa) {
     this.donanteSeleccionado.set(donante);
-    this.formulario.controls.donanteId.setValue(donante.id);
-    this.textoBusquedaDonante.set(donante.razonSocial);
+    this.formulario.controls.donanteId.setValue(Number(donante.id));
+    this.textoBusquedaDonante.set(donante.razon_social);
   }
 
   onInputDonante(event: Event) {
@@ -88,7 +89,7 @@ export class ItemDonacionEdit implements OnInit{
     const donanteIdForm = this.formulario.controls.donanteId.value;
     const donanteIdFinal = donanteIdForm > 0
       ? donanteIdForm
-      : this.donanteService.donantes().find(d => d.razonSocial === itemActual.donante)?.id ?? 0;
+      : Number(this.empresas().find(d => d.razon_social === itemActual.donante)?.id ?? 0);
 
 
 

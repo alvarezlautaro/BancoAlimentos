@@ -20,3 +20,10 @@ export const guestGuard: CanActivateFn = () => {
     const auth = inject(AuthService);
     return auth.isLoggedIn() ? inject(Router).createUrlTree(['/home']) : true;
 }
+
+export const authorityGuard: CanActivateFn = (route) => {
+    const auth = inject(AuthService);
+    const router = inject(Router);
+    if (!auth.isLoggedIn()) return router.createUrlTree(['/login']);
+    return auth.hasAuthority(route.data['authority']) ? true : router.createUrlTree(['/home']);
+}

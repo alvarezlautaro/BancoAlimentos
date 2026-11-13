@@ -1,5 +1,6 @@
 package com.group6.BancoAlimentos.Features.Donantes.service;
 
+import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
 import com.group6.BancoAlimentos.Features.Donantes.model.Donante;
@@ -15,5 +16,5 @@ public interface IDonanteService {
     Optional<DonanteResponseDTO> findById(Long id);
     DonanteResponseDTO update(Long id,DonanteRequestDTO dto);
     void delete(Long id);
-    public List<Donante> getHistorial(Long id);
+    public List<RevisionDTO<DonanteResponseDTO>> getHistorial(Long id);
 }
