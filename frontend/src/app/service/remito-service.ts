@@ -46,8 +46,13 @@ export class RemitoService {
             (error) => {
                 this.error.set("No se pudo agregar el remito: " + error);
             }
+<<<<<<< Updated upstream
         );
         }
+=======
+        )
+        }   
+>>>>>>> Stashed changes
 
     update(id: string, remito: RemitoRequest){ 
         this.http.put<Remito>( this.url + '/' + id,remito ).subscribe

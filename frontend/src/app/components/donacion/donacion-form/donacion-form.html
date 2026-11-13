@@ -1,0 +1,78 @@
+<div class="container-form">
+    <h1>
+        {{id ? 'Editar donación' : 'Crear donación'}}
+    </h1>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+
+        <label>Fecha</label>
+        <input type="date" formControlName="fecha" />
+        @if (formulario.get('fecha')?.invalid && formulario.get('fecha')?.touched) {
+            <p class="error">La fecha es obligatoria</p>
+        }
+
+        <label>Estado</label>
+        <select formControlName="estado">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="CONFIRMADA">Confirmada</option>
+        </select>
+        @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
+            <p class="error">El estado es obligatorio</p>
+        }
+
+        <label>N° Remito Proveedor</label>
+        <input type="number" formControlName="nroRemitoProveedor" placeholder="Ej: 12345" />
+        @if (formulario.get('nroRemitoProveedor')?.invalid && formulario.get('nroRemitoProveedor')?.touched) {
+            @if (formulario.get('nroRemitoProveedor')?.hasError('required')) { <p class="error">El número de remito es obligatorio</p> }
+            @if (formulario.get('nroRemitoProveedor')?.hasError('pattern')) { <p class="error">Solo debe contener números</p> }
+        }
+
+        <label>ID Donante</label>
+        <input type="number" formControlName="idDonante" placeholder="ID del donante" />
+        @if (formulario.get('idDonante')?.invalid && formulario.get('idDonante')?.touched) {
+            <p class="error">El donante es obligatorio</p>
+        }
+
+        <label>Observaciones</label>
+        <textarea formControlName="observaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
+
+        <hr class="divider" />
+
+        <div class="items-header">
+            <h3>Ítems de la Donación</h3>
+            <button type="button" (click)="agregarItem()" class="btn-add">+ Agregar ítem</button>
+        </div>
+
+        <div formArrayName="items" class="items-container">
+            @for (itemControl of items.controls; track $index; let i = $index) {
+                <div [formGroupName]="i" class="item-row">
+                    <div class="input-group">
+                        <label>ID Producto</label>
+                        <input type="number" formControlName="productoId" placeholder="ID prod." />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Cantidad</label>
+                        <input type="number" formControlName="cantidad" placeholder="Cant." />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Valor Unitario</label>
+                        <input type="number" formControlName="valorUnitario" placeholder="$" />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vencimiento</label>
+                        <input type="date" formControlName="fechaVencimiento" />
+                    </div>
+
+                    <button type="button" (click)="eliminarItem(i)" class="btn-remove">X</button>
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn-submit">Guardar</button>
+        <a [routerLink]="id ? ['/donaciones', id] : ['/donaciones']" class="btn-cancel">Cancelar</a>
+
+    </form>
+</div>

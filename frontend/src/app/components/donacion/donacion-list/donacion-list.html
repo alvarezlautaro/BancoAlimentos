@@ -1,0 +1,45 @@
+<div class="container-lista">
+        
+    <div class="encabezado">
+        <h1>Gestión de Donaciones</h1>
+
+        <a routerLink="/donaciones/form" class="btn-create"> Nueva donación </a>
+    </div>
+
+    <div class="barra-busqueda">
+        <input type="text" [(ngModel)]="filtroDonacion" placeholder="Buscar por ID, estado, remito, donante u observaciones...">
+    </div>
+
+    <div class="list">
+        @for(d of donacionesFiltradas; track d.id){
+            <article class="item">
+
+                <div class="data">
+                    <h2>Remito N°: {{d.nroRemitoProveedor}}</h2>
+                    <h3>Fecha: {{d.fecha}}</h3>
+                    <p><strong>Estado:</strong> 
+                        <span class="badge" [ngClass]="d.estado?.toLowerCase()">
+                            {{d.estado}}
+                        </span>
+                    </p>
+                    <p><strong>Donante:</strong> {{d.nombreDonante || 'Sin donante'}}</p>
+                    <p><strong>Observaciones:</strong> {{d.observaciones || 'Sin observaciones'}}</p>
+                </div>
+
+                <div class="btns">
+                    <a [routerLink]="['/donaciones', d.id]" class="btn-details">Ver detalle</a>
+                    @if (d.estado !== 'CONFIRMADA') {
+                        <button (click)="d.id && confirmar(d.id)" class="btn-confirm">Confirmar</button>
+                        <a [routerLink]="['/donaciones/form', d.id]" class="btn-edit">Editar</a>
+                    }
+                    <button (click)="d.id && eliminarDonacion(d.id)" class="btn-delete">Eliminar</button>
+                </div>
+
+            </article>
+        }@empty{
+            <p>No hay donaciones cargadas</p>
+        }
+
+    </div>
+
+</div>

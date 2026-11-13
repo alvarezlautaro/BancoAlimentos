@@ -1,0 +1,147 @@
+.container-details {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #FEFFFF;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.container-details article {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.container-details article h2 {
+    color: #17252A;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.container-details article p {
+    color: #334155;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.container-details article p strong {
+    color: #17252A;
+    font-weight: 600;
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: #e2e8f0;
+    color: #475569;
+}
+
+.badge.confirmada {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge.pendiente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.items-section {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.items-section h3 {
+    font-size: 1.1rem;
+    color: #17252A;
+    margin-bottom: 5px;
+}
+
+.item-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.empty-items {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-edit, .btn-delete, .btn-confirm, .btn-back {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-edit {
+    background-color: #3AAFA9;
+    color: #FEFFFF;
+}
+
+.btn-edit:hover {
+    background-color: #2B7A78;
+}
+
+.btn-confirm {
+    background-color: #10b981;
+    color: #FEFFFF;
+}
+
+.btn-confirm:hover {
+    background-color: #059669;
+}
+
+.btn-delete {
+    background-color: #ef4444;
+    color: #FEFFFF;
+}
+
+.btn-delete:hover {
+    background-color: #dc2626;
+}
+
+.btn-back {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-back:hover {
+    background-color: #e2e8f0;
+}
+
+.empty-message {
+    color: #64748b;
+    font-size: 1rem;
+    text-align: center;
+    margin: 20px 0;
+}
