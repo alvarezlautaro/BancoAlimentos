@@ -1,55 +1,29 @@
 <section>
-  <h1>Listado de remitos</h1>
 
-  <div>
-    <label for="buscarId">Buscar por ID:</label>
-    <input id="buscarId" type="text" [(ngModel)]="searchId">
-    <button type="button" (click)="buscar()">Buscar</button>
-  </div>
+    <h1>Listado de remitos</h1>
 
-  @if (remitoService.remitoById(); as remito) {
-    <p>
-      Remito {{ remito.id }} - Fecha: {{ remito.fecha }}
-    </p>
-    <button type="button" (click)="editar(remito)">Editar</button>
-    @if (remito.id) {
-      <button type="button" (click)="eliminar(remito.id)">Eliminar</button>
-    }
-  }
+    <ul>
+        @for (item of remitoService.remitos(); track $index) {
+            <li>
+                Remito:
+                {{ item.fecha }}
+                - Institución:
+                {{ item.idInstitucion }}
 
-  <div>
-    <label for="filtroInstitucion">Filtrar por institución:</label>
-    <input id="filtroInstitucion" type="text" [(ngModel)]="institucionId">
-    <button type="button" (click)="buscarPorInstitucion()">Filtrar</button>
-  </div>
-
-  <div>
-    <label for="filtroFecha">Filtrar por fecha:</label>
-    <input id="filtroFecha" type="date" [(ngModel)]="fecha">
-    <button type="button" (click)="buscarPorFecha()">Filtrar</button>
-  </div>
-
-  <ul>
-    @for (remito of remitoService.remitos(); track remito.id) {
-      <li>
-        Remito {{ remito.id }} - Fecha: {{ remito.fecha }}
-        <button type="button" (click)="editar(remito)">Editar</button>
-        @if (remito.id) {
-          <button type="button" (click)="eliminar(remito.id)">Eliminar</button>
+                <button (click)="editar(item)">Editar</button>
+                <button (click)="eliminar(item.externalId)">Eliminar</button>
+            </li>
         }
-      </li>
-    } @empty {
-      <li>No hay remitos para mostrar.</li>
+    </ul>
+
+    @if (remitoService.remitoByID(); as r) {
+        <app-remito-edit></app-remito-edit>
     }
-  </ul>
 
-  @if (remitoService.remitoById()) {
-    <app-remito-edit></app-remito-edit>
-  }
+    @if (remitoService.error(); as mensajeError) {
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+            {{ mensajeError }}
+        </div>
+    }
 
-  @if (remitoService.error(); as mensajeError) {
-    <div>{{ mensajeError }}</div>
-  }
-
-  <app-remito-create></app-remito-create>
 </section>

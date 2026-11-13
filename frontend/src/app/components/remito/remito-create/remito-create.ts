@@ -1,58 +1,48 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ItemDonacionResponse } from '../../../interfaces/ItemDonacion';
-import { RemitoResponse } from '../../../interfaces/remito';
-import { ItemdonacionService } from '../../../service/itemdonacion-service';
+import { Component, inject, OnInit } from '@angular/core';
 import { RemitoService } from '../../../service/remito-service';
-
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RemitoRequest } from '../../../interfaces/remito';
+import { InstitucionService } from '../../../services/instituciones/institucion-service';
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-remito-create',
   styleUrl: './remito-create.css',
   templateUrl: './remito-create.html',
 })
-export class RemitoCreate {
-  private readonly remitoService = inject(RemitoService);
-  readonly itemDonacionService = inject(ItemdonacionService);
-  private readonly fb = inject(FormBuilder);
-
-  formulario = this.fb.nonNullable.group({
-    fecha: ['', Validators.required],
-    institucionId: ['', [Validators.required, Validators.min(1)]],
-    itemIds: this.fb.nonNullable.array<FormControl<number>>([]),
-  });
-
-  isItemSelected(id: number) {
-    return this.formulario.controls.itemIds.controls.some((control) => control.value === id);
+export class RemitoCreate implements OnInit  {
+ngOnInit(): void {
+    this.institucionService.obtenerInstituciones().subscribe({
+      next: (data) => {
+        this.instituciones = data;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
+  remitoservice=inject(RemitoService);
+  fb: FormBuilder = inject(FormBuilder);
+  institucionService = inject(InstitucionService);
 
-  toggleItem(id: number, event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    const itemIds = this.formulario.controls.itemIds;
-    const index = itemIds.controls.findIndex((control) => control.value === id);
+   instituciones: any[] = [];
 
-    if (checked && index === -1) {
-      itemIds.push(this.fb.nonNullable.control(id));
-    } else if (!checked && index !== -1) {
-      itemIds.removeAt(index);
+  formulario= this.fb.nonNullable.group(
+    {
+      fecha: ['',[Validators.required]],
+      idInstitucion: ['',[Validators.required]],
     }
-  }
+  )
 
-  add() {
-    if (this.formulario.invalid) return;
 
-    const items = this.formulario.controls.itemIds.controls
-      .map((control) => this.itemDonacionService.items().find((item) => item.id === control.value))
-      .filter((item): item is ItemDonacionResponse => item !== undefined);
+  add(){
+    if(this.formulario.invalid) return;   
 
-    const remito: RemitoResponse = {
-      fecha: new Date(this.formulario.controls.fecha.value),
-      items,
-      institucion: { id: Number(this.formulario.controls.institucionId.value) },
-    };
+    const r: RemitoRequest = {
+      fecha: this.formulario.controls.fecha.value,
+      idInstitucion: Number(this.formulario.controls.idInstitucion.value)
+    }
 
-    this.remitoService.add(remito);
+    this.remitoservice.add(r);
     this.formulario.reset();
-    this.formulario.controls.itemIds.clear();
-  }
+}
 }

@@ -1,84 +1,75 @@
+import { PageResponse, Remito, RemitoRequest } from './../interfaces/remito';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Service, signal } from '@angular/core';
-import { RemitoResponse } from '../interfaces/remito';
+import { inject, Injectable, signal } from '@angular/core';
+@Injectable({
+  providedIn: 'root'
+})
 
-@Service()
+
 export class RemitoService {
 
+    url: string = 'http://localhost:8080/api/remitos'
+    http: HttpClient = inject(HttpClient); 
 
-    http: HttpClient=inject(HttpClient)
-    url:string='http://localhost:8080/api/remitos'
-    remitos= signal<RemitoResponse[]>([]);
-    remitoById= signal<RemitoResponse | null>(null);
-
-    error= signal<string>('');
+    remitos = signal<Remito[]>([]);
+    remitoByID = signal<Remito | null>(null);
     
-    listRemitos(){
-        this.http.get<RemitoResponse[]>(this.url).subscribe(
-            {
-                next: (data) => {
-                    this.remitos.set(data)
-                },
-                error: (error) =>{
-                    this.error.set("No se pudieron cargar los remitos " + error)
-                }
+    error= signal<string>('');
+
+   listRemitos(){
+    this.http.get<PageResponse<Remito>>(this.url).subscribe({
+        next: (data) => {
+            this.remitos.set(data.content);
+        },
+        error: (error) => {
+            this.error.set("No se pudieron cargar los remitos");
+        }
+    });
+}
+
+    getById(id: string){
+    this.http.get<Remito>(this.url + '/' + id).subscribe({
+        next: (data) => {
+            this.remitoByID.set(data);
+        },
+        error: error => {
+            this.error.set("No se pudo encontrar el remito con id: " + id);
+        }
+    });
+}
+
+    add(remito: RemitoRequest){
+        this.http.post(this.url, remito).subscribe(
+            () => {
+                this.listRemitos();
+            },
+            (error) => {
+                this.error.set("No se pudo agregar el remito: " + error);
             }
-        )
+        );
         }
 
-        add(remito: RemitoResponse){
-            this.http.post(this.url, remito).subscribe(
-                () => {
-                    this.listRemitos(); 
-                },
-                (error) => {
-                    this.error.set("No se pudo agregar el remito: " + error);
-                }
-            );
-            }
-
-        getById(id: string){
-            this.http.get<RemitoResponse>(this.url + '/' + id).subscribe(
-                {
-                    next: (data) => {
-                        this.remitoById.set(data)
-                    },
-                    error: error => {
-                        this.error.set("No se pudo encontrar el remito con id: " + id)
-                    } 
-                }
-            )
-            }
-
-            update(id: string, rUpdate: Partial<RemitoResponse>){
-                this.http.put(this.url + '/' + id, rUpdate).subscribe(
-                    () => {
-                        this.listRemitos(); 
-                    },
-                    (error) => {
-                        this.error.set("No se pudo actualizar el remito: " + error);
-                    }
-                );
-           }
-
-           getbyInstitucion(institucionId: string){
-            const params = new HttpParams().set('institucionId', institucionId);
-            return this.http.get<RemitoResponse[]>(this.url, { params });
-} 
-
-            getByFecha(fecha: string){
-                const params = new HttpParams().set('fecha', fecha);
-                return this.http.get<RemitoResponse[]>(this.url, { params });
-            }
-            
-            remover(id: string){
-                this.http.delete(this.url + '/' + id).subscribe(
-                    () => {
-                        this.listRemitos(); 
-                    },
-                    (error) => {
-                        this.error.set("No se pudo eliminar el remito: " + error);
-                    }
-                );
-            }
+    update(id: string, remito: RemitoRequest){ 
+        this.http.put<Remito>( this.url + '/' + id,remito ).subscribe
+        ({
+        next: () => {
+            this.listRemitos();
+        },
+        error: (error) => {
+            this.error.set("No se pudo actualizar el remito");
+        }
+    });
+}
+remove(id: string){
+    this.http.delete<void>(
+        this.url + '/' + id
+    ).subscribe({
+        next: () => {
+            this.listRemitos();
+        },
+        error: (error) => {
+            this.error.set("No se pudo eliminar el remito");
+        }
+    });
+}
 }

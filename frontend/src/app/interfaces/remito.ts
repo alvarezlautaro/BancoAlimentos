@@ -1,19 +1,17 @@
-import { Institucion } from "./institucion"
-import { ItemDonacionResponse } from "./ItemDonacion"
-
 export interface Remito {
-
-    id?:string
-    fecha:Date
-    items: ItemDonacionResponse[]
-    institucion: Institucion
+  externalId: string;
+  fecha: string;
+  idInstitucion: number;
 }
 
-
-export interface RemitoResponse{
-
-    id?:string
-    fecha:Date
-    items: ItemDonacionResponse[]
-    institucion: Institucion
+export interface RemitoRequest {
+  fecha: string;
+  idInstitucion: number;
+}
+export interface PageResponse<T> {
+    content: T[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
 }

@@ -1,74 +1,27 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RemitoResponse } from '../../../interfaces/remito';
 import { RemitoService } from '../../../service/remito-service';
-import { RemitoCreate } from '../remito-create/remito-create';
 import { RemitoEdit } from '../remito-edit/remito-edit';
+import { Remito } from '../../../interfaces/remito';
 
 @Component({
-  imports: [FormsModule, RemitoCreate, RemitoEdit],
+  imports: [RemitoEdit],
   selector: 'app-remito-list',
   styleUrl: './remito-list.css',
   templateUrl: './remito-list.html',
 })
 export class RemitoList implements OnInit {
-  readonly remitoService = inject(RemitoService);
-  searchId = '';
-  institucionId = '';
-  fecha = '';
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.remitoService.listRemitos();
   }
 
-  buscar() {
-    if (this.searchId.trim()) {
-      this.remitoService.getById(this.searchId.trim());
-    }
+  remitoService=inject(RemitoService);  
+  remitos=this.remitoService.remitos;
+
+  eliminar(id:string){
+    this.remitoService.remove(id);
   }
 
-  buscarPorInstitucion() {
-    if (!this.institucionId.trim()) {
-      this.remitoService.listRemitos();
-      return;
-    }
-
-    this.remitoService.getbyInstitucion(this.institucionId).subscribe({
-      next: (remitos) => {
-        this.remitoService.remitos.set(remitos);
-        this.remitoService.error.set('');
-      },
-      error: (error) => {
-        this.remitoService.error.set('No se pudieron cargar los remitos de la institución: ' + error);
-      },
-    });
-  }
-
-  buscarPorFecha() {
-    if (!this.fecha) {
-      this.remitoService.listRemitos();
-      return;
-    }
-
-    this.remitoService.getByFecha(this.fecha).subscribe({
-      next: (remitos) => {
-        this.remitoService.remitos.set(remitos);
-        this.remitoService.error.set('');
-      },
-      error: (error) => {
-        this.remitoService.error.set('No se pudieron cargar los remitos de la fecha: ' + error);
-      },
-    });
-  }
-
-  editar(remito: RemitoResponse) {
-    this.remitoService.remitoById.set(remito);
-  }
-
-  eliminar(id: string) {
-    this.remitoService.remover(id);
-    if (this.remitoService.remitoById()?.id === id) {
-      this.remitoService.remitoById.set(null);
-    }
+  editar(r: Remito) {
+    this.remitoService.remitoByID.set(r);
   }
 }

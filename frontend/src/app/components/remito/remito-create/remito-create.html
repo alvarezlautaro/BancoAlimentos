@@ -1,39 +1,42 @@
-<section>
-  <h2>Crear remito</h2>
+<h2>Crear Remito</h2>
 
-  <form [formGroup]="formulario" (ngSubmit)="add()">
+<form [formGroup]="formulario">
+
     <div>
-      <label for="fecha">Fecha:</label>
-      <input id="fecha" type="date" formControlName="fecha">
-      @if (formulario.controls.fecha.touched && formulario.controls.fecha.hasError('required')) {
-        <small>La fecha es obligatoria.</small>
-      }
+        <label for="">Fecha:</label>
+        <input type="date" formControlName="fecha">
+
+        @if (formulario.controls.fecha.hasError('required') && formulario.controls.fecha.touched) {
+            <small style="color: red">Campo requerido</small>
+        }
     </div>
 
     <div>
-      <label for="institucionId">ID de institución:</label>
-      <input id="institucionId" type="number" min="1" formControlName="institucionId">
-      @if (formulario.controls.institucionId.touched && formulario.controls.institucionId.hasError('required')) {
-        <small>El ID de institución es obligatorio.</small>
-      }
+        <label for="">Institución:</label>
+
+        <select id="idInstitucion" formControlName="idInstitucion">
+            <option value="0" disabled selected>
+                Seleccione una institución...
+            </option>
+
+            @for (institucion of instituciones; track $index) {
+                <option [value]="institucion.id">
+                    {{ institucion.nombre }}
+                </option>
+            }
+        </select>
+
+        @if (formulario.controls.idInstitucion.hasError('min') && formulario.controls.idInstitucion.touched) {
+            <small style="color: red">
+                Debe seleccionar una institución
+            </small>
+        }
     </div>
 
-    <fieldset>
-      <legend>Cargar productos</legend>
-      @for (item of itemDonacionService.items(); track item.id) {
-        <label>
-          <input
-            type="checkbox"
-            [checked]="isItemSelected(item.id)"
-            (change)="toggleItem(item.id, $event)">
-          {{ item.productoNombre }} - {{ item.donante }} -
-          Cantidad: {{ item.cantidad }} - Vencimiento: {{ item.fechaVencimiento }}
-        </label>
-      } @empty {
-        <p>No hay ítems de donación disponibles en el estado actual.</p>
-      }
-    </fieldset>
+    <div>
+        <button (click)="add()" [disabled]="formulario.invalid">
+            Crear Remito
+        </button>
+    </div>
 
-    <button type="submit" [disabled]="formulario.invalid">Crear remito</button>
-  </form>
-</section>
+</form>
