@@ -18,5 +18,5 @@ export const roleGuard: CanActivateFn = (route) => {
 
 export const guestGuard: CanActivateFn = () => {
     const auth = inject(AuthService);
-    return auth.isLoggedIn() ? inject(Router).createUrlTree(['/']) : true;
+    return auth.isLoggedIn() ? inject(Router).createUrlTree(['/home']) : true;
 }
