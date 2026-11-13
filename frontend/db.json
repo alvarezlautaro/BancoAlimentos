@@ -1,0 +1,14 @@
+{
+  "empresas": [
+    {
+      "razon_social": "Dani",
+      "cuit": "22222222222",
+      "telefono": "33333333333",
+      "email": "dani@g",
+      "direccion": "dasd 123",
+      "id": "SozVzacI5M8"
+    }
+  ],
+  "instituciones": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
