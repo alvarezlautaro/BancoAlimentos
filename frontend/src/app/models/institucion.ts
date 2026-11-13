@@ -1,3 +1,4 @@
+import { Estado } from "../enums/Estado";
 import { TipoInstitucion } from "../enums/tipo-institucion";
 
 export interface Institucion {
@@ -7,4 +8,5 @@ export interface Institucion {
     direccion : string;
     telefono : string;
     email : string;
+    estadoPago: Estado;
 }
