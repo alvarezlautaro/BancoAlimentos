@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -106,13 +105,13 @@ public class DetalleRemitoServicio {
     }
 
     @Transactional
-    public DetalleRemitoResponse actualizar(UUID externalId, DetalleRemitoRequest requestDto){
-        if(!externalId.equals(requestDto.getExternalId())){
+    public DetalleRemitoResponse actualizar(Long id, DetalleRemitoRequest requestDto){
+        if(!id.equals(requestDto.getId())){
             throw new ReglaNegocioException("El id externo del path no coincide con el body", "DETALLE-REMITO");
         }
 
-        DetalleRemito detalleExistente = detalleRemitoRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("El detalle remito con id: " + externalId + " no fue encontrado"));
+        DetalleRemito detalleExistente = detalleRemitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El detalle remito con el id no fue encontrado"));
 
         ItemDonacion itemDonacion = detalleExistente.getItemDonacion();
 
@@ -132,9 +131,9 @@ public class DetalleRemitoServicio {
     }
 
     @Transactional
-    public void eliminar(UUID externalId){
-        DetalleRemito detalle = detalleRemitoRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el detalle con el id: " + externalId));
+    public void eliminar(Long id){
+        DetalleRemito detalle = detalleRemitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el detalle con el id"));
 
         ItemDonacion itemDonacion = detalle.getItemDonacion();
         itemDonacion.setCantidad(itemDonacion.getCantidad() + detalle.getCantidad());

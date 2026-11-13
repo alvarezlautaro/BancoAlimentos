@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Schema(description = "DTO para la actualizacion parcial de instituciones.")
 public class ActualizarInstitucionParcialDTO {
         @NotNull
-        UUID externalId;
+        Long id;
 
         @Schema(description = "Nombre de la institucion", example = "Escuela Nuestra Señora de Fátima")
         @Length(min = 3, message = "Debe tener al menos 3 caracteres")

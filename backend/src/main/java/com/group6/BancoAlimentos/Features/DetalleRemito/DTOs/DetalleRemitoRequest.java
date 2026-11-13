@@ -4,14 +4,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetalleRemitoRequest {
     @NotNull(message = "El id externo es obligatorio")
-    private UUID externalId;
+    private Long id;
 
     @NotNull(message = "El id del remito es obligatorio")
     private Long idRemito;

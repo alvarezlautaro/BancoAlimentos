@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,8 +75,8 @@ public class DonanteService implements IDonanteService{
         donanteRepository.delete(donante);
     }
 
-    public List<Donante> getHistorial(UUID externalId) {
-        Donante donante = donanteRepository.findByExternalId(externalId)
+    public List<Donante> getHistorial(Long id) {
+        Donante donante = donanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donante no encontrado"));
 
         AuditReader reader = AuditReaderFactory.get(entityManager);

@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,9 +78,9 @@ public class DetalleRemitoController {
             @ApiResponse(responseCode = "404", description = "Detalle no encontrado"),
             @ApiResponse(responseCode = "422", description = "Violación de regla de negocio")
     })
-    @PutMapping("/{externalId}")
-    public ResponseEntity<DetalleRemitoResponse> actualizar(@PathVariable UUID externalId, @Valid @RequestBody DetalleRemitoRequest dto){
-        return ResponseEntity.ok(detalleRemitoServicio.actualizar(externalId, dto));
+    @PutMapping("/{id}")
+    public ResponseEntity<DetalleRemitoResponse> actualizar(@PathVariable Long id, @Valid @RequestBody DetalleRemitoRequest dto){
+        return ResponseEntity.ok(detalleRemitoServicio.actualizar(id, dto));
     }
 
     @PreAuthorize("hasAuthority('DETALLE_REMITO_ELIMINAR')")
@@ -91,9 +90,9 @@ public class DetalleRemitoController {
             @ApiResponse(responseCode = "400", description = "El id externo no es un UUID válido"),
             @ApiResponse(responseCode = "404", description = "Detalle no encontrado")
     })
-    @DeleteMapping("/{externalId}")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID externalId){
-        detalleRemitoServicio.eliminar(externalId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id){
+        detalleRemitoServicio.eliminar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

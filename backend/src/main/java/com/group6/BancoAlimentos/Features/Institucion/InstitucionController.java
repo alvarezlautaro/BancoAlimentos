@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -46,9 +45,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "200", description = "Institución obtenida correctamente"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @GetMapping("/{externalId}")
-    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable UUID externalId){
-        return ResponseEntity.ok(institucionServicio.encontrarPorID(externalId));
+    @GetMapping("/{id}")
+    public ResponseEntity<InstitucionDTO> encontrarPorID(@PathVariable Long id){
+        return ResponseEntity.ok(institucionServicio.encontrarPorID(id));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER_DEPOSITO', 'ROLE_USER_TESORERIA', 'ROLE_USER_INSTITUCIONAL')")
@@ -110,9 +109,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @PutMapping("/{externalId}")
-    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable UUID externalId, @Valid @RequestBody InstitucionDTO institucionDTO){
-        return ResponseEntity.ok(institucionServicio.actualizar(externalId, institucionDTO));
+    @PutMapping("/{id}")
+    public ResponseEntity<InstitucionDTO> actualizar(@PathVariable Long id, @Valid @RequestBody InstitucionDTO institucionDTO){
+        return ResponseEntity.ok(institucionServicio.actualizar(id, institucionDTO));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER_INSTITUCIONAL', 'ROLE_USER_TESORERIA')")
@@ -124,9 +123,9 @@ public class InstitucionController {
             @ApiResponse(responseCode = "400", description = "Datos ingresados inválidos"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @PatchMapping("/{externalId}")
-    public ResponseEntity<InstitucionDTO> actualizacionParcial(@PathVariable UUID externalId, @Valid @RequestBody ActualizarInstitucionParcialDTO dtoParcial){
-        return ResponseEntity.ok(institucionServicio.actualizacionParcial(externalId, dtoParcial));
+    @PatchMapping("/{id}")
+    public ResponseEntity<InstitucionDTO> actualizacionParcial(@PathVariable Long id, @Valid @RequestBody ActualizarInstitucionParcialDTO dtoParcial){
+        return ResponseEntity.ok(institucionServicio.actualizacionParcial(id, dtoParcial));
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER_INSTITUCIONAL')")
@@ -137,13 +136,13 @@ public class InstitucionController {
             @ApiResponse(responseCode = "204", description = "Institución eliminada correctamente"),
             @ApiResponse(responseCode = "404", description = "Institución no encontrada")
     })
-    @DeleteMapping("/{externalId}")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID externalId){
-        institucionServicio.eliminar(externalId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id){
+        institucionServicio.eliminar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    @GetMapping("/{externalId}/historial")
-    public ResponseEntity<List<Institucion>> getHistorial(@PathVariable UUID externalId) {
-        return ResponseEntity.ok(institucionServicio.getHistorial(externalId));
+    @GetMapping("/{id}/historial")
+    public ResponseEntity<List<Institucion>> getHistorial(@PathVariable Long id) {
+        return ResponseEntity.ok(institucionServicio.getHistorial(id));
     }
 }

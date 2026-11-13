@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,8 +57,8 @@ public class DonanteController {
     }
 
     @PreAuthorize("hasAuthority('AUDITORIA_DONACION_VER')")
-    @GetMapping("/{externalId}/historial")
-    public ResponseEntity<List<Donante>> getHistorial(@PathVariable UUID externalId) {
-        return ResponseEntity.ok(donanteService.getHistorial(externalId));
+    @GetMapping("/{id}/historial")
+    public ResponseEntity<List<Donante>> getHistorial(@PathVariable Long id) {
+        return ResponseEntity.ok(donanteService.getHistorial(id));
     }
 }

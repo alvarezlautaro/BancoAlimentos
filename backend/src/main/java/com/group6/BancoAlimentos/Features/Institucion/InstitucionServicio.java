@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,10 +36,10 @@ public class InstitucionServicio {
                 .map(institucionMapper::aDTO);
     }
 
-    public InstitucionDTO encontrarPorID(UUID externalId){
-        return institucionRepositorio.findByExternalId(externalId)
+    public InstitucionDTO encontrarPorID(Long id){
+        return institucionRepositorio.findById(id)
                 .map(entidad -> institucionMapper.aDTO(entidad))
-                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el id externo: " + externalId));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada con el id: " + id));
     }
 
     public InstitucionDTO encontrarPorNombre(String nombre){
@@ -67,12 +66,12 @@ public class InstitucionServicio {
     }
 
     @Transactional
-    public InstitucionDTO actualizar(UUID externalId, InstitucionDTO dto){
-        if(!externalId.equals(dto.getExternalId())){
-            throw new ReglaNegocioException("El id externo del path no coincide con el body", "DETALLE-REMITO");
+    public InstitucionDTO actualizar(Long id, InstitucionDTO dto){
+        if(!id.equals(dto.getId())){
+            throw new ReglaNegocioException("El id del path no coincide con el body", "DETALLE-REMITO");
         }
 
-        Institucion institucion = institucionRepositorio.findByExternalId(externalId)
+        Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
 
         institucion.setNombre(dto.getNombre());
@@ -87,12 +86,12 @@ public class InstitucionServicio {
     }
 
     @Transactional
-    public InstitucionDTO actualizacionParcial(UUID externalId, ActualizarInstitucionParcialDTO dto){
-        if(!externalId.equals(dto.getExternalId())){
-            throw new ReglaNegocioException("El id externo del path no coincide con el body", "DETALLE-REMITO");
+    public InstitucionDTO actualizacionParcial(Long id, ActualizarInstitucionParcialDTO dto){
+        if(!id.equals(dto.getId())){
+            throw new ReglaNegocioException("El id del path no coincide con el body", "DETALLE-REMITO");
         }
 
-        Institucion institucion = institucionRepositorio.findByExternalId(externalId)
+        Institucion institucion = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Institucion no encontrada"));
 
         return institucionMapper.aDTO(
@@ -101,15 +100,15 @@ public class InstitucionServicio {
     }
 
     @Transactional
-    public void eliminar(UUID externalId){
-        Institucion institucion = institucionRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id externo: " + externalId + " no fue encontrada"));
+    public void eliminar(Long id){
+        Institucion institucion = institucionRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("La institucion a eliminar con el id no fue encontrada"));
 
         institucionRepositorio.delete(institucion);
     }
 
-    public List<Institucion> getHistorial(UUID externalId) {
-        Institucion inst = institucionRepositorio.findByExternalId(externalId)
+    public List<Institucion> getHistorial(Long id) {
+        Institucion inst = institucionRepositorio.findById(id)
                 .orElseThrow(() -> new RuntimeException("Institución no encontrada"));
 
         AuditReader reader = AuditReaderFactory.get(entityManager);

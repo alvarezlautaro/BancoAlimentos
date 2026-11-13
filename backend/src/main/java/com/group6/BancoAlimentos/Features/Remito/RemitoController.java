@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,8 +63,8 @@ public class RemitoController {
             @ApiResponse(responseCode = "404", description = "Remito no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<RemitoDTO> encontrarPorExternalId(@PathVariable UUID id){
-        return ResponseEntity.ok(remitoServicio.encontrarPorExternalID(id));
+    public ResponseEntity<RemitoDTO> encontrarPorExternalId(@PathVariable Long id){
+        return ResponseEntity.ok(remitoServicio.encontrarPorID(id));
     }
 
     @PreAuthorize("hasAuthority('REMITO_ACTUALIZAR')")
@@ -77,7 +76,7 @@ public class RemitoController {
             @ApiResponse(responseCode = "422", description = "Violación de regla de negocio")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<RemitoDTO> actualizar(@PathVariable UUID id, @RequestBody ActualizarRemitoDTO actualizarRemito){
+    public ResponseEntity<RemitoDTO> actualizar(@PathVariable Long id, @RequestBody ActualizarRemitoDTO actualizarRemito){
         return ResponseEntity.ok(remitoServicio.actualizar(id, actualizarRemito));
     }
 
@@ -90,7 +89,7 @@ public class RemitoController {
             @ApiResponse(responseCode = "422", description = "Violación de regla de negocio")
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<RemitoDTO> actualizacionParcial(@PathVariable UUID id, @RequestBody ActualizarRemitoDTO actualizarRemito){
+    public ResponseEntity<RemitoDTO> actualizacionParcial(@PathVariable Long id, @RequestBody ActualizarRemitoDTO actualizarRemito){
         return ResponseEntity.ok(remitoServicio.actualizacionParcial(id, actualizarRemito));
     }
 
@@ -102,7 +101,7 @@ public class RemitoController {
             @ApiResponse(responseCode = "404", description = "Remito no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID id){
+    public ResponseEntity<Void> eliminar(@PathVariable Long id){
         remitoServicio.eliminar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -48,9 +47,9 @@ public class RemitoServicio {
                 .map(remitoMapper::aDTO);
     }
 
-    public RemitoDTO encontrarPorExternalID(UUID uuid){
-        return remitoMapper.aDTO(remitoRepositorio.findByExternalId(uuid)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el remito con el id externo: "+ uuid)));
+    public RemitoDTO encontrarPorID(Long id){
+        return remitoMapper.aDTO(remitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el remito con ese id")));
     }
 
     @Transactional
@@ -72,9 +71,9 @@ public class RemitoServicio {
     }
 
     @Transactional
-    public RemitoDTO actualizar(UUID externalId, ActualizarRemitoDTO remitoActualizar){
-        Remito remito = remitoRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
+    public RemitoDTO actualizar(Long id, ActualizarRemitoDTO remitoActualizar){
+        Remito remito = remitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id no existe."));
 
         Institucion nuevaInstitucion = institucionRepositorio.findById(remitoActualizar.getIdInstitucion())
                 .orElseThrow(() -> new RecursoNoEncontradoException("La institución con id: " + remitoActualizar.getIdInstitucion() + " no existe."));
@@ -86,17 +85,17 @@ public class RemitoServicio {
     }
 
     @Transactional
-    public RemitoDTO actualizacionParcial(UUID externalId, ActualizarRemitoDTO remitoActualizar){
-        Remito remito = remitoRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe."));
+    public RemitoDTO actualizacionParcial(Long id, ActualizarRemitoDTO remitoActualizar){
+        Remito remito = remitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id no existe."));
 
         return remitoMapper.aDTO(remitoRepositorio.save(actualizarRemitoMapper.actualizarEntidad(remitoActualizar, remito)));
     }
 
     @Transactional
-    public void eliminar(UUID externalId){
-        Remito remito = remitoRepositorio.findByExternalId(externalId)
-                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id externo: " + externalId + " no existe"));
+    public void eliminar(Long id){
+        Remito remito = remitoRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El remito con el id no existe"));
 
         remitoRepositorio.delete(remito);
     }

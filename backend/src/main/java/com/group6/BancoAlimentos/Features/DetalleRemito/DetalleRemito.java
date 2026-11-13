@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
 
 @Entity
 @Table(name = "detalle-remito")
@@ -21,9 +20,6 @@ public class DetalleRemito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetalleRemito;
 
-    @Column(unique = true, nullable = false, updatable = false)
-    private UUID externalId;
-
     @ManyToOne
     @JoinColumn(name = "id_remito")
     private Remito remito;
@@ -34,11 +30,4 @@ public class DetalleRemito {
 
     @Column(nullable = false)
     private Integer cantidad;
-
-    @PrePersist
-    protected void onCreate() {
-        if (this.externalId == null) {
-            this.externalId = UUID.randomUUID();
-        }
-    }
 }
