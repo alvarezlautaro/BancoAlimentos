@@ -145,3 +145,18 @@
     text-align: center;
     margin: 20px 0;
 }
+
+.badge.al_dia {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge.deudor {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge.excepcional {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}

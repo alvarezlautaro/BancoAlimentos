@@ -1,6 +1,6 @@
 export enum TipoInstitucion {
-    COMEDOR,
-    MERENDERO,
-    ESCUELA,
-    OTRO    
+    COMEDOR = 'COMEDOR',
+    MERENDERO = 'MERENDERO',
+    ESCUELA = 'ESCUELA',
+    OTRO = 'OTRO'
 }
