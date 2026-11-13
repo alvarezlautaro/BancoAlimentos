@@ -1,0 +1,56 @@
+
+<div>
+    <label for="buscarId">Buscar por id: </label>
+    <input id="buscarId" type="number" [(ngModel)]="searchId">
+    <button (click)="buscar()">Buscar</button>
+</div>
+    @if (facturaService.facturaById(); as f) {
+    <div>
+        <p>
+            Factura: {{ f.id }}
+            - Donación: {{ f.idDonacion }}
+            - Fecha: {{ f.fecha }}
+            - Tipo: {{ f.tipo }}
+            - Donante: {{ f.nombreDonante }}
+        </p>
+    </div>
+}
+
+<div>
+    <label for="fechaDesde">Desde: </label>
+    <input id="fechaDesde" type="date" [(ngModel)]="fechaDesde">
+
+    <label for="fechaHasta">Hasta: </label>
+    <input id="fechaHasta" type="date" [(ngModel)]="fechaHasta">
+
+    <button (click)="filtrar()">Filtrar</button>
+</div>
+<button (click)="facturaService.listFacturas()">
+    Mostrar todas
+</button>
+<section>
+    <h1>Listado de facturas</h1>
+
+    <ul>
+        @for (item of facturaService.facturas(); track $index) {
+            <li>
+                Factura:
+                {{ item.id }}
+                - Donación:
+                {{ item.idDonacion }}
+                - Fecha:
+                {{ item.fecha }}
+                - Tipo:
+                {{ item.tipo }}
+                - Donante:
+                {{ item.nombreDonante }}
+            </li>
+        }
+    </ul>
+
+    @if (facturaService.error(); as mensajeError) {
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+            {{ mensajeError }}
+        </div>
+    }
+</section>
