@@ -1,5 +1,5 @@
 export enum tipoFactura{
-    A,
-    B,
-    C
+    A = 'A',
+    B = 'B',
+    C = 'C'
 }

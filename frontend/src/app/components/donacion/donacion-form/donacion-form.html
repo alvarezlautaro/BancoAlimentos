@@ -13,9 +13,9 @@
 
         <label>Estado</label>
         <select formControlName="estado">
-            <option value="AL_DIA">Al día</option>
-            <option value="DEUDOR">Deudor</option>
-            <option value="EXCEPCIONAL">Excepcional</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="CONFIRMADA">Confirmada</option>
+            <option value="CANCELADA">Cancelada</option>
         </select>
         @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
             <p class="error">El estado es obligatorio</p>

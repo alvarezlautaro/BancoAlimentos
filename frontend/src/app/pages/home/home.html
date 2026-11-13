@@ -1,5 +1,35 @@
+<header>
+    <span>Usuario: {{ auth.username() }}</span>
+    <button type="button" (click)="auth.logout()">Cerrar sesión</button>
+</header>
+
 <app-producto-create></app-producto-create>
 <app-producto-list></app-producto-list>
 
 <app-item-donacion-create></app-item-donacion-create>
 <app-item-donacion-list></app-item-donacion-list>
+
+<app-producto-create></app-producto-create>
+<app-producto-list></app-producto-list>
+
+<app-item-donacion-create></app-item-donacion-create>
+<app-item-donacion-list></app-item-donacion-list>
+
+<app-empresa-list></app-empresa-list>
+<app-empresa-form></app-empresa-form>
+<app-empresa-detail></app-empresa-detail>
+
+<app-institucion-list></app-institucion-list>
+<app-intitucion-form></app-intitucion-form>
+<app-institucion-detail></app-institucion-detail>
+
+<app-donacion-list></app-donacion-list>
+<app-donacion-form></app-donacion-form>
+<app-donacion-details></app-donacion-details>
+
+<app-remito-list></app-remito-list>
+<app-remito-create></app-remito-create>
+<app-remito-edit></app-remito-edit>
+
+<app-factura-list></app-factura-list>
+<app-factura-edit></app-factura-edit>

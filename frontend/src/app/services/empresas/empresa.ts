@@ -9,7 +9,7 @@ import { map } from 'rxjs';
 })
 export class EmpresaService{
 
-    private url = 'http://localhost:3000/empresas';
+    private url = 'http://localhost:8080/api/donantes';
 
     constructor(private http : HttpClient){}
 

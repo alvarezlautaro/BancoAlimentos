@@ -16,9 +16,9 @@
 
             <div class="items-section">
                 <h3>Ítems de la Donación</h3>
-                @for(item of donacion.items; track item.id || item.productoId) {
+                @for(item of donacion.items; track item.id || item.id) {
                     <div class="item-card">
-                        <p><strong>Producto:</strong> {{ item.nombreProducto || 'ID Producto: ' + item.productoId }}</p>
+                        <p><strong>Producto:</strong> {{ item.productoNombre }}</p>
                         <p><strong>Cantidad:</strong> {{ item.cantidad }}</p>
                         <p><strong>Valor Unitario:</strong> ${{ item.valorUnitario }}</p>
                         <p><strong>Vencimiento:</strong> {{ item.fechaVencimiento }}</p>
@@ -30,7 +30,7 @@
         </article>
 
         <div class="actions">
-            @if (donacion.estado !== 'CONFIRMADA') {
+            @if (donacion.estado.toString() !== 'CONFIRMADA') {
                 <button (click)="confirmar()" class="btn-confirm">Confirmar</button>
                 <a [routerLink]="['/donaciones/form', donacion.id]" class="btn-edit">Editar</a>
             }

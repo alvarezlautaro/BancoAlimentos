@@ -28,7 +28,7 @@
 
                 <div class="btns">
                     <a [routerLink]="['/donaciones', d.id]" class="btn-details">Ver detalle</a>
-                    @if (d.estado !== 'CONFIRMADA') {
+                    @if (d.estado.toString() !== 'CONFIRMADA') {
                         <button (click)="d.id && confirmar(d.id)" class="btn-confirm">Confirmar</button>
                         <a [routerLink]="['/donaciones/form', d.id]" class="btn-edit">Editar</a>
                     }

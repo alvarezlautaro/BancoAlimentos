@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DonacionService } from '../../../service/donacion-service';
 import { Estado } from '../../../enums/Estado';
+import { EstadoDonacion } from '../../../enums/EstadoDonacion';
 
 @Component({
   imports: [RouterLink, CommonModule, ReactiveFormsModule],
@@ -27,8 +28,8 @@ export class DonacionForm implements OnInit{
 
     this.formulario = this.fb.group({
       fecha: ['', Validators.required],
-      ////Se inicializa al dia
-      estado: [Estado.AL_DIA, Validators.required],
+      ////Se inicializa pendiente
+      estado: [EstadoDonacion.PENDIENTE, Validators.required],
       nroRemitoProveedor: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       observaciones: [''],
       idDonante: ['', Validators.required],

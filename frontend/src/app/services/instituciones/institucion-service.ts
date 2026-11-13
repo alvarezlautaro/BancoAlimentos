@@ -7,7 +7,7 @@ import { map } from 'rxjs';
     providedIn :'root'
 })
 export class InstitucionService {
-        private url = 'http://localhost:3000/instituciones';
+        private url = 'http://localhost:3000/api/instituciones';
 
     constructor(private http : HttpClient){}
 

@@ -10,7 +10,7 @@ import { Institucion } from '../../../models/institucion';
   styleUrl: './intitucion-form.css',
   templateUrl: './intitucion-form.html',
 })
-export class IntitucionForm implements OnInit{
+export class InstitucionForm implements OnInit{
   
 
   formulario!: FormGroup;
