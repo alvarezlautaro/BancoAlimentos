@@ -74,14 +74,13 @@ export class InstitucionList implements OnInit{
         return lista;
       } else {
         return lista.filter(institucion => {
-          const idCoincide = institucion.id?.toString().toLowerCase().includes(filtro);
-          const nombreCoincide = institucion.nombre.toLowerCase().includes(filtro);
-          const direccionCoincide = institucion.direccion.toLowerCase().includes(filtro);
-          const emailCoincide = institucion.email.toLowerCase().includes(filtro);
-          const telefonoCoincide = institucion.telefono.toLowerCase().includes(filtro);
+        const idCoincide = institucion.id?.toString().toLowerCase().includes(filtro);
+        const nombreCoincide = institucion.nombre?.toLowerCase().includes(filtro);
+        const tipoCoincide = String(institucion.tipo || '').toLowerCase().includes(filtro);        const direccionCoincide = institucion.direccion?.toLowerCase().includes(filtro);
+        const emailCoincide = institucion.email?.toLowerCase().includes(filtro);
+        const telefonoCoincide = institucion.telefono?.toLowerCase().includes(filtro);
 
-          return idCoincide || nombreCoincide || direccionCoincide || emailCoincide || telefonoCoincide;
-        });
+        return idCoincide || nombreCoincide || tipoCoincide || direccionCoincide || emailCoincide || telefonoCoincide; });
       }
     }
 }
