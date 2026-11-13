@@ -1,7 +1,7 @@
 .container-form {
-    max-width: 700px;
+    max-width: 900px;
     margin: 40px auto;
-    padding: 30px;
+    padding: 32px;
     background-color: #FEFFFF;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -12,13 +12,13 @@
     color: #17252A;
     font-size: 1.8rem;
     font-weight: 700;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
 .container-form form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
 }
 
 .container-form label {
@@ -60,17 +60,18 @@
 .divider {
     border: none;
     border-top: 1px solid #e2e8f0;
-    margin: 10px 0;
+    margin: 8px 0 0;
 }
 
 .items-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8px;
 }
 
 .items-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #17252A;
     margin: 0;
 }
@@ -79,10 +80,10 @@
     background-color: #3AAFA9;
     color: #FEFFFF;
     border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -94,24 +95,25 @@
 .items-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .item-row {
     display: flex;
-    gap: 10px;
+    gap: 16px;
     align-items: flex-end;
     background-color: #f8fafc;
-    padding: 12px;
+    padding: 16px;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     flex: 1;
+    min-width: 0;
 }
 
 .input-group label {
@@ -119,18 +121,20 @@
     color: #64748b;
 }
 
-.input-group input {
-    padding: 8px 10px;
+.input-group input,
+.input-group select {
+    padding: 10px 12px;
     font-size: 0.9rem;
+    min-height: 44px;
 }
 
 .btn-remove {
     background-color: #ef4444;
     color: #FEFFFF;
     border: none;
-    width: 36px;
-    height: 38px;
-    border-radius: 6px;
+    width: 40px;
+    height: 44px;
+    border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -141,10 +145,10 @@
 }
 
 .btn-submit {
-    margin-top: 10px;
+    margin-top: 8px;
     background-color: #2B7A78;
     color: #FEFFFF;
-    padding: 14px;
+    padding: 16px;
     border: none;
     border-radius: 10px;
     font-size: 1rem;

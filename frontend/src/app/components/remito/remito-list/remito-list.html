@@ -5,15 +5,22 @@
         <a routerLink="/remitos/crear" class="btn-create">Crear remito</a>
     </div>
 
-    <ul>
+    <ul class="remito-list">
         @for (item of remitoService.remitos(); track $index) {
-            <li>
-                <div>
-                    <strong>Remito N° {{ item.id }} </strong>
-                    <span>{{ item.fecha | date:'dd/MM/yyyy' }}</span>
+            <li class="remito-item">
+                <div class="remito-header">
+                    <div class="remito-title-group">
+                        <strong>Remito N° {{ item.id }}</strong>
+                        <span>{{ item.fecha | date:'dd/MM/yyyy' }}</span>
+                    </div>
+
+                    <div class="remito-actions">
+                        <button class="btn-edit" (click)="editar(item)">Editar</button>
+                        <button class="btn-delete" (click)="eliminar(item.id)">Eliminar</button>
+                    </div>
                 </div>
 
-                <div>
+                <div class="remito-body">
                     <p><strong>Institución:</strong> {{ item.institucionNombre || 'Institución sin nombre' }}</p>
                     <p><strong>Items:</strong> {{ item.items?.length ?? 0 }}</p>
 
@@ -27,11 +34,6 @@
                             }
                         </ul>
                     }
-                </div>
-
-                <div>
-                    <button (click)="editar(item)">Editar</button>
-                    <button (click)="eliminar(item.id)">Eliminar</button>
                 </div>
             </li>
         }

@@ -1,0 +1,125 @@
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.section-heading h1 {
+  margin: 0;
+  color: #17252a;
+}
+
+.remito-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.remito-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #dfe7ee;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fbfc 0%, #f1f5f9 100%);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.remito-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.remito-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #17252a;
+}
+
+.remito-title-group strong {
+  font-size: 1.05rem;
+}
+
+.remito-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #23363d;
+}
+
+.remito-body p {
+  margin: 0;
+}
+
+.detalle-remito {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 8px 0 0;
+}
+
+.detalle-remito li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.remito-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remito-actions button,
+.btn-create {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.remito-actions button:hover,
+.btn-create:hover {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.btn-edit {
+  background: #dff7f5;
+  border-color: #7dd3c8;
+  color: #0f766e;
+}
+
+.btn-delete {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  color: #be123c;
+}
+
+.btn-create {
+  background: #3aafa9;
+  color: #fff;
+  text-decoration: none;
+}
+
+.error-message {
+  margin-top: 16px;
+}
