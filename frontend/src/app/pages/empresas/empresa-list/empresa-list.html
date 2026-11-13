@@ -1,0 +1,48 @@
+<div class="container-lista">
+        
+    <div class="encabezado">
+        <h1>Gestión de empresas</h1>
+
+        <a routerLink="/empresas/form" class="btn-create"> Nueva empresa </a>
+    </div>
+
+    <div class="barra-busqueda">
+        <input type="text" [(ngModel)]="filtroEmpresa" placeholder="Buscar por ID, razón social, CUIT, email o dirección...">
+
+    </div>
+
+    <div class="list">
+        @for(data of empresasFiltradas; track data.id){
+            <article class="item">
+
+                <div class="data">
+                    <h2> {{data.cuit}} </h2>
+                    <h3> {{data.razon_social}} </h3>
+                    <p><strong>Tel:</strong> {{data.telefono}}</p>
+                    <p><strong>Email:</strong> {{data.email}}</p>
+                    <p><strong>Dirección:</strong> {{data.direccion}}</p>
+        
+                </div>
+               
+
+                <div class="btns">
+                    <a [routerLink]="['/empresas', data.id]" class="btn-details">Ver detalle</a>
+                    <a [routerLink]="['/empresas/form', data.id]" class="btn-edit">Editar</a>
+                    <button (click)="eliminarEmpresa(data.id!)" class="btn-delete">Eliminar</button>
+                </div>
+                
+
+            </article>
+        }@empty{
+            <p>No hay empresas cargadas</p>
+        }
+
+    </div>
+
+
+
+        
+
+
+
+</div>

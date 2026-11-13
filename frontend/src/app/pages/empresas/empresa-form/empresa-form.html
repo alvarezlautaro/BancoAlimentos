@@ -1,0 +1,49 @@
+<div class="container-form">
+    <h1>
+        {{id ? 'Editar empresa' : 'Crear empresa'}}
+    </h1>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+
+    <label>Razón Social</label>
+    <input formControlName="razon_social" />
+    @if (formulario.get('razon_social')?.invalid && formulario.get('razon_social')?.touched) {
+        @if (formulario.get('razon_social')?.hasError('required')) { <p class="error">La razón social es obligatoria</p> }
+    }
+
+    <label>CUIT</label>
+    <input formControlName="cuit" />
+    @if (formulario.get('cuit')?.invalid && formulario.get('cuit')?.touched) {
+        @if (formulario.get('cuit')?.hasError('required')) { <p class="error">El CUIT es obligatorio</p> }
+        @if (formulario.get('cuit')?.hasError('minlength') || formulario.get('cuit')?.hasError('maxlength')) { <p class="error">El CUIT debe tener exactamente 11 caracteres</p> }
+        @if (formulario.get('cuit')?.hasError('pattern')) { <p class="error">El CUIT solo debe contener números</p> }
+    }
+
+    <label>Teléfono</label>
+    <input formControlName="telefono" />
+    @if (formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched) {
+        @if (formulario.get('telefono')?.hasError('required')) { <p class="error">El teléfono es obligatorio</p> }
+        @if (formulario.get('telefono')?.hasError('minlength') || formulario.get('telefono')?.hasError('maxlength')) { <p class="error">El teléfono debe tener exactamente 11 caracteres</p> }
+        @if (formulario.get('telefono')?.hasError('pattern')) { <p class="error">El teléfono solo debe contener números</p> }
+    }
+
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    @if (formulario.get('email')?.invalid && formulario.get('email')?.touched) {
+        @if (formulario.get('email')?.hasError('required')) { <p class="error">El email es obligatorio</p> }
+        @if (formulario.get('email')?.hasError('email')) { <p class="error">El formato del email no es válido</p> }
+    }
+
+
+    <label>Dirección</label>
+    <input formControlName="direccion" />
+    @if (formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched) {
+        @if (formulario.get('direccion')?.hasError('required')) { <p class="error">La dirección es obligatoria</p> }
+    }
+
+    <button type="submit">Guardar</button>
+    <a [routerLink]="id ? ['/empresas', id] : ['/empresas']">Cancelar</a>
+
+    </form>
+
+</div>

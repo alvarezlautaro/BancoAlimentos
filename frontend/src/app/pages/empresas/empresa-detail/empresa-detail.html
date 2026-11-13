@@ -1,0 +1,24 @@
+<div class="container-details">
+
+    @if(empresa){
+        
+        <article>
+            <p><strong>ID:</strong> {{ empresa.id }}</p>
+            <p><strong>Razón Social:</strong> {{ empresa.razon_social }}</p>
+            <p><strong>CUIT:</strong> {{ empresa.cuit }}</p>
+            <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+            <p><strong>Email:</strong> {{ empresa.email }}</p>
+            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+        </article>
+
+        <div class="actions">
+            <a [routerLink]="['/empresas/form', empresa.id]" class="btn-edit">Editar</a>
+            <button (click)="deleteEmpresa()" class="btn-delete">Eliminar</button>
+            <a routerLink="/empresas" class="btn-back">Volver al listado</a>
+        </div>
+
+    }@else{
+        <p>No hay empresa cargada con el ID ingresado</p>
+    }
+
+</div>

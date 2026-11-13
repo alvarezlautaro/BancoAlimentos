@@ -1,0 +1,29 @@
+.container-app{
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-areas: "header"
+                        "main"
+                        "footer";
+
+    grid-template-rows: auto 1fr auto;
+
+    background-color: #F4F9F9;
+    color: #17252A;
+}
+
+#header{
+    background-color: #2B7A78;
+    grid-area: header;
+}
+
+#main{
+    grid-area: main;
+}
+
+#footer{
+    background-color: #2B2D42;
+    color: #F4F9F9;
+    grid-area: footer;
+}
