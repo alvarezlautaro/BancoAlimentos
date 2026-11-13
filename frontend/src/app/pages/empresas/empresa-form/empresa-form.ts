@@ -26,7 +26,7 @@ export class EmpresaForm implements OnInit{
     this.formulario = this.fb.group({
       razon_social : ['', [Validators.required]],
       cuit : ['',[Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern('^[0-9]+$')]],
-      telefono: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern('^[0-9]+$')]],
+      telefono: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(11), Validators.pattern('^[0-9]+$')]],
       email: ['', [Validators.required, Validators.email]],
       direccion: ['', [Validators.required]]
     })

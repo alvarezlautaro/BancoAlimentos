@@ -81,7 +81,7 @@ export class EmpresaList implements OnInit {
         const emailCoincide = empresa.email.toLowerCase().includes(filtro);      
         const direccionCoincide = empresa.direccion.toLowerCase().includes(filtro); 
 
-        return idCoincide || razonCoincide || cuitCoincide;
+        return idCoincide || razonCoincide || cuitCoincide || emailCoincide || direccionCoincide;
       })
     }
   } 

@@ -13,6 +13,7 @@ import java.util.Date;
 public class ItemDonacionResponseDTO {
 
         private Long id;
+        private Long productoId;
         private Date fechaVencimiento;
         private Double valorUnitario;
         private Integer cantidad;

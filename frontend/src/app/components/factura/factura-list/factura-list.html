@@ -1,56 +1,60 @@
-
-<div>
-    <label for="buscarId">Buscar por id: </label>
-    <input id="buscarId" type="number" [(ngModel)]="searchId">
-    <button (click)="buscar()">Buscar</button>
-</div>
-    @if (facturaService.facturaById(); as f) {
-    <div>
-        <p>
-            Factura: {{ f.id }}
-            - Donación: {{ f.idDonacion }}
-            - Fecha: {{ f.fecha }}
-            - Tipo: {{ f.tipo }}
-            - Donante: {{ f.nombreDonante }}
-        </p>
+<section class="container-lista factura-page">
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Depósito</p>
+            <h1>Facturas</h1>
+        </div>
+        <button type="button" class="btn-back" (click)="mostrarTodas()">Restablecer filtros</button>
     </div>
-}
 
-<div>
-    <label for="fechaDesde">Desde: </label>
-    <input id="fechaDesde" type="date" [(ngModel)]="fechaDesde">
+    <div class="factura-filters">
+        <div class="filter-field">
+            <label for="buscarId">Buscar por ID</label>
+            <div class="filter-control">
+                <input id="buscarId" type="number" min="1" [(ngModel)]="searchId" placeholder="ID de factura">
+                <button type="button" (click)="buscar()" [disabled]="!searchId || searchId < 1">Buscar</button>
+            </div>
+        </div>
 
-    <label for="fechaHasta">Hasta: </label>
-    <input id="fechaHasta" type="date" [(ngModel)]="fechaHasta">
-
-    <button (click)="filtrar()">Filtrar</button>
-</div>
-<button (click)="facturaService.listFacturas()">
-    Mostrar todas
-</button>
-<section>
-    <h1>Listado de facturas</h1>
-
-    <ul>
-        @for (item of facturaService.facturas(); track $index) {
-            <li>
-                Factura:
-                {{ item.id }}
-                - Donación:
-                {{ item.idDonacion }}
-                - Fecha:
-                {{ item.fecha }}
-                - Tipo:
-                {{ item.tipo }}
-                - Donante:
-                {{ item.nombreDonante }}
-            </li>
-        }
-    </ul>
+        <div class="filter-field">
+            <label for="fechaDesde">Filtrar por fecha</label>
+            <div class="date-range">
+                <input id="fechaDesde" type="date" [(ngModel)]="fechaDesde" aria-label="Fecha desde">
+                <span>hasta</span>
+                <input id="fechaHasta" type="date" [(ngModel)]="fechaHasta" aria-label="Fecha hasta">
+                <button type="button" (click)="filtrar()">Aplicar</button>
+            </div>
+        </div>
+    </div>
 
     @if (facturaService.error(); as mensajeError) {
-        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
-            {{ mensajeError }}
-        </div>
+        <p class="error-message" role="alert">{{ mensajeError }}</p>
     }
+
+    @if (facturaService.facturaById(); as factura) {
+        <article class="factura-result">
+            <h2>Factura #{{ factura.id }}</h2>
+            <p><strong>Donación:</strong> #{{ factura.idDonacion }}</p>
+            <p><strong>Fecha:</strong> {{ factura.fecha }}</p>
+            <p><strong>Tipo:</strong> {{ factura.tipo }}</p>
+            <p><strong>Donante:</strong> {{ factura.nombreDonante }}</p>
+        </article>
+    }
+
+    <div class="factura-list">
+        <h2>Listado de facturas</h2>
+        @for (factura of facturaService.facturas(); track factura.id) {
+            <article class="factura-row">
+                <div>
+                    <h3>Factura #{{ factura.id }}</h3>
+                    <p>Donación #{{ factura.idDonacion }} · {{ factura.tipo }} · {{ factura.nombreDonante }}</p>
+                </div>
+                <time>{{ factura.fecha }}</time>
+            </article>
+        } @empty {
+            @if (!facturaService.error()) {
+                <p class="empty-state">No hay facturas para mostrar.</p>
+            }
+        }
+    </div>
 </section>

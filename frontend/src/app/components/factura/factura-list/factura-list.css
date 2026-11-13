@@ -1,0 +1,163 @@
+.factura-page .eyebrow {
+    margin-bottom: 5px;
+    color: #2B7A78;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.factura-page .encabezado {
+    align-items: flex-end;
+}
+
+.factura-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.filter-field {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #FEFFFF;
+}
+
+.filter-field label {
+    color: #17252A;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.filter-control,
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-control input,
+.date-range input {
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #FEFFFF;
+    color: #17252A;
+}
+
+.filter-control input {
+    flex: 1;
+}
+
+.date-range input {
+    width: 100%;
+}
+
+.filter-control button,
+.date-range button,
+.factura-page .btn-back {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #2B7A78;
+    color: #FEFFFF;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.filter-control button:hover:not(:disabled),
+.date-range button:hover,
+.factura-page .btn-back:hover {
+    background: #3AAFA9;
+}
+
+.filter-control button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.date-range span {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.factura-result,
+.factura-list {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #FEFFFF;
+}
+
+.factura-result {
+    border-left: 4px solid #3AAFA9;
+}
+
+.factura-result h2,
+.factura-list > h2 {
+    margin-bottom: 12px;
+    color: #17252A;
+    font-size: 1.15rem;
+}
+
+.factura-result p,
+.factura-row p {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.factura-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+.factura-row h3 {
+    color: #2B7A78;
+    font-size: 1rem;
+}
+
+.factura-row time {
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    padding: 22px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    color: #64748b;
+    text-align: center;
+}
+
+@media (max-width: 760px) {
+    .factura-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-control,
+    .date-range {
+        flex-wrap: wrap;
+    }
+
+    .date-range input {
+        flex: 1 1 35%;
+    }
+
+    .factura-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

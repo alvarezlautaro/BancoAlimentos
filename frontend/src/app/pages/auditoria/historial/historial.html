@@ -1,32 +1,49 @@
-<h2>{{ titulo }}</h2>
+<section class="history-page">
+    <header class="history-header">
+        <p class="eyebrow">Auditoría</p>
+        <h1>{{ titulo }}</h1>
+        <p>Historial de cambios registrados para este elemento.</p>
+    </header>
 
-@if (error()) {
-    <p style="color: red">{{ error() }}</p>
-}
-
-<table>
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Cambio</th>
-            @for (c of columnas(); track c) {
-                <th>{{ c }}</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for (r of revisiones(); track r.revision) {
-            <tr>
-                <td>{{ r.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
-                <td>{{ etiquetas[r.tipo] }}</td>
-                @if (r.tipo === 'DEL') {
-                    <td [attr.colspan]="columnas().length">Registro eliminado</td>
-                } @else {
-                    @for (c of columnas(); track c) {
-                        <td>{{ r.datos[c] }}</td>
+    @if (error()) {
+        <p class="error-message" role="alert">{{ error() }}</p>
+    } @else if (revisiones().length === 0) {
+        <p class="empty-state">No hay auditorías registradas para este elemento.</p>
+    } @else {
+        <div class="history-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cambio</th>
+                        @for (c of columnas(); track c) {
+                            <th>{{ c }}</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (r of revisiones(); track r.revision) {
+                        <tr>
+                            <td>{{ r.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                            <td>
+                                <span class="change-badge"
+                                      [class.add]="r.tipo === 'ADD'"
+                                      [class.mod]="r.tipo === 'MOD'"
+                                      [class.del]="r.tipo === 'DEL'">
+                                    {{ etiquetas[r.tipo] }}
+                                </span>
+                            </td>
+                            @if (r.tipo === 'DEL') {
+                                <td [attr.colspan]="columnas().length || 1">Registro eliminado</td>
+                            } @else {
+                                @for (c of columnas(); track c) {
+                                    <td>{{ r.datos[c] }}</td>
+                                }
+                            }
+                        </tr>
                     }
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

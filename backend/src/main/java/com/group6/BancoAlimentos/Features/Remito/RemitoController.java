@@ -56,14 +56,14 @@ public class RemitoController {
     }
 
     @PreAuthorize("hasAuthority('REMITO_VER')")
-    @Operation(summary = "Obtener un remito por su id externo")
+    @Operation(summary = "Obtener un remito por su id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Remito encontrado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "El id externo no es un UUID válido"),
+            @ApiResponse(responseCode = "400", description = "El id no es válido"),
             @ApiResponse(responseCode = "404", description = "Remito no encontrado")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<RemitoDTO> encontrarPorExternalId(@PathVariable Long id){
+    public ResponseEntity<RemitoDTO> encontrarPorID(@PathVariable Long id){
         return ResponseEntity.ok(remitoServicio.encontrarPorID(id));
     }
 
@@ -94,10 +94,10 @@ public class RemitoController {
     }
 
     @PreAuthorize("hasAuthority('REMITO_ELIMINAR')")
-    @Operation(summary = "Eliminar un remito por su id externo")
+    @Operation(summary = "Eliminar un remito por su id")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Remito eliminado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "El id externo no es un UUID válido"),
+            @ApiResponse(responseCode = "400", description = "El id no es válido"),
             @ApiResponse(responseCode = "404", description = "Remito no encontrado")
     })
     @DeleteMapping("/{id}")

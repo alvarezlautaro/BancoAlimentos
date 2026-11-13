@@ -25,5 +25,7 @@ export const authorityGuard: CanActivateFn = (route) => {
     const auth = inject(AuthService);
     const router = inject(Router);
     if (!auth.isLoggedIn()) return router.createUrlTree(['/login']);
+    const deniedRoles: string[] = route.data['deniedRoles'] ?? [];
+    if (auth.hasAnyRole(deniedRoles)) return router.createUrlTree(['/home']);
     return auth.hasAuthority(route.data['authority']) ? true : router.createUrlTree(['/home']);
 }

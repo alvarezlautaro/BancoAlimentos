@@ -3,7 +3,9 @@
     <div class="encabezado">
         <h1>Gestión de instituciones</h1>
 
-        <a routerLink="/instituciones/form" class="btn-create"> Nueva institución </a>
+        @if (puedeCrear) {
+            <a routerLink="/instituciones/form" class="btn-create"> Nueva institución </a>
+        }
     </div>
 
     <div class="barra-busqueda">
@@ -20,13 +22,22 @@
                     <p><strong>Tel:</strong> {{data.telefono}}</p>
                     <p><strong>Email:</strong> {{data.email}}</p>
                     <p><strong>Dirección:</strong> {{data.direccion}}</p>
-                    <p><strong>Estado:</strong></p>
+                    <p><strong>Estado:</strong> {{data.estadoPago}}</p>
                 </div>
 
                 <div class="btns">
                     <a [routerLink]="['/instituciones', data.id]" class="btn-details">Ver detalle</a>
-                    <a [routerLink]="['/instituciones/form', data.id]" class="btn-edit">Editar</a>
-                    <button (click)="eliminarInstitucion(data.id!)" class="btn-delete">Eliminar</button>
+                    @if (puedeVerAuditoria) {
+                        <a [routerLink]="['/auditoria/instituciones', data.id]" class="btn-details">Auditoría</a>
+                    }
+                    @if (puedeEditar) {
+                        <a [routerLink]="['/instituciones/form', data.id]" class="btn-edit">
+                            {{ auth.hasRole('USER_TESORERIA') && !auth.hasRole('USER_INSTITUCIONAL') ? 'Estado de pago' : 'Editar' }}
+                        </a>
+                    }
+                    @if (puedeEliminar) {
+                        <button (click)="eliminarInstitucion(data.id!)" class="btn-delete">Eliminar</button>
+                    }
                 </div>
 
             </article>

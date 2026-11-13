@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
 import { Institucion } from '../../../models/institucion';
+import { AuthService } from '../../../service/auth-service';
 
 @Component({
   imports: [RouterLink, CommonModule, FormsModule],
@@ -14,7 +15,12 @@ import { Institucion } from '../../../models/institucion';
 export class InstitucionList implements OnInit{
   
 
+  auth = inject(AuthService);
   instituciones = signal<Institucion[]>([]);
+  readonly puedeCrear = this.auth.hasRole('USER_INSTITUCIONAL');
+  readonly puedeEditar = this.auth.hasAnyRole(['USER_INSTITUCIONAL', 'USER_TESORERIA']);
+  readonly puedeEliminar = this.auth.hasRole('USER_INSTITUCIONAL');
+  readonly puedeVerAuditoria = this.auth.hasAuthority('AUDITORIA_INSTITUCION_VER');
 
   ////para la barra de navegacion
   filtroInstitucion = ''

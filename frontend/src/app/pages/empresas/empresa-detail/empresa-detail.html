@@ -14,6 +14,7 @@
         <div class="actions">
             <a [routerLink]="['/empresas/form', empresa.id]" class="btn-edit">Editar</a>
             <button (click)="deleteEmpresa()" class="btn-delete">Eliminar</button>
+            <a [routerLink]="['/auditoria/donantes', empresa.id]" class="btn-back">Ver auditoría</a>
             <a routerLink="/empresas" class="btn-back">Volver al listado</a>
         </div>
 

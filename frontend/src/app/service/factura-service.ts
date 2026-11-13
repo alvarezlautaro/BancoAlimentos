@@ -14,44 +14,66 @@ export class FacturaService {
   facturas = signal<Factura[]>([]);
   facturaById = signal<Factura | null>(null);
   error = signal<string | null>(null);
+  private todasFacturas = signal<Factura[]>([]);
 
   listFacturas() {
+    this.error.set(null);
+    this.facturaById.set(null);
     this.http.get<Factura[]>(this.url).subscribe({
       next: (data) => {
+        this.todasFacturas.set(data);
         this.facturas.set(data);
       },
-      error: (error) => {
+      error: () => {
+        this.todasFacturas.set([]);
+        this.facturas.set([]);
         this.error.set('No se pudieron cargar las facturas');
- }
+      }
     });
- }
+  }
 
   getById(id: number) {
+    this.error.set(null);
+    this.facturaById.set(null);
+    if (!Number.isInteger(id) || id < 1) {
+      this.error.set('Ingresá un ID de factura válido');
+      return;
+    }
+
     this.http.get<Factura>(this.url + '/' + id).subscribe({
       next: (data) => {
         this.facturaById.set(data);
       },
-      error: (error) => {
+      error: () => {
         this.error.set('No se pudo encontrar la factura con id: ' + id);
       }
     });
   }
 
   filtrarPorFecha(fechaDesde: string, fechaHasta: string) {
+    this.error.set(null);
+    this.facturaById.set(null);
 
-  const facturasFiltradas = this.facturas().filter(factura => {
-
-    if (fechaDesde && factura.fecha < fechaDesde) {
-      return false;
+    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
+      this.error.set('La fecha inicial no puede ser posterior a la fecha final');
+      return;
     }
 
-    if (fechaHasta && factura.fecha > fechaHasta) {
-      return false;
-    }
+    const facturasFiltradas = this.todasFacturas().filter(factura => {
+      const fecha = factura.fecha.slice(0, 10);
 
-    return true;
-  });
+      if (fechaDesde && fecha < fechaDesde) return false;
+      if (fechaHasta && fecha > fechaHasta) return false;
 
-  this.facturas.set(facturasFiltradas);
-}
+      return true;
+    });
+
+    this.facturas.set(facturasFiltradas);
+  }
+
+  mostrarTodas() {
+    this.error.set(null);
+    this.facturaById.set(null);
+    this.facturas.set(this.todasFacturas());
+  }
 }

@@ -25,6 +25,7 @@ public class ItemDonacionMapper {
         ItemDonacionResponseDTO dto=new ItemDonacionResponseDTO();
 
         dto.setId(item.getId());
+        dto.setProductoId(item.getProducto().getId());
         dto.setFechaVencimiento(item.getFechaVencimiento());
         dto.setValorUnitario(item.getValorUnitario());
         dto.setCantidad(item.getCantidad());

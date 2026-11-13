@@ -38,17 +38,6 @@ export class ItemdonacionService {
         )
     }
 
-    add(i: ItemDonacionRequest){
-        this.http.post(this.url, i).subscribe(
-                () => {
-                    this.listItems()
-                },
-                error =>{
-                    this.error.set('Error al agregar el item ' + error)
-                }
-        )
-    }
-
     update(id: number, iUpdate: Partial<ItemDonacionRequest>){
         this.http.patch(this.url + '/' + id, iUpdate).subscribe(
             {

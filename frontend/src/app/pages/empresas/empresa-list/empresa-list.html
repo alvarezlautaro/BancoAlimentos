@@ -27,6 +27,7 @@
 
                 <div class="btns">
                     <a [routerLink]="['/empresas', data.id]" class="btn-details">Ver detalle</a>
+                    <a [routerLink]="['/auditoria/donantes', data.id]" class="btn-details">Auditoría</a>
                     <a [routerLink]="['/empresas/form', data.id]" class="btn-edit">Editar</a>
                     <button (click)="eliminarEmpresa(data.id!)" class="btn-delete">Eliminar</button>
                 </div>

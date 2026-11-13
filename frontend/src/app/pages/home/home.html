@@ -1,35 +1,113 @@
-<header>
-    <span>Usuario: {{ auth.username() }}</span>
-    <button type="button" (click)="auth.logout()">Cerrar sesión</button>
-</header>
+<main class="dashboard">
+    <h1>Panel de gestión</h1>
+    @if (auth.hasRole('USER_DEPOSITO')) {
+        <section class="dashboard-section">
+            <h2>Depósito</h2>
+            <nav class="dashboard-links" aria-label="Módulos de depósito">
+                <a routerLink="/empresas">Empresas</a>
+                <a routerLink="/donaciones">Donaciones</a>
+                <a routerLink="/remitos">Remitos</a>
+                <a routerLink="/itemdonacion">Ítems de donación</a>
+                <a routerLink="/productos">Productos</a>
+                <a routerLink="/facturas">Facturas</a>
+                <a routerLink="/instituciones">Instituciones <span>Solo lectura</span></a>
+            </nav>
+        </section>
 
-<app-producto-create></app-producto-create>
-<app-producto-list></app-producto-list>
+        @if (auth.hasAuthority('AUDITORIA_DONACION_VER')) {
+            <section class="dashboard-section">
+                <h2>Auditoría de donantes</h2>
+                <p>Consultá el historial de cambios de un donante desde su registro.</p>
+                <a class="dashboard-action" routerLink="/empresas">Elegir donante</a>
+            </section>
+        }
 
-<app-item-donacion-create></app-item-donacion-create>
-<app-item-donacion-list></app-item-donacion-list>
+        <section class="recent-section">
+            <article class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Últimas donaciones cargadas</h2>
+                        <p>Las cinco donaciones más recientes.</p>
+                    </div>
+                    <a class="dashboard-action" routerLink="/donaciones">Ver todas</a>
+                </div>
 
-<app-producto-create></app-producto-create>
-<app-producto-list></app-producto-list>
+                @if (errorDonaciones()) {
+                    <p class="error-message">{{ errorDonaciones() }}</p>
+                } @else {
+                    <div class="recent-list">
+                        @for (donacion of ultimasDonaciones(); track donacion.id) {
+                            <article class="recent-item">
+                                <div>
+                                    <h3>Donación #{{ donacion.id }}</h3>
+                                    <p>{{ donacion.nombreDonante || 'Donante sin nombre' }}</p>
+                                    <span>{{ donacion.fecha | date:'dd/MM/yyyy' }} · {{ donacion.estado }}</span>
+                                </div>
+                                @if (donacion.id !== undefined) {
+                                    <a [routerLink]="['/donaciones', donacion.id]">Ver detalle</a>
+                                }
+                            </article>
+                        } @empty {
+                            <p class="empty-state">Todavía no hay donaciones cargadas.</p>
+                        }
+                    </div>
+                }
+            </article>
 
-<app-item-donacion-create></app-item-donacion-create>
-<app-item-donacion-list></app-item-donacion-list>
+            <article class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Últimos remitos emitidos</h2>
+                        <p>Los cinco remitos con fecha de emisión más reciente.</p>
+                    </div>
+                    <a class="dashboard-action" routerLink="/remitos">Ver todos</a>
+                </div>
 
-<app-empresa-list></app-empresa-list>
-<app-empresa-form></app-empresa-form>
-<app-empresa-detail></app-empresa-detail>
+                @if (remitoService.error()) {
+                    <p class="error-message">{{ remitoService.error() }}</p>
+                } @else {
+                    <div class="recent-list">
+                        @for (remito of ultimosRemitos(); track remito.id) {
+                            <article class="recent-item">
+                                <div>
+                                    <h3>Remito {{ remito.id }}</h3>
+                                    <p>{{ remito.institucionNombre || 'Institución sin nombre' }}</p>
+                                    <span>{{ remito.fecha | date:'dd/MM/yyyy' }}</span>
+                                </div>
+                                <a routerLink="/remitos">Ver listado</a>
+                            </article>
+                        } @empty {
+                            <p class="empty-state">Todavía no hay remitos emitidos.</p>
+                        }
+                    </div>
+                }
+            </article>
+        </section>
+    }
 
-<app-institucion-list></app-institucion-list>
-<app-intitucion-form></app-intitucion-form>
-<app-institucion-detail></app-institucion-detail>
+    @if (auth.hasAnyRole(['USER_INSTITUCIONAL', 'USER_TESORERIA'])) {
+        <section class="dashboard-section">
+            <h2>Instituciones</h2>
+            <p>Consulta, filtrado y gestión de instituciones según tu perfil.</p>
+            <nav class="dashboard-links" aria-label="Módulos institucionales">
+                <a routerLink="/instituciones">Gestión de instituciones</a>
+            </nav>
+        </section>
 
-<app-donacion-list></app-donacion-list>
-<app-donacion-form></app-donacion-form>
-<app-donacion-details></app-donacion-details>
+        @if (auth.hasAuthority('AUDITORIA_INSTITUCION_VER')) {
+            <section class="dashboard-section">
+                <h2>Auditoría de instituciones</h2>
+                <p>Consultá el historial de cambios desde el registro de cada institución.</p>
+                <a class="dashboard-action" routerLink="/instituciones">Elegir institución</a>
+            </section>
+        }
+    }
 
-<app-remito-list></app-remito-list>
-<app-remito-create></app-remito-create>
-<app-remito-edit></app-remito-edit>
-
-<app-factura-list></app-factura-list>
-<app-factura-edit></app-factura-edit>
+    @if (!auth.hasAnyRole(['USER_DEPOSITO', 'USER_INSTITUCIONAL', 'USER_TESORERIA'])) {
+        <section class="dashboard-section access-warning">
+            <h2>Perfil de acceso no disponible</h2>
+            <p>No encontramos un rol de usuario habilitado en esta sesión. Cerrá sesión y volvé a ingresar.</p>
+            <button type="button" (click)="auth.logout()">Cerrar sesión</button>
+        </section>
+    }
+</main>

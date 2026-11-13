@@ -1,13 +1,13 @@
 <h2>Crear Remito</h2>
 
-<form [formGroup]="formulario">
+<form [formGroup]="formulario" (ngSubmit)="add()">
 
     <div>
         <label for="">Fecha:</label>
         <input type="date" formControlName="fecha">
 
         @if (formulario.controls.fecha.hasError('required') && formulario.controls.fecha.touched) {
-            <small style="color: red">Campo requerido</small>
+            <small class="error">Campo requerido</small>
         }
     </div>
 
@@ -15,7 +15,7 @@
         <label for="">Institución:</label>
 
         <select id="idInstitucion" formControlName="idInstitucion">
-            <option value="0" disabled selected>
+            <option value="" disabled>
                 Seleccione una institución...
             </option>
 
@@ -26,15 +26,40 @@
             }
         </select>
 
-        @if (formulario.controls.idInstitucion.hasError('min') && formulario.controls.idInstitucion.touched) {
-            <small style="color: red">
+        @if (formulario.controls.idInstitucion.invalid && formulario.controls.idInstitucion.touched) {
+            <small class="error">
                 Debe seleccionar una institución
             </small>
         }
     </div>
 
+    <div formArrayName="items">
+        <h3>Ítems de donación</h3>
+        @for (detalle of items.controls; track $index; let i = $index) {
+            <div [formGroupName]="i">
+                <label>Producto / ítem</label>
+                <select formControlName="idItemDonacion">
+                    <option value="" disabled>Seleccione un ítem disponible...</option>
+                    @for (item of itemsDisponibles; track item.id) {
+                        <option [value]="item.id">
+                            {{ item.productoNombre }} — {{ item.donante }} — disponibles: {{ item.cantidad }}
+                        </option>
+                    }
+                </select>
+
+                <label>Cantidad a entregar</label>
+                <input type="number" formControlName="cantidad" min="1">
+
+                <button type="button" (click)="eliminarItem(i)" [disabled]="items.length === 1">
+                    Quitar ítem
+                </button>
+            </div>
+        }
+        <button type="button" (click)="agregarItem()">Agregar otro ítem</button>
+    </div>
+
     <div>
-        <button (click)="add()" [disabled]="formulario.invalid">
+        <button type="submit" [disabled]="formulario.invalid">
             Crear Remito
         </button>
     </div>

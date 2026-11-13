@@ -14,6 +14,7 @@ import com.group6.BancoAlimentos.Features.Factura.model.TipoFactura;
 import com.group6.BancoAlimentos.Features.Factura.repository.IFacturaRepository;
 import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
 import com.group6.BancoAlimentos.Features.Producto.model.Producto;
+import com.group6.BancoAlimentos.Features.Producto.mapper.ProductoMapper;
 import com.group6.BancoAlimentos.Features.Producto.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,10 @@ public class DonacionService implements IDonacionService {
         donacion.setDonante(donante);
 
         List<ItemDonacion> items = dto.getItems().stream().map(itemDTO -> {
-            Producto producto = productoRepository.findById(itemDTO.getProductoId()).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            Producto producto = itemDTO.getProductoId() != null
+                    ? productoRepository.findById(itemDTO.getProductoId())
+                        .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado"))
+                    : productoRepository.save(ProductoMapper.toEntity(itemDTO.getProducto()));
 
             ItemDonacion item = new ItemDonacion();
             item.setFechaVencimiento(itemDTO.getFechaVencimiento());
@@ -77,11 +81,9 @@ public class DonacionService implements IDonacionService {
 
         donacion.setItemDonaciones(items);
         Donacion donacionGuardada = donacionRepository.save(donacion);
-        Factura factura = new Factura();
-        factura.setDonacion(donacionGuardada);
-        factura.setFecha(LocalDate.now());
-        factura.setTipo(TipoFactura.C);
-        facturaRepository.save(factura);
+        if (donacionGuardada.getEstado() == EstadoDonacion.CONFIRMADA) {
+            crearFacturaSiNoExiste(donacionGuardada);
+        }
 
         return DonacionMapper.toResponse(donacionGuardada);
     }
@@ -97,8 +99,14 @@ public class DonacionService implements IDonacionService {
         donacion.setEstado(dto.getEstado());
         donacion.setNroRemitoProveedor(dto.getNroRemitoProveedor());
         donacion.setObservaciones(dto.getObservaciones());
+        Donante donante = donanteRepository.findById(dto.getIdDonante())
+                .orElseThrow(() -> new RecursoNoEncontradoException("Donante no encontrado"));
+        donacion.setDonante(donante);
 
         Donacion donacionActualizada = donacionRepository.save(donacion);
+        if (donacionActualizada.getEstado() == EstadoDonacion.CONFIRMADA) {
+            crearFacturaSiNoExiste(donacionActualizada);
+        }
 
         return DonacionMapper.toResponse(donacionActualizada);
     }
@@ -120,7 +128,18 @@ public class DonacionService implements IDonacionService {
         donacion.setEstado(EstadoDonacion.CONFIRMADA);
 
         Donacion donacionConfirmada = donacionRepository.save(donacion);
+        crearFacturaSiNoExiste(donacionConfirmada);
 
         return DonacionMapper.toResponse(donacionConfirmada);
+    }
+
+    private void crearFacturaSiNoExiste(Donacion donacion) {
+        if (facturaRepository.findByDonacionId(donacion.getId()).isEmpty()) {
+            Factura factura = new Factura();
+            factura.setDonacion(donacion);
+            factura.setFecha(LocalDate.now());
+            factura.setTipo(TipoFactura.C);
+            facturaRepository.save(factura);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.Institucion.DTOs;
 
 import com.group6.BancoAlimentos.Features.Institucion.estadoPago;
 import com.group6.BancoAlimentos.Features.Institucion.tipoInstitucion;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,11 +35,12 @@ public class NuevaInstitucionDTO {
 
         @Schema(description = "Email de la institucion", example = "contacto@example.com")
         @Email(message = "El formato del email no es valido",
-                regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+                regexp = "^$|^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
         String email;
 
         @Schema(description = "Estado del pago de la suscripción", example = "AL DIA")
         @NotNull(message = "El estado de pago es requerido")
+        @JsonAlias("estadoPago")
         estadoPago estado;
         //Al ser todos de ingreso por el cliente/usuario tienen verificaciones
 }

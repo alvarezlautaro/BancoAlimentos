@@ -1,30 +1,40 @@
-import { Component, inject } from '@angular/core';
-import { ProductoCreate } from '../../components/producto/producto-create/producto-create';
-import { ProductoList } from '../../components/producto/producto-list/producto-list';
-import { ItemDonacionCreate } from '../../components/itemdonacion/item-donacion-create/item-donacion-create';
-import { ItemDonacionList } from '../../components/itemdonacion/item-donacion-list/item-donacion-list';
-import { EmpresaDetail } from '../empresas/empresa-detail/empresa-detail';
-import { EmpresaForm } from '../empresas/empresa-form/empresa-form';
-import { EmpresaList } from '../empresas/empresa-list/empresa-list';
-import { InstitucionList } from '../instituciones/institucion-list/institucion-list';
-import { InstitucionForm } from '../instituciones/intitucion-form/intitucion-form';
-import { InstitucionDetail } from '../instituciones/institucion-detail/institucion-detail';
-import { DonacionList } from '../../components/donacion/donacion-list/donacion-list';
-import { DonacionForm } from '../../components/donacion/donacion-form/donacion-form';
-import { DonacionDetails } from '../../components/donacion/donacion-details/donacion-details';
-import { RemitoCreate } from '../../components/remito/remito-create/remito-create';
-import { RemitoList } from '../../components/remito/remito-list/remito-list';
-import { RemitoEdit } from '../../components/remito/remito-edit/remito-edit';
-import { FacturaList } from '../../components/factura/factura-list/factura-list';
-import { FacturaEdit } from '../../components/factura/factura-edit/factura-edit';
+import { DatePipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../service/auth-service';
+import { Donacion } from '../../interfaces/donacion';
+import { DonacionService } from '../../service/donacion-service';
+import { RemitoService } from '../../service/remito-service';
 
 @Component({
-  imports: [ProductoCreate, ProductoList, ItemDonacionCreate, ItemDonacionList, EmpresaDetail, EmpresaForm, EmpresaList, InstitucionList, InstitucionForm, InstitucionDetail, DonacionList, DonacionForm, DonacionDetails, RemitoCreate, RemitoList, RemitoEdit, FacturaList, FacturaEdit],
+  imports: [RouterLink, DatePipe],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
-export class Home {
+export class Home implements OnInit {
   auth = inject(AuthService);
+  private donacionService = inject(DonacionService);
+  readonly remitoService = inject(RemitoService);
+
+  donaciones = signal<Donacion[]>([]);
+  errorDonaciones = signal('');
+
+  readonly ultimasDonaciones = computed(() => [...this.donaciones()]
+    .sort((a, b) => (b.id ?? -1) - (a.id ?? -1) || b.fecha.localeCompare(a.fecha))
+    .slice(0, 5));
+
+  readonly ultimosRemitos = computed(() => [...this.remitoService.remitos()]
+    .sort((a, b) => b.fecha.localeCompare(a.fecha))
+    .slice(0, 5));
+
+  ngOnInit(): void {
+    if (!this.auth.hasRole('USER_DEPOSITO')) return;
+
+    this.donacionService.obtenerDonaciones().subscribe({
+      next: donaciones => this.donaciones.set(donaciones),
+      error: () => this.errorDonaciones.set('No se pudieron cargar las donaciones recientes.'),
+    });
+    this.remitoService.listRemitos();
+  }
 }

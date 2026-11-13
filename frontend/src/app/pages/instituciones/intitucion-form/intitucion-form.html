@@ -1,10 +1,11 @@
 <div class="container-form">
     <h1>
-        {{id ? 'Editar institución' : 'Crear institución'}}
+        {{id ? (esTesoreria ? 'Actualizar estado de pago' : 'Editar institución') : 'Crear institución'}}
     </h1>
 
     <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
 
+    @if (!esTesoreria) {
     <label>Nombre</label>
     <input formControlName="nombre" />
     @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
@@ -41,19 +42,20 @@
     @if (formulario.get('email')?.invalid && formulario.get('email')?.touched) {
         @if (formulario.get('email')?.hasError('email')) { <p class="error">El formato del email no es válido</p> }
     }
+    }
 
     <label>Estado</label>
     <select formControlName="estado">
         <option value="">Seleccione un estado</option>
-        <option value="PENDIENTE">Pendiente</option>
-        <option value="APROBADO">Aprobado</option>
-        <option value="RECHAZADO">Rechazado</option>
+        <option value="AL_DIA">Al dia</option>
+        <option value="DEUDOR">Deudor</option>
+        <option value="EXCEPCIONAL">Excepcional</option>
     </select>
     @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
         @if (formulario.get('estado')?.hasError('required')) { <p class="error">El estado es obligatorio</p> }
     }
 
-    <button type="submit">Guardar</button>
+    <button type="submit">{{esTesoreria ? 'Actualizar estado' : 'Guardar'}}</button>
     <a [routerLink]="id ? ['/instituciones', id] : ['/instituciones']">Cancelar</a>
 
     </form>

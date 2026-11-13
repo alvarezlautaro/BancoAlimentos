@@ -1,6 +1,199 @@
-/* You can add global styles to this file, and also import other style files */
-*{
+* {
+    box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    background: #F4F9F9;
+    color: #17252A;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button:not([class]) {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #2B7A78;
+    color: #FEFFFF;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:not([class]):hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #3AAFA9;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+body .container-form .error,
+body .error,
+body p.error {
+    display: block;
+    margin: -2px 0 12px;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+body .error-message {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 0.9rem;
+}
+
+app-producto-create,
+app-producto-list,
+app-item-donacion-list,
+app-remito-create,
+app-remito-list {
+    display: block;
+    max-width: 1000px;
+    margin: 28px auto;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #FEFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+app-producto-create h2,
+app-producto-list h1,
+app-item-donacion-list h1,
+app-remito-create h2,
+app-remito-list h1 {
+    margin-bottom: 18px;
+    color: #17252A;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+app-producto-create form > div,
+app-remito-create form > div {
+    margin-bottom: 16px;
+}
+
+app-producto-create label,
+app-remito-create label,
+app-producto-list label,
+app-item-donacion-list label {
+    display: block;
+    margin-bottom: 8px;
+    color: #17252A;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+app-producto-create input,
+app-producto-create select,
+app-remito-create input,
+app-remito-create select,
+app-producto-list input,
+app-producto-list select,
+app-item-donacion-list input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    background: #FEFFFF;
+    color: #17252A;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+app-producto-create input:focus,
+app-producto-create select:focus,
+app-remito-create input:focus,
+app-remito-create select:focus,
+app-producto-list input:focus,
+app-producto-list select:focus,
+app-item-donacion-list input:focus {
+    border-color: #2B7A78;
+    box-shadow: 0 0 0 3px rgba(43, 122, 120, 0.15);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.btn-create {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #2B7A78;
+    color: #FEFFFF;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-create:hover {
+    background: #3AAFA9;
+}
+
+app-producto-list ul,
+app-item-donacion-list ul,
+app-remito-list ul {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    list-style: none;
+}
+
+app-producto-list li,
+app-item-donacion-list li,
+app-remito-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2B7A78;
+    border-radius: 8px;
+    background: #FEFFFF;
+    color: #334155;
+}
+
+@media (max-width: 600px) {
+    app-producto-create,
+    app-producto-list,
+    app-item-donacion-list,
+    app-remito-create,
+    app-remito-list {
+        margin: 18px 12px;
+        padding: 18px;
+    }
+
+    .section-heading,
+    app-producto-list li,
+    app-item-donacion-list li,
+    app-remito-list li {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }
 

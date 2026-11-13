@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Institucion } from '../../../models/institucion';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
+import { AuthService } from '../../../service/auth-service';
 
 @Component({
   imports: [RouterLink],
@@ -10,6 +11,10 @@ import { InstitucionService } from '../../../services/instituciones/institucion-
   templateUrl: './institucion-detail.html',
 })
 export class InstitucionDetail implements OnInit {
+  auth = inject(AuthService);
+  readonly puedeEditar = this.auth.hasAnyRole(['USER_INSTITUCIONAL', 'USER_TESORERIA']);
+  readonly puedeEliminar = this.auth.hasRole('USER_INSTITUCIONAL');
+  readonly puedeVerAuditoria = this.auth.hasAuthority('AUDITORIA_INSTITUCION_VER');
   institucion ?: Institucion;
   id ?: string;
 

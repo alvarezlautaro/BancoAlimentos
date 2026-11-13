@@ -32,10 +32,10 @@ public class Institucion {
     @Column(nullable = false)
     private String direccion;
 
-    @Column(nullable = false)
+    @Column
     private String telefono;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
     @Enumerated(EnumType.STRING)

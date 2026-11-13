@@ -28,8 +28,13 @@
             @if (formulario.get('nroRemitoProveedor')?.hasError('pattern')) { <p class="error">Solo debe contener números</p> }
         }
 
-        <label>ID Donante</label>
-        <input type="number" formControlName="idDonante" placeholder="ID del donante" />
+        <label>Donante</label>
+        <select formControlName="idDonante">
+            <option value="" disabled>Seleccione un donante...</option>
+            @for (donante of donantes; track donante.id) {
+                <option [value]="donante.id">{{ donante.razon_social }} — CUIT {{ donante.cuit }}</option>
+            }
+        </select>
         @if (formulario.get('idDonante')?.invalid && formulario.get('idDonante')?.touched) {
             <p class="error">El donante es obligatorio</p>
         }
@@ -48,9 +53,40 @@
             @for (itemControl of items.controls; track $index; let i = $index) {
                 <div [formGroupName]="i" class="item-row">
                     <div class="input-group">
-                        <label>ID Producto</label>
-                        <input type="number" formControlName="productoId" placeholder="ID prod." />
+                        <label>Producto</label>
+                        <select formControlName="productoId" (change)="onProductoChange(i)">
+                            <option value="" disabled>Seleccione un producto...</option>
+                            @for (producto of productos; track producto.id) {
+                                <option [value]="producto.id">{{ producto.nombre }} ({{ producto.categoria }})</option>
+                            }
+                            <option value="nuevo">Crear producto nuevo...</option>
+                        </select>
                     </div>
+
+                    @if (itemControl.get('productoId')?.value === 'nuevo') {
+                        <div class="input-group">
+                            <label>Nombre del producto</label>
+                            <input type="text" formControlName="productoNombre" maxlength="55" />
+                        </div>
+                        <div class="input-group">
+                            <label>Categoría</label>
+                            <select formControlName="categoria">
+                                <option value="" disabled>Seleccione una categoría...</option>
+                                @for (categoria of categorias; track categoria) {
+                                    <option [value]="categoria">{{ categoria.replaceAll('_', ' ') }}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Unidad de medida</label>
+                            <select formControlName="unidadMedida">
+                                <option value="" disabled>Seleccione una unidad...</option>
+                                @for (unidad of unidades; track unidad) {
+                                    <option [value]="unidad">{{ unidad.replaceAll('_', ' ') }}</option>
+                                }
+                            </select>
+                        </div>
+                    }
 
                     <div class="input-group">
                         <label>Cantidad</label>

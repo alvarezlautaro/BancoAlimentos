@@ -13,8 +13,17 @@
         </article>
 
         <div class="actions">
-            <a [routerLink]="['/instituciones/form', institucion.id]" class="btn-edit">Editar</a>
-            <button (click)="deleteInstitucion()" class="btn-delete">Eliminar</button>
+            @if (puedeEditar) {
+                <a [routerLink]="['/instituciones/form', institucion.id]" class="btn-edit">
+                    {{ auth.hasRole('USER_TESORERIA') && !auth.hasRole('USER_INSTITUCIONAL') ? 'Estado de pago' : 'Editar' }}
+                </a>
+            }
+            @if (puedeEliminar) {
+                <button (click)="deleteInstitucion()" class="btn-delete">Eliminar</button>
+            }
+            @if (puedeVerAuditoria) {
+                <a [routerLink]="['/auditoria/instituciones', institucion.id]" class="btn-back">Ver auditoría</a>
+            }
             <a routerLink="/instituciones" class="btn-back">Volver al listado</a>
         </div>
 

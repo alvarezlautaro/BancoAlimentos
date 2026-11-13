@@ -5,6 +5,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DonacionService } from '../../../service/donacion-service';
 import { Estado } from '../../../enums/Estado';
 import { EstadoDonacion } from '../../../enums/EstadoDonacion';
+import { Categoria } from '../../../enums/Categoria';
+import { UnidadMedida } from '../../../enums/UnidadMedida';
+import { ProductoService } from '../../../service/producto-service';
+import { ProductoResponse } from '../../../interfaces/Producto';
+import { EmpresaService } from '../../../services/empresas/empresa';
+import { Empresa } from '../../../models/empresa';
 
 @Component({
   imports: [RouterLink, CommonModule, ReactiveFormsModule],
@@ -15,12 +21,18 @@ import { EstadoDonacion } from '../../../enums/EstadoDonacion';
 export class DonacionForm implements OnInit{
   formulario!: FormGroup;
   id?: string;
+  donantes: Empresa[] = [];
+  productos: ProductoResponse[] = [];
+  categorias = Object.values(Categoria);
+  unidades = Object.values(UnidadMedida);
 
   constructor(
     private fb: FormBuilder,
     private donacionService: DonacionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private empresaService: EmpresaService,
+    private productoService: ProductoService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +46,15 @@ export class DonacionForm implements OnInit{
       observaciones: [''],
       idDonante: ['', Validators.required],
       items: this.fb.array([], Validators.required)
+    });
+
+    this.empresaService.obtenerEmpresas().subscribe({
+      next: donantes => this.donantes = donantes,
+      error: error => alert('No se pudieron cargar los donantes: ' + error.message)
+    });
+    this.productoService.obtenerProductos().subscribe({
+      next: productos => this.productos = productos,
+      error: error => alert('No se pudieron cargar los productos: ' + error.message)
     });
 
     if (this.id) {
@@ -71,6 +92,9 @@ export class DonacionForm implements OnInit{
   agregarItem() {
     const itemForm = this.fb.group({
       productoId: ['', Validators.required],
+      productoNombre: [''],
+      categoria: ['' as Categoria | '',],
+      unidadMedida: ['' as UnidadMedida | ''],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       valorUnitario: ['', [Validators.required, Validators.min(0)]],
       fechaVencimiento: ['', Validators.required]
@@ -81,11 +105,24 @@ export class DonacionForm implements OnInit{
   agregarItemExistente(item: any) {
     const itemForm = this.fb.group({
       productoId: [item.productoId, Validators.required],
+      productoNombre: [''],
+      categoria: ['' as Categoria | ''],
+      unidadMedida: ['' as UnidadMedida | ''],
       cantidad: [item.cantidad, [Validators.required, Validators.min(1)]],
       valorUnitario: [item.valorUnitario, [Validators.required, Validators.min(0)]],
       fechaVencimiento: [item.fechaVencimiento, Validators.required]
     });
     this.items.push(itemForm);
+  }
+
+  onProductoChange(index: number): void {
+    const item = this.items.at(index) as FormGroup;
+    const esNuevo = item.get('productoId')?.value === 'nuevo';
+    for (const controlName of ['productoNombre', 'categoria', 'unidadMedida']) {
+      const control = item.get(controlName)!;
+      control.setValidators(esNuevo ? Validators.required : null);
+      control.updateValueAndValidity();
+    }
   }
 
   eliminarItem(index: number) {
@@ -102,7 +139,44 @@ export class DonacionForm implements OnInit{
       return;
     }
 
-    const donacionData = this.formulario.value;
+    const valor = this.formulario.getRawValue() as {
+      fecha: string;
+      estado: EstadoDonacion;
+      nroRemitoProveedor: string | number;
+      observaciones: string;
+      idDonante: string | number;
+      items: Array<{
+        productoId: string | number;
+        productoNombre: string;
+        categoria: Categoria | '';
+        unidadMedida: UnidadMedida | '';
+        cantidad: string | number;
+        valorUnitario: string | number;
+        fechaVencimiento: string;
+      }>;
+    };
+    const donacionData = {
+      ...valor,
+      nroRemitoProveedor: Number(valor.nroRemitoProveedor),
+      idDonante: Number(valor.idDonante),
+      items: valor.items.map(item => item.productoId === 'nuevo'
+        ? {
+            cantidad: Number(item.cantidad),
+            valorUnitario: Number(item.valorUnitario),
+            fechaVencimiento: item.fechaVencimiento,
+            producto: {
+              nombre: item.productoNombre,
+              categoria: item.categoria,
+              unidadMedida: item.unidadMedida
+            }
+          }
+        : {
+            cantidad: Number(item.cantidad),
+            valorUnitario: Number(item.valorUnitario),
+            fechaVencimiento: item.fechaVencimiento,
+            productoId: Number(item.productoId)
+          })
+    };
 
     if (this.id) {
       this.donacionService.editarDonacion(this.id, donacionData).subscribe({

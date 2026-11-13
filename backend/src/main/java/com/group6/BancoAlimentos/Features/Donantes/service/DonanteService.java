@@ -63,7 +63,8 @@ public class DonanteService implements IDonanteService{
         Donante donante=donanteRepository.findById(id).
                 orElseThrow(()-> new RuntimeException("El donante no existe") );
 
-        donante.setTelefono(donante.getTelefono());
+        donante.setTelefono(donanteDTO.getTelefono());
+        donante.setEmail(donanteDTO.getEmail());
         donante.setCuit(donanteDTO.getCuit());
         donante.setDireccion(donanteDTO.getDireccion());
         donante.setRazonSocial(donanteDTO.getRazonSocial());

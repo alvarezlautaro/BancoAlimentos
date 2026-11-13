@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Donacion } from '../interfaces/donacion';
+import { Donacion, DonacionRequest } from '../interfaces/donacion';
 
 @Injectable({
     providedIn :'root'
@@ -20,11 +20,11 @@ private url = 'http://localhost:8080/api/donaciones';
     return this.http.get<Donacion>(`${this.url}/${id}`);
   }
 
-  crearDonacion(donacion: Donacion): Observable<Donacion> {
+  crearDonacion(donacion: DonacionRequest): Observable<Donacion> {
     return this.http.post<Donacion>(this.url, donacion);
   }
 
-  editarDonacion(id: string | number, donacion: Donacion): Observable<Donacion> {
+  editarDonacion(id: string | number, donacion: DonacionRequest): Observable<Donacion> {
     return this.http.put<Donacion>(`${this.url}/${id}`, donacion);
   }
 

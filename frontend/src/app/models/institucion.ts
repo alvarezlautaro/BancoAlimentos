@@ -9,4 +9,5 @@ export interface Institucion {
     telefono : string;
     email : string;
     estadoPago: Estado;
+    estado?: Estado;
 }

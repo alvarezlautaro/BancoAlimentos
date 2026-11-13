@@ -82,6 +82,7 @@ public class InstitucionServicio {
 
         institucion.setNombre(dto.getNombre());
         institucion.setTipo(dto.getTipo());
+        institucion.setDireccion(dto.getDireccion());
         institucion.setTelefono(dto.getTelefono());
         institucion.setEmail(dto.getEmail());
         institucion.setEstado(dto.getEstado());

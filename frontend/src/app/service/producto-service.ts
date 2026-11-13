@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { ProductoRequest, ProductoResponse } from '../interfaces/Producto';
 import { Categoria } from '../enums/Categoria';
+import { Observable, tap } from 'rxjs';
 
 @Service()
 export class ProductoService {
@@ -13,8 +14,12 @@ export class ProductoService {
 
     error= signal<string>('');
 
+    obtenerProductos(): Observable<ProductoResponse[]> {
+        return this.http.get<ProductoResponse[]>(this.url);
+    }
+
     listProductos(){
-        this.http.get<ProductoResponse[]>(this.url).subscribe(
+        this.obtenerProductos().subscribe(
             {
                 next: (data) => {
                     this.productos.set(data)
@@ -55,15 +60,19 @@ export class ProductoService {
         )
     }
 
-    add(producto: ProductoRequest){
-        this.http.post(this.url, producto).subscribe(
-            () => {
+    crearProducto(producto: ProductoRequest): Observable<ProductoResponse> {
+        return this.http.post<ProductoResponse>(this.url, producto).pipe(
+            tap(() => {
+                this.error.set('');
                 this.listProductos()
-            },
-            error => {
-                this.error.set("Error al cargar un producto " + error)
-            }
-        )
+            })
+        );
+    }
+
+    add(producto: ProductoRequest){
+        this.crearProducto(producto).subscribe({
+            error: error => this.error.set("Error al cargar un producto " + error)
+        });
     }
 
     update(id: number, pUpdate: Partial<ProductoRequest>){

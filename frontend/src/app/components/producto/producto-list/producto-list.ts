@@ -3,10 +3,11 @@ import { ProductoService } from '../../../service/producto-service';
 import { Categoria } from '../../../enums/Categoria';
 import { ProductoResponse, ProductoRequest } from '../../../interfaces/Producto';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ProductoEdit } from '../producto-edit/producto-edit';
 
 @Component({
-  imports: [FormsModule, ProductoEdit],
+  imports: [FormsModule, ProductoEdit, RouterLink],
   selector: 'app-producto-list',
   styleUrl: './producto-list.css',
   templateUrl: './producto-list.html',

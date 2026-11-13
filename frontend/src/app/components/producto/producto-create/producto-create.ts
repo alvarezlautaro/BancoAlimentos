@@ -21,7 +21,7 @@ export class ProductoCreate {
 
   formulario = this.fb.nonNullable.group(
     {
-      nombre: ['', [Validators.required, Validators.maxLength(55)]],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(55)]],
       categoria: ['' as Categoria, Validators.required],
       unidadMedida: ['' as UnidadMedida, Validators.required]
     }
@@ -36,7 +36,9 @@ export class ProductoCreate {
       unidadMedida: this.formulario.controls.unidadMedida.value as UnidadMedida
     };
 
-    this.productoService.add(p);
-    this.formulario.reset();
+    this.productoService.crearProducto(p).subscribe({
+      next: () => this.formulario.reset(),
+      error: error => this.productoService.error.set('Error al crear el producto: ' + error.message)
+    });
   }
 }

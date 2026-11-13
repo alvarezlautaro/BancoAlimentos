@@ -11,7 +11,12 @@
 
         <div>
             <label for="">Institución</label>
-            <input type="number" formControlName="idInstitucion">
+            <select formControlName="idInstitucion">
+                <option [ngValue]="0" disabled>Seleccione una institución...</option>
+                @for (institucion of instituciones; track institucion.id) {
+                    <option [ngValue]="idValue(institucion.id)">{{ institucion.nombre }}</option>
+                }
+            </select>
         </div>
 
         <div>

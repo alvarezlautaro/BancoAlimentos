@@ -24,6 +24,9 @@ public class DetalleRemitoResponseMapper implements IMapper<DetalleRemito, Detal
 
         if(detalleRemito.getItemDonacion() != null){
             response.setIdItemDonacion(detalleRemito.getItemDonacion().getId());
+            if(detalleRemito.getItemDonacion().getProducto() != null){
+                response.setNombreProducto(detalleRemito.getItemDonacion().getProducto().getNombre());
+            }
         }
 
         return response;

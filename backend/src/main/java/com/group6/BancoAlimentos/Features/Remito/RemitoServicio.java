@@ -5,6 +5,10 @@ import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.Institucion.IInstitucionRepositorio;
 import com.group6.BancoAlimentos.Features.Institucion.Institucion;
 import com.group6.BancoAlimentos.Features.Institucion.estadoPago;
+import com.group6.BancoAlimentos.Features.DetalleRemito.DetalleRemito;
+import com.group6.BancoAlimentos.Features.DetalleRemito.IDetalleRemitoRepositorio;
+import com.group6.BancoAlimentos.Features.ItemDonacion.model.ItemDonacion;
+import com.group6.BancoAlimentos.Features.ItemDonacion.repository.ItemDonacionRepository;
 import com.group6.BancoAlimentos.Features.Remito.DTOs.ActualizarRemitoDTO;
 import com.group6.BancoAlimentos.Features.Remito.DTOs.NuevoRemitoDTO;
 import com.group6.BancoAlimentos.Features.Remito.DTOs.RemitoDTO;
@@ -19,17 +23,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class RemitoServicio {
     private final IRemitoRepositorio remitoRepositorio;
     private final IInstitucionRepositorio institucionRepositorio;
+    private final ItemDonacionRepository itemDonacionRepositorio;
+    private final IDetalleRemitoRepositorio detalleRemitoRepositorio;
 
     private final RemitoMapper remitoMapper;
     private final RemitoNuevoMapper remitoNuevoMapper;
     private final ActualizarRemitoMapper actualizarRemitoMapper;
 
+    @Transactional(readOnly = true)
     public Page<RemitoDTO> encontrarTodos(Integer mes,
                                           Integer anio,
                                           LocalDate desde,
@@ -47,6 +57,7 @@ public class RemitoServicio {
                 .map(remitoMapper::aDTO);
     }
 
+    @Transactional(readOnly = true)
     public RemitoDTO encontrarPorID(Long id){
         return remitoMapper.aDTO(remitoRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el remito con ese id")));
@@ -54,6 +65,10 @@ public class RemitoServicio {
 
     @Transactional
     public RemitoDTO crear(NuevoRemitoDTO nuevoRemitoDTO){
+        if (nuevoRemitoDTO.getItems() == null || nuevoRemitoDTO.getItems().isEmpty()) {
+            throw new ReglaNegocioException("El remito debe incluir al menos un item de donación", "DETALLE_REMITO");
+        }
+
         Remito remitoNuevo = remitoNuevoMapper.aEntidad(nuevoRemitoDTO);
 
         Institucion institucion = institucionRepositorio.findById(nuevoRemitoDTO.getIdInstitucion())
@@ -66,6 +81,34 @@ public class RemitoServicio {
         }
 
         remitoNuevo.setInstitucion(institucion);
+        remitoNuevo = remitoRepositorio.save(remitoNuevo);
+
+        Set<Long> itemsIncluidos = new HashSet<>();
+        for (var itemDTO : nuevoRemitoDTO.getItems()) {
+            if (!itemsIncluidos.add(itemDTO.getIdItemDonacion())) {
+                throw new ReglaNegocioException("El item de donación está repetido en el remito", "DETALLE_REMITO");
+            }
+
+            ItemDonacion item = itemDonacionRepositorio.findById(itemDTO.getIdItemDonacion())
+                    .orElseThrow(() -> new RecursoNoEncontradoException(
+                            "El item de donación no existe: " + itemDTO.getIdItemDonacion()));
+            if (item.getFechaVencimiento() == null || item.getFechaVencimiento().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate().isBefore(remitoNuevo.getFecha())) {
+                throw new ReglaNegocioException("No se puede agregar un item vencido al remito", "FECHA");
+            }
+            if (itemDTO.getCantidad() > item.getCantidad()) {
+                throw new ReglaNegocioException("La cantidad solicitada supera el stock disponible", "STOCK");
+            }
+
+            item.setCantidad(item.getCantidad() - itemDTO.getCantidad());
+            itemDonacionRepositorio.save(item);
+            DetalleRemito detalle = new DetalleRemito();
+            detalle.setRemito(remitoNuevo);
+            detalle.setItemDonacion(item);
+            detalle.setCantidad(itemDTO.getCantidad());
+            remitoNuevo.getDetalles().add(detalle);
+            detalleRemitoRepositorio.save(detalle);
+        }
 
         return remitoMapper.aDTO(remitoRepositorio.save(remitoNuevo));
     }

@@ -1,5 +1,8 @@
 <section>
-    <h1>Listado de productos</h1>
+    <div class="section-heading">
+        <h1>Listado de productos</h1>
+        <a routerLink="/productos/form" class="btn-create">Nuevo producto</a>
+    </div>
 
     <div>
         <label for="buscarId">Buscar por id: </label>
@@ -39,7 +42,7 @@
     }
 
     @if (productoService.error(); as mensajeError) {
-        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+        <div class="error-message">
             {{ mensajeError }}
         </div>
     }

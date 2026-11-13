@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
 import { Institucion } from '../../../models/institucion';
+import { AuthService } from '../../../service/auth-service';
+import { Estado } from '../../../enums/Estado';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink],
@@ -15,12 +17,14 @@ export class InstitucionForm implements OnInit{
 
   formulario!: FormGroup;
   id?: string;
+  esTesoreria = false;
 
   constructor(
     private fb: FormBuilder,
     private institucionService: InstitucionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -33,12 +37,23 @@ export class InstitucionForm implements OnInit{
       estado: ['', [Validators.required]]
     });
 
+    this.esTesoreria = this.auth.hasRole('USER_TESORERIA')
+      && !this.auth.hasRole('USER_INSTITUCIONAL');
+    if (this.esTesoreria) {
+      ['nombre', 'tipo', 'direccion', 'telefono', 'email'].forEach(campo => {
+        this.formulario.get(campo)?.disable();
+      });
+    }
+
     this.id = this.route.snapshot.params['id'];
 
     if (this.id) {
       //EDITAR
       this.institucionService.obtenerInstitucionPorId(this.id).subscribe({
-        next: (institucionEncontrada) => this.formulario.patchValue(institucionEncontrada),
+        next: (institucionEncontrada) => this.formulario.patchValue({
+          ...institucionEncontrada,
+          estado: institucionEncontrada.estadoPago ?? institucionEncontrada.estado
+        }),
         error: (e) => {
           console.log(e);
           alert('Error al cargar los datos de la institución');
@@ -53,11 +68,13 @@ export class InstitucionForm implements OnInit{
       return;
     }
 
-    const dataForm: Institucion = { ...this.formulario.value };
+    const dataForm: Institucion = { ...this.formulario.getRawValue() };
 
     if (this.id) {
-      // Editar institución existente
-      this.institucionService.editarInstitucion({ ...dataForm, id: this.id }).subscribe({
+      const actualizacion = this.esTesoreria
+        ? this.institucionService.actualizarEstadoPago(this.id, dataForm.estadoPago ?? dataForm.estado as Estado)
+        : this.institucionService.editarInstitucion({ ...dataForm, id: this.id });
+      actualizacion.subscribe({
         next: () => {
           alert('Institución actualizada correctamente.');
           this.router.navigate(['/instituciones', this.id]);

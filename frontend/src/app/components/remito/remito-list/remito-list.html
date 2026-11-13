@@ -1,17 +1,38 @@
 <section>
 
-    <h1>Listado de remitos</h1>
+    <div class="section-heading">
+        <h1>Listado de remitos</h1>
+        <a routerLink="/remitos/crear" class="btn-create">Crear remito</a>
+    </div>
 
     <ul>
         @for (item of remitoService.remitos(); track $index) {
             <li>
-                Remito:
-                {{ item.fecha }}
-                - Institución:
-                {{ item.idInstitucion }}
+                <div>
+                    <strong>Remito N° {{ item.id }} </strong>
+                    <span>{{ item.fecha | date:'dd/MM/yyyy' }}</span>
+                </div>
 
-                <button (click)="editar(item)">Editar</button>
-                <button (click)="eliminar(item.externalId)">Eliminar</button>
+                <div>
+                    <p><strong>Institución:</strong> {{ item.institucionNombre || 'Institución sin nombre' }}</p>
+                    <p><strong>Items:</strong> {{ item.items?.length ?? 0 }}</p>
+
+                    @if (item.items?.length) {
+                        <ul class="detalle-remito">
+                            @for (detalle of item.items; track detalle.idItemDonacion) {
+                                <li>
+                                    <span>{{ detalle.nombreProducto || 'Item sin nombre' }}</span>
+                                    <span>Cantidad: {{ detalle.cantidad }}</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+
+                <div>
+                    <button (click)="editar(item)">Editar</button>
+                    <button (click)="eliminar(item.id)">Eliminar</button>
+                </div>
             </li>
         }
     </ul>
@@ -21,7 +42,7 @@
     }
 
     @if (remitoService.error(); as mensajeError) {
-        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+        <div class="error-message">
             {{ mensajeError }}
         </div>
     }

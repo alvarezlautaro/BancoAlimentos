@@ -7,6 +7,7 @@ import { Revision } from '../../../interfaces/Revision';
 @Component({
   imports: [DatePipe],
   selector: 'app-historial',
+  styleUrl: './historial.css',
   templateUrl: './historial.html',
 })
 export class Historial {

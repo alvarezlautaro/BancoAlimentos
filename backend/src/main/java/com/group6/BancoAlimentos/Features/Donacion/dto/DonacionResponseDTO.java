@@ -19,5 +19,7 @@ public class DonacionResponseDTO {
     private EstadoDonacion estado;
     private int nroRemitoProveedor;
     private String observaciones;
+    private Long idDonante;
+    private String nombreDonante;
     private List<ItemDonacionResponseDTO> items;
 }

@@ -13,4 +13,6 @@ public class DetalleRemitoResponse {
     private Long idItemDonacion;
 
     private Integer cantidad;
+
+    private String nombreProducto;
 }

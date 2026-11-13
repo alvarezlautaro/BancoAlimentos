@@ -8,6 +8,7 @@ export interface ItemDonacionRequest {
 
 export interface ItemDonacionResponse {
   id: number;
+  productoId?: number;
   fechaVencimiento: string;
   valorUnitario: number;
   cantidad: number;

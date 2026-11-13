@@ -19,6 +19,8 @@ public class DonacionMapper {
         dto.setEstado(donacion.getEstado());
         dto.setNroRemitoProveedor(donacion.getNroRemitoProveedor());
         dto.setObservaciones(donacion.getObservaciones());
+        dto.setIdDonante(donacion.getDonante().getId());
+        dto.setNombreDonante(donacion.getDonante().getRazonSocial());
 
         List<ItemDonacionResponseDTO> items = donacion.getItemDonaciones().stream().map(ItemDonacionMapper::aResponse)
                 .collect(Collectors.toList());
